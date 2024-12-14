@@ -38,11 +38,9 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            <i>
-              Spreading the Joy of Art to Generations Across Cities{' '}
-              <br className="hidden sm:block" />
-              and Rural Communities Since 1994.
-            </i>
+            Spreading the Joy of Art to Generations Across Cities{' '}
+            <br className="hidden sm:block" />
+            and Rural Communities Since 1994.
           </motion.p>
 
           <motion.div
