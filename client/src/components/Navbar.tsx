@@ -69,7 +69,7 @@ export default function Navbar() {
                 Gaana Nritya Academy Manglore
               </p>
               <p className="text-sm capitalize">
-                Center for India Music & Dance
+                Center for Indian Music & Dance
               </p>
             </div>
           </a>
