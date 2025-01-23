@@ -75,7 +75,7 @@ export default function Navbar() {
             {isOpen ? (
               <CgClose className="text-2xl" />
             ) : (
-              <CgMenuRight className="text-2xl" />
+              <CgMenuRight className="size-8" />
             )}
           </button>
 
