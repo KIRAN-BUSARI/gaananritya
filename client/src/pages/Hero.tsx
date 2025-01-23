@@ -33,7 +33,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.p
-            className="text-center text-xs leading-5 tracking-[-3%] text-primary/80 sm:text-start sm:text-lg sm:leading-[25px]"
+            className="text-center text-xs leading-5 tracking-[-3%] text-primary/80 sm:text-start sm:text-lg sm:leading-[30px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
