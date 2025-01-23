@@ -23,7 +23,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <motion.p
-            className="text-balance text-center text-2xl font-semibold leading-8 tracking-[-1%] text-primary sm:text-start sm:text-[32px] sm:font-normal sm:leading-[130%]"
+            className="text-balance text-center text-2xl font-semibold leading-[42px] tracking-[-1%] text-primary sm:text-start sm:text-[32px] sm:font-normal sm:leading-[130%]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -38,8 +38,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            Spreading the Joy of Art to Generations Across Cities{' '}
-            <br className="hidden sm:block" />
+            Spreading the Joy of Art to Generations Across Cities <br />
             and Rural Communities Since 1994.
           </motion.p>
 

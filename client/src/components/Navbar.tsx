@@ -66,7 +66,8 @@ export default function Navbar() {
           <a href={'/'}>
             <div className="flex flex-col items-center">
               <p className="bg-gradient-to-r from-[#1b1b1e] to-[#1b1b1e] bg-clip-text text-lg font-medium capitalize text-transparent dark:to-white">
-                Gaana Nritya Academy (R) Manglore
+                Gaana Nritya Academy (R) <br className="block md:hidden" />
+                <span className="">Manglore</span>
               </p>
             </div>
           </a>

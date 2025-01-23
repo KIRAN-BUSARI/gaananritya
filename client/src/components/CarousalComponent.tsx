@@ -49,7 +49,7 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
   }, [delay, images.length]);
 
   return (
-    <div className="w-full max-w-[90%] overflow-hidden rounded-[16px] lg:max-w-[75%]">
+    <div className="w-full max-w-[100%] overflow-hidden rounded-[16px] lg:max-w-[75%]">
       <div
         className="flex transition-transform duration-500 ease-linear"
         ref={carouselRef}
@@ -60,7 +60,7 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
               src={image.image}
               alt={`Slide ${image.id}`}
               width={1000}
-              height={500}
+              height={1000}
             />
           </div>
         ))}
