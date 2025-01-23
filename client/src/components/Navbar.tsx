@@ -65,9 +65,8 @@ export default function Navbar() {
         <div className="flex w-full items-center justify-between py-[30px]">
           <a href={'/'}>
             <div className="flex flex-col items-center">
-              <p className="bg-gradient-to-r from-[#BE3579] to-[#BE3579] bg-clip-text text-lg font-medium capitalize text-transparent dark:to-white">
-                Gaana Nritya Academy (R){' '}
-                <span className="text-[#1b1b1e]">Manglore</span>
+              <p className="bg-gradient-to-r from-[#1b1b1e] to-[#1b1b1e] bg-clip-text text-lg font-medium capitalize text-transparent dark:to-white">
+                Gaana Nritya Academy (R) Manglore
               </p>
             </div>
           </a>
