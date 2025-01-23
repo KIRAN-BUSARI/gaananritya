@@ -62,14 +62,11 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-20 w-full bg-white">
       <nav className="px-4 md:px-[120px] lg:ml-0 lg:mr-0">
-        <div className="flex w-full items-center justify-between py-[20px]">
+        <div className="flex w-full items-center justify-between py-[30px]">
           <a href={'/'}>
             <div className="flex flex-col items-center">
               <p className="bg-gradient-to-r from-[#BE3579] to-[#BE3579] bg-clip-text text-lg font-medium capitalize text-transparent dark:to-white">
-                Gaana Nritya Academy Manglore
-              </p>
-              <p className="text-sm capitalize">
-                Center for Indian Music & Dance
+                Gaana Nritya Academy (R) Manglore
               </p>
             </div>
           </a>
