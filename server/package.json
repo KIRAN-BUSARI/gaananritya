@@ -7,10 +7,10 @@
     "dev": "nodemon src/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Busari Kiran Kumar",
   "license": "ISC",
   "type": "module",
-  "description": "",
+  "description": "This is a backend for the gaananritya complete website",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
