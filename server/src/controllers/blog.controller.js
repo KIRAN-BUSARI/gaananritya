@@ -86,63 +86,81 @@ const getBlogs = asyncHandler(async (_, res) => {
 });
 
 const updateBlog = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { title, date, content, author } = req.body;
-  const imageLocalPath = req.file?.path;
+const { id } = req.params;
+const { title, date, content, author } = req.body;
+const imageLocalPath = req.file?.path;
 
-  try {
+try {
     // Check if blog exists
     const existingBlog = await Blog.findById(id);
     if (!existingBlog) {
-      throw new ApiError(404, "Blog not found");
+    throw new ApiError(404, "Blog not found");
     }
 
-    // Create updateFields object with only the provided fields
+    // Create updateFields object for provided fields
     const updateFields = {};
 
-    if (title?.trim()) updateFields.title = title.trim();
-    if (content?.trim()) updateFields.content = content.trim();
-    if (author?.trim()) updateFields.author = author.trim();
+    // Only add fields that are actually provided (not undefined or null)
+    if (title !== undefined && title !== null) {
+    updateFields.title = title.trim();
+    }
+    if (content !== undefined && content !== null) {
+    updateFields.content = content.trim();
+    }
+    if (author !== undefined && author !== null) {
+    updateFields.author = author.trim();
+    }
 
     // Parse and validate date only if provided
-    if (date?.trim()) {
-      const parsedDate = new Date(date);
-      if (isNaN(parsedDate.getTime())) {
+    if (date !== undefined && date !== null) {
+    try {
+        // Using ISO format for consistent date handling
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
         throw new ApiError(400, "Invalid date format. Use YYYY-MM-DD");
-      }
-      updateFields.date = parsedDate;
+        }
+        // Set time to noon to avoid timezone issues
+        parsedDate.setUTCHours(12, 0, 0, 0);
+        updateFields.date = parsedDate;
+    } catch (error) {
+        throw new ApiError(400, "Invalid date format. Use YYYY-MM-DD");
+    }
     }
 
     // Handle image upload if provided
     if (imageLocalPath) {
-      const uploadedImage = await uploadOnCloudinary(imageLocalPath);
-      if (!uploadedImage?.url) {
+    try {
+        const uploadedImage = await uploadOnCloudinary(imageLocalPath);
+        if (!uploadedImage?.url) {
         throw new ApiError(500, "Error uploading image to Cloudinary");
-      }
-      updateFields.image = uploadedImage.url;
+        }
+        updateFields.image = uploadedImage.url;
+    } catch (error) {
+        throw new ApiError(500, "Failed to upload image");
+    }
     }
 
-    // Only update if there are fields to update
-    if (Object.keys(updateFields).length === 0) {
-      throw new ApiError(400, "No fields provided for update");
-    }
-
+    // Proceed with update even if no fields are provided (allowing partial updates)
     const blog = await Blog.findByIdAndUpdate(
-      id,
-      updateFields,
-      { new: true }
+    id,
+    updateFields,
+    { new: true }
     );
 
     if (!blog) {
-      throw new ApiError(400, "Failed to update blog")
+    throw new ApiError(400, "Failed to update blog");
     }
-    return res.status(202).json(new ApiResponse(200, "Blog updated successfully", blog))
-  } catch (error) {
+
+    return res.status(200).json(
+    new ApiResponse(200, "Blog updated successfully", blog)
+    );
+
+} catch (error) {
     if (error instanceof ApiError) {
-      throw error;
+    throw error;
     }
     throw new ApiError(500, error?.message || "Error while updating blog");
-  }
+}
 });
 
 const deleteBlog = asyncHandler(async (req, res) => {
