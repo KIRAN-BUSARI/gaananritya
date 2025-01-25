@@ -11,6 +11,6 @@ router.route("/all").get(getBlogs);
 
 router.route("/update/:id").patch(upload.single("image"), verifyJWT, allowedRoles("ADMIN"), updateBlog);
 
-router.route("/delete/:blogId").delete(verifyJWT, allowedRoles("ADMIN"), deleteBlog);
+router.route("/delete/:id").delete(verifyJWT, allowedRoles("ADMIN"), deleteBlog);
 
 export default router;

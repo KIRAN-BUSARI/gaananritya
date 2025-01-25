@@ -62,10 +62,22 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
+  console.log(email, process.env.ADMIN_EMAIL, password, process.env.ADMIN_PASSWORD);
+
+  if ((email !== process.env.ADMIN_EMAIL) || (password !== process.env.ADMIN_PASSWORD)) {
+    throw new ApiError(500, "Please provide a correct ADMIN credentials")
+  };
+
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user || !(await user.isPasswordCorrect(password))) {
-    throw new ApiError(401, "Invalid email or password");
+  if (!user) {
+    throw new ApiError(401, "User Not Found! with this Email");
+  }
+
+  const isCorrectPassword = await user.isPasswordCorrect(password)
+
+  if (!isCorrectPassword) {
+    throw new ApiError(401, "Invalid Password");
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
@@ -78,12 +90,12 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Error while getting user details");
   }
 
-const options = {
-httpOnly: true,
-secure: process.env.NODE_ENV === "production",
-sameSite: 'lax',
-path: '/'
-}
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'lax',
+    path: '/'
+  }
 
   return res
     .status(200)
@@ -114,12 +126,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
   )
 
-const options = {
-httpOnly: true,
-secure: process.env.NODE_ENV === "production",
-sameSite: 'lax',
-path: '/'
-}
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'lax',
+    path: '/'
+  }
 
   return res
     .status(200)
