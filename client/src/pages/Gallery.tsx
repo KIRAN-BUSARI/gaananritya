@@ -38,7 +38,7 @@ function Gallery() {
         </div>
       </div>
 
-      <div className="mt-12 flex items-center justify-center">
+      <div className="mt-12 flex">
         <motion.div
           className="grid grid-cols-2 gap-8 md:grid-cols-3"
           initial="hidden"
