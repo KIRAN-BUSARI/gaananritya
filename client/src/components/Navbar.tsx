@@ -1,5 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CgClose, CgMenuRight } from 'react-icons/cg';
+
+const useScrollDirection = () => {
+  const [prevOffset, setPrevOffset] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const toggleHeader = () => {
+      const currentOffset = window.pageYOffset;
+      if (currentOffset <= 0) {
+        setVisible(true);
+        return;
+      }
+      if (currentOffset > prevOffset && visible) {
+        setVisible(false);
+      } else if (currentOffset < prevOffset && !visible) {
+        setVisible(true);
+      }
+      setPrevOffset(currentOffset);
+    };
+
+    window.addEventListener('scroll', toggleHeader);
+    return () => window.removeEventListener('scroll', toggleHeader);
+  }, [visible, prevOffset]);
+  return visible;
+};
 
 const navbarItems: {
   id: string;
@@ -47,6 +72,7 @@ const navbarItems: {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('');
+  const isVisible = useScrollDirection();
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -61,13 +87,17 @@ export default function Navbar() {
     link === activeLink ? 'text-navlinkcolor' : 'text-primary1';
 
   return (
-    <header className="sticky top-0 z-20 w-full bg-white">
-      <nav className="px-4 py-[24px] md:px-[120px] lg:ml-0 lg:mr-0">
+    <header
+      className={`sticky top-0 z-10 w-full bg-white/80 transition-all duration-300 ${
+        !isVisible ? '-translate-y-full' : 'translate-y-0'
+      }`}
+    >
+      <nav className="px-4 py-[16px] backdrop-blur-sm md:px-[120px] lg:ml-0 lg:mr-0">
         <div className="flex w-full items-center justify-between">
           <a href={'/'}>
             <div className="flex items-center">
               <img src="/logo.png" alt="logo" className="size-12 md:size-16" />
-              <p className="text-sm font-medium capitalize text-[#660102] md:text-xl">
+              <p className="text-sm font-medium capitalize md:text-xl">
                 Gaana Nritya Academy&reg;,&nbsp;
                 <span className="">Manglore</span>
               </p>
