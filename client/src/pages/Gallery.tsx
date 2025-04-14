@@ -28,7 +28,7 @@ function Gallery() {
     >
       <div className="flex flex-col justify-center">
         <div className="flex flex-col space-y-5 text-center">
-          <h1 className="text-left text-2xl font-semibold text-[#181818] md:text-4xl">
+          <h1 className="text-left text-2xl font-semibold md:text-4xl">
             A Journey in Rhythm, Grace & Celebration
           </h1>
           <p className="text-balance text-left text-sm font-normal md:text-base md:leading-6">

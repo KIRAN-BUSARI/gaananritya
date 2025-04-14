@@ -75,5 +75,5 @@
 }
 
 .bg-image {
-  @apply bg-[url(@/assets/heroSection.png)];
+  @apply bg-[url(@/assets/heroSection0.png)];
 }
