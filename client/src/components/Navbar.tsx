@@ -92,7 +92,7 @@ export default function Navbar() {
         !isVisible ? '-translate-y-full' : 'translate-y-0'
       }`}
     >
-      <nav className="px-4 py-[16px] backdrop-blur-sm md:px-[120px] lg:ml-0 lg:mr-0">
+      <nav className="px-4 py-[16px] backdrop-blur-md md:px-[120px] lg:ml-0 lg:mr-0">
         <div className="flex w-full items-center justify-between">
           <a href={'/'}>
             <div className="flex items-center">
