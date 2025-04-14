@@ -39,14 +39,20 @@ const SignInCard = () => {
     const res = await axiosInstance.post('/user/login', {
       ...data,
     });
-    console.log(res.data);
+    // console.log(res.data);
     if (res.data.success === true) {
+      localStorage.setItem('user', JSON.stringify(res.data.data.user));
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem(
+        'isAdmin',
+        res.data.data.user.role === 'ADMIN' ? 'true' : 'false',
+      );
       navigate('/');
     }
   };
 
   return (
-    <div className="relative flex h-screen items-center justify-center">
+    <div className="relative flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="flex w-1/4 flex-col rounded-md bg-[#f5f5f5] p-10 shadow-md">
         <LabelInputContainer>
           <Label htmlFor="email">Email</Label>
@@ -69,7 +75,7 @@ const SignInCard = () => {
           />
         </LabelInputContainer>
         <button
-          className="group/btn relative mt-6 block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative mt-6 block h-10 w-full rounded-md bg-secondary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
           onClick={handleSubmit}
         >

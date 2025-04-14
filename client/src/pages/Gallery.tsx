@@ -15,7 +15,7 @@ function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const fetchImages = async () => {
     const { data } = await axiosInstnace.get('/gallery/all');
-    console.log(data.data);
+    // console.log(data.data);
     setImages(data.data);
   };
   useEffect(() => {

@@ -22,7 +22,7 @@ export default function Hero() {
               Clasees
             </Button>
             <Button className="hover:none border border-[#1D6D8D] bg-black px-8 py-2 text-xl text-[#FAFAFA]">
-              Achievemnets
+              Achievements
             </Button>
           </div>
         </div>

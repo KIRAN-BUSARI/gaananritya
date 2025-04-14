@@ -43,6 +43,7 @@ const navbarItems: {
     name: 'contact',
   },
 ];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('');
@@ -64,9 +65,10 @@ export default function Navbar() {
       <nav className="px-4 py-[24px] md:px-[120px] lg:ml-0 lg:mr-0">
         <div className="flex w-full items-center justify-between">
           <a href={'/'}>
-            <div className="flex flex-col items-center">
-              <p className="bg-gradient-to-r from-[#1b1b1e] to-[#1b1b1e] bg-clip-text text-lg font-medium capitalize text-transparent dark:to-white">
-                Gaana Nritya Academy, <br className="block md:hidden" />
+            <div className="flex items-center">
+              <img src="/logo.png" alt="logo" className="h-16 w-16" />
+              <p className="text-xl font-medium capitalize text-[#660102]">
+                Gaana Nritya Academy&reg;, <br className="block md:hidden" />
                 <span className="">Manglore</span>
               </p>
             </div>
@@ -81,8 +83,9 @@ export default function Navbar() {
           </button>
 
           {isOpen ? (
+            // Mobile Menu
             <>
-              <div className="fixed right-0 w-full font-semibold md:hidden">
+              <div className="fixed right-0 w-full font-medium md:hidden">
                 <div className="absolute mt-5 flex h-48 w-full flex-col items-end text-end">
                   <div className="block list-none bg-white px-5 py-5 text-base md:hidden">
                     <ul className="mr-5 flex flex-col gap-5">
@@ -103,10 +106,11 @@ export default function Navbar() {
               </div>
             </>
           ) : (
-            <div className="hidden list-none text-base font-normal md:block">
+            // Desktop Menu
+            <div className="hidden list-none text-lg md:block">
               <ul className="flex gap-10">
                 {navbarItems.map((item) => (
-                  <li key={item.id} className="font-semibold capitalize">
+                  <li key={item.id} className="font-medium capitalize">
                     <a
                       href={item.link}
                       onClick={() => handleLinkClick(item.name || '')}
