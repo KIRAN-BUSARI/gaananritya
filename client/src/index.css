@@ -75,7 +75,7 @@
 }
 
 .bg-image {
-  @apply bg-[url(@/assets/heroSection.png)] bg-cover bg-no-repeat w-[100%] h-[100%];
+  @apply bg-[url(@/assets/heroSection.png)];
 }
 
 .hero-screen {

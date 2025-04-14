@@ -2,16 +2,19 @@ import { Button } from '@/components/ui/button.tsx';
 
 export default function Hero() {
   return (
-    <div id="" className="bg-image relative mx-auto h-auto px-[120px]">
-      <div className="relative flex h-[90vh] items-center">
-        <div className="flex flex-col items-start justify-center">
-          <h1 className="text-[40px] font-medium leading-[130%] tracking-[-1.5px] text-primary">
+    <div
+      id="#"
+      className="bg-image relative mx-auto flex h-[calc(100vh-100px)] w-[100%] items-center bg-cover bg-center bg-no-repeat"
+    >
+      <div className="px-4 sm:px-[120px]">
+        <div className="flex flex-col items-center justify-center md:items-start">
+          <h1 className="text-center text-2xl font-medium leading-[130%] tracking-[-1.5px] text-primary md:text-left md:text-[40px]">
             Celebrating 30 Years of <br /> Nurturing Dreams Through <br />{' '}
             Indian Music & Dance <br />{' '}
             <span className="text-secondary">Gaana Nritya Academy</span>
           </h1>
           <div className="mt-2">
-            <p className="text-xl font-normal leading-[30px] text-primary">
+            <p className="text-base font-normal leading-[30px] text-primary md:text-xl">
               Spreading the Joy of Art to Generations Across <br /> Cities and
               Rural Communities{' '}
               <span className="text-secondary">Since 1994.</span>

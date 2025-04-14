@@ -66,9 +66,9 @@ export default function Navbar() {
         <div className="flex w-full items-center justify-between">
           <a href={'/'}>
             <div className="flex items-center">
-              <img src="/logo.png" alt="logo" className="h-16 w-16" />
-              <p className="text-xl font-medium capitalize text-[#660102]">
-                Gaana Nritya Academy&reg;, <br className="block md:hidden" />
+              <img src="/logo.png" alt="logo" className="size-12 md:size-16" />
+              <p className="text-sm font-medium capitalize text-[#660102] md:text-xl">
+                Gaana Nritya Academy&reg;,&nbsp;
                 <span className="">Manglore</span>
               </p>
             </div>
@@ -78,7 +78,7 @@ export default function Navbar() {
             {isOpen ? (
               <CgClose className="text-2xl" />
             ) : (
-              <CgMenuRight className="size-8" />
+              <CgMenuRight className="size-7" />
             )}
           </button>
 
