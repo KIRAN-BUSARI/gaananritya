@@ -38,9 +38,9 @@ function Gallery() {
         </div>
       </div>
 
-      <div className="mt-12 flex">
+      <div className="mt-12">
         <motion.div
-          className="grid grid-cols-2 gap-8 md:grid-cols-3"
+          className="grid grid-cols-2 justify-between gap-8 md:grid-cols-3"
           initial="hidden"
           whileInView="visible"
           variants={{
