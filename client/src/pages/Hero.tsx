@@ -1,20 +1,18 @@
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 import { Button } from '@/components/ui/button.tsx';
 import imgUrl0 from '@/assets/heroSection0.png';
-import imgUrl1 from '@/assets/Frame 193.png';
 import imgUrl2 from '@/assets/heroSection2.png';
 import imgUrl3 from '@/assets/heroSection3.png';
 import imgUrl4 from '@/assets/heroSection4.png';
-import imgUrl5 from '@/assets/heroSection5.png';
 
-const images = [imgUrl0, imgUrl1, imgUrl2, imgUrl3, imgUrl4, imgUrl5];
+const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 
 export default function Hero() {
   return (
     <div className="relative h-[calc(100vh-100px)]">
       {/* Background Carousel */}
       <div className="absolute inset-0 z-0">
-        <HeroSectionBgCarousel images={images} interval={3000} />
+        <HeroSectionBgCarousel images={images} interval={4000} />
       </div>
 
       {/* Content Overlay */}
