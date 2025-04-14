@@ -1,28 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CgClose, CgMenuRight } from 'react-icons/cg';
 
 const useScrollDirection = () => {
-  const [prevOffset, setPrevOffset] = useState(0);
+  const [, setScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const toggleHeader = () => {
-      const currentOffset = window.pageYOffset;
-      if (currentOffset <= 0) {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateScrollDir = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 0) {
         setVisible(true);
-        return;
-      }
-      if (currentOffset > prevOffset && visible) {
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setVisible(false);
-      } else if (currentOffset < prevOffset && !visible) {
+      } else if (currentScrollY < lastScrollY) {
         setVisible(true);
       }
-      setPrevOffset(currentOffset);
+
+      lastScrollY = currentScrollY > 0 ? currentScrollY : 0;
+      ticking = false;
     };
 
-    window.addEventListener('scroll', toggleHeader);
-    return () => window.removeEventListener('scroll', toggleHeader);
-  }, [visible, prevOffset]);
+    const onScroll = () => {
+      setScrollY(window.scrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollDir);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return visible;
 };
 
@@ -88,11 +101,11 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-10 w-full bg-white/80 transition-all duration-300 ${
+      className={`sticky top-0 z-10 w-full bg-white/80 backdrop-blur-md transition-all duration-300 ${
         !isVisible ? '-translate-y-full' : 'translate-y-0'
       }`}
     >
-      <nav className="px-4 py-[16px] backdrop-blur-md md:px-[120px] lg:ml-0 lg:mr-0">
+      <nav className="px-4 py-[16px] md:px-[120px] lg:ml-0 lg:mr-0">
         <div className="flex w-full items-center justify-between">
           <a href={'/'}>
             <div className="flex items-center">
@@ -144,7 +157,7 @@ export default function Navbar() {
                     <a
                       href={item.link}
                       onClick={() => handleLinkClick(item.name || '')}
-                      className={linkClasses(item.name || '')}
+                      className={`${linkClasses(item.name || '')}`}
                     >
                       {item.title}
                     </a>
