@@ -90,7 +90,7 @@ function Gallery() {
 
     return (
       <motion.div
-        className="grid grid-cols-2 justify-between gap-4 md:grid-cols-3 md:gap-8"
+        className="grid grid-cols-2 place-content-between justify-between gap-4 md:grid-cols-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
