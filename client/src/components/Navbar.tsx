@@ -130,6 +130,7 @@ export default function Navbar() {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('user');
       localStorage.removeItem('isAdmin');
+      localStorage.removeItem('accessToken');
       setIsLoggedIn(false);
       setUserRole(null);
       setIsOpen(false);

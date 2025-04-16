@@ -39,9 +39,9 @@ const SignInCard = () => {
     const res = await axiosInstance.post('/user/login', {
       ...data,
     });
-    // console.log(res.data);
     if (res.data.success === true) {
       localStorage.setItem('user', JSON.stringify(res.data.data.user));
+      localStorage.setItem('accessToken', res.data.data.accessToken);
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem(
         'isAdmin',
