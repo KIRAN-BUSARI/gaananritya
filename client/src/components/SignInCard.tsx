@@ -48,6 +48,7 @@ const SignInCard = () => {
         res.data.data.user.role === 'ADMIN' ? 'true' : 'false',
       );
       navigate('/');
+      window.location.reload();
     }
   };
 

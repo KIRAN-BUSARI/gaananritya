@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CgClose, CgMenuRight } from 'react-icons/cg';
+import { useNavigate } from 'react-router-dom';
 
 const useScrollDirection = () => {
   const [, setScrollY] = useState(0);
@@ -82,10 +83,38 @@ const navbarItems: {
   },
 ];
 
+interface UserData {
+  role: string;
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('');
   const isVisible = useScrollDirection();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+      const storedUserData = localStorage.getItem('user');
+
+      setIsLoggedIn(storedIsLoggedIn === 'true');
+
+      if (storedUserData) {
+        try {
+          const userData: UserData = JSON.parse(storedUserData);
+          setUserRole(userData?.role || null);
+        } catch (e) {
+          console.error('Failed to parse user data from localStorage:', e);
+          setUserRole(null);
+        }
+      } else {
+        setUserRole(null);
+      }
+    }
+  }, []);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -96,8 +125,23 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAdmin');
+      setIsLoggedIn(false);
+      setUserRole(null);
+      setIsOpen(false);
+      navigate('/');
+      location.reload();
+    }
+  };
+
   const linkClasses = (link: string) =>
     link === activeLink ? 'text-navlinkcolor' : 'text-primary1';
+
+  const isAdmin = isLoggedIn && userRole === 'ADMIN';
 
   return (
     <header
@@ -125,47 +169,63 @@ export default function Navbar() {
             )}
           </button>
 
-          {isOpen ? (
-            // Mobile Menu
-            <>
-              <div className="fixed right-0 w-full font-medium md:hidden">
-                <div className="absolute mt-5 flex h-48 w-full flex-col items-end text-end">
-                  <div className="block list-none bg-white px-5 py-5 text-base md:hidden">
-                    <ul className="mr-5 flex flex-col gap-5">
-                      {navbarItems.map((item) => (
-                        <li key={item.id} className="capitalize">
-                          <a
-                            href={item.link}
-                            onClick={() => handleLinkClick(item.name || '')}
-                            className={linkClasses(item.name || '')}
-                          >
-                            {item.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+          {isOpen && (
+            <div className="fixed right-0 top-[80px] w-full font-medium md:hidden">
+              <div className="absolute mt-0 flex h-auto w-full flex-col items-end text-end">
+                <div className="block list-none rounded-bl-lg bg-white px-5 py-5 text-base shadow-lg">
+                  <ul className="mr-5 flex flex-col gap-5">
+                    {navbarItems.map((item) => (
+                      <li key={item.id} className="capitalize">
+                        <a
+                          href={item.link}
+                          onClick={() => handleLinkClick(item.name || '')}
+                          className={linkClasses(item.name || '')}
+                        >
+                          {item.title}
+                        </a>
+                      </li>
+                    ))}
+                    {isAdmin && (
+                      <li className="capitalize">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left text-secondary hover:text-secondary/90"
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    )}
+                  </ul>
                 </div>
               </div>
-            </>
-          ) : (
-            // Desktop Menu
-            <div className="hidden list-none text-lg md:block">
-              <ul className="flex gap-10">
-                {navbarItems.map((item) => (
-                  <li key={item.id} className="font-medium capitalize">
-                    <a
-                      href={item.link}
-                      onClick={() => handleLinkClick(item.name || '')}
-                      className={`${linkClasses(item.name || '')}`}
-                    >
-                      {item.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
           )}
+
+          <div className="hidden list-none text-lg md:block">
+            <ul className="flex items-center gap-6">
+              {navbarItems.map((item) => (
+                <li key={item.id} className="font-medium capitalize">
+                  <a
+                    href={item.link}
+                    onClick={() => handleLinkClick(item.name || '')}
+                    className={`${linkClasses(item.name || '')} transition-colors hover:text-navlinkcolor`}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+              {isAdmin && (
+                <li className="flex items-center font-medium capitalize">
+                  <button
+                    onClick={handleLogout}
+                    className="rounded bg-secondary px-3 py-1 text-sm text-white hover:bg-secondary/90"
+                  >
+                    Logout
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </nav>
     </header>
