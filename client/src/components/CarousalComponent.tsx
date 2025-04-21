@@ -49,7 +49,7 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
   }, [delay, images.length]);
 
   return (
-    <div className="w-full max-w-[100%] overflow-hidden rounded-[16px] lg:max-w-[75%]">
+    <div className="w-full max-w-[100%] overflow-hidden rounded-sm lg:max-w-[100%]">
       <div
         className="flex transition-transform duration-500 ease-linear"
         ref={carouselRef}
@@ -70,7 +70,7 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
           <button
             key={index}
             className={`h-3 w-3 rounded-full ${
-              index === currentIndex ? 'bg-[#79348D]/50' : 'bg-gray-300'
+              index === currentIndex ? 'bg-secondary/50' : 'bg-gray-300'
             }`}
           />
         ))}

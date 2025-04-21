@@ -5,6 +5,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { RecoilRoot } from 'recoil';
+import { Toaster } from './components/ui/sonner.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <RecoilRoot>
         <Analytics />
         <App />
+        <Toaster />
       </RecoilRoot>
     </BrowserRouter>
   </React.StrictMode>,

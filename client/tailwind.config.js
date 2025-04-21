@@ -74,6 +74,7 @@ export default {
       textColor: {
         primary: '#F5F5F5',
         secondary: '#67D6F9',
+        secondary1: '#1D6D8D',
         navlinkcolor: '#297289',
         primary1: '#313131'
       },

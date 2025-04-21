@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface GalleryImage {
   _id: string;
@@ -47,39 +48,69 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+interface UploadState {
+  isUploading: boolean;
+  error: string | null;
+  success: string | null;
+  selectedFile: File | null;
+  category: string;
+  isDialogOpen: boolean;
+  imagePreview: string | null;
+}
+
+interface DeleteState {
+  isDeleting: boolean;
+  imageToDelete: string | null;
+  isDialogOpen: boolean;
+  error: string | null;
+  success: string | null;
+}
+
 function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [filter, setFilter] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadCategory, setUploadCategory] = useState<string>('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadState, setUploadState] = useState<UploadState>({
+    isUploading: false,
+    error: null,
+    success: null,
+    selectedFile: null,
+    category: '',
+    isDialogOpen: false,
+    imagePreview: null,
+  });
 
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
+  const [deleteState, setDeleteState] = useState<DeleteState>({
+    isDeleting: false,
+    imageToDelete: null,
+    isDialogOpen: false,
+    error: null,
+    success: null,
+  });
 
-  const isAdmin = localStorage.getItem('isAdmin');
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  const isAdmin = useMemo(() => localStorage.getItem('isAdmin') === 'true', []);
+  const isLoggedIn = useMemo(
+    () => localStorage.getItem('isLoggedIn') === 'true',
+    [],
+  );
 
   const fetchImages = useCallback(async () => {
-    setError(null);
+    setFetchError(null);
+    setIsLoading(true);
     try {
       const { data } = await axiosInstnace.get<{ data: GalleryImage[] }>(
         '/gallery/all',
       );
       setImages(data.data);
-    } catch (err) {
-      setError('Failed to fetch images. Please try again later.');
+    } catch (err: any) {
       console.error('Error fetching images:', err);
+      const errorMsg =
+        err.response?.data?.message ||
+        'Failed to fetch images. Please try again later.';
+      setFetchError(errorMsg);
+      toast.error(errorMsg);
       setImages([]);
     } finally {
       setIsLoading(false);
@@ -92,7 +123,9 @@ function Gallery() {
 
   const filteredImages = useMemo(() => {
     if (filter === 'all') return images;
-    return images.filter((image) => image.category === filter);
+    return images.filter(
+      (image) => image.category.toLowerCase() === filter.toLowerCase(),
+    );
   }, [images, filter]);
 
   const handleFilterChange = useCallback((category: string) => {
@@ -101,56 +134,79 @@ function Gallery() {
 
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setSelectedFile(file || null);
-    setUploadError(null); // Clear previous errors on new file selection
-    setUploadSuccess(null);
+    setUploadState((prev) => ({
+      ...prev,
+      selectedFile: file || null,
+      error: null,
+      success: null,
+      imagePreview: null,
+    }));
 
-    // Create image preview
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
+        setUploadState((prev) => ({
+          ...prev,
+          imagePreview: e.target?.result as string,
+        }));
+      };
+      reader.onerror = () => {
+        setUploadState((prev) => ({ ...prev, error: 'Failed to read file.' }));
+        toast.error('Failed to read file.');
       };
       reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
     }
   };
 
-  const resetDialogForm = useCallback(() => {
-    setSelectedFile(null);
-    setUploadCategory('');
-    setImagePreview(null);
-    setUploadError(null);
-    setUploadSuccess(null);
+  const resetUploadDialogForm = useCallback(() => {
+    setUploadState({
+      isUploading: false,
+      error: null,
+      success: null,
+      selectedFile: null,
+      category: '',
+      isDialogOpen: false,
+      imagePreview: null,
+    });
   }, []);
 
-  const handleDialogChange = (open: boolean) => {
-    setIsDialogOpen(open);
-    if (!open) {
-      resetDialogForm();
-    }
-  };
+  const handleUploadDialogChange = useCallback(
+    (open: boolean) => {
+      setUploadState((prev) => ({ ...prev, isDialogOpen: open }));
+      if (!open) {
+        setTimeout(() => {
+          resetUploadDialogForm();
+        }, 300);
+      }
+    },
+    [resetUploadDialogForm],
+  );
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      setUploadError('Please select an image to upload');
+    if (!uploadState.selectedFile) {
+      setUploadState((prev) => ({
+        ...prev,
+        error: 'Please select an image to upload',
+      }));
       return;
     }
 
-    if (!uploadCategory) {
-      setUploadError('Please enter a category');
+    if (!uploadState.category.trim()) {
+      setUploadState((prev) => ({ ...prev, error: 'Please enter a category' }));
       return;
     }
 
-    setIsUploading(true);
-    setUploadError(null);
-    setUploadSuccess(null);
+    setUploadState((prev) => ({
+      ...prev,
+      isUploading: true,
+      error: null,
+      success: null,
+    }));
 
     try {
       const formData = new FormData();
-      formData.append('images', selectedFile);
-      formData.append('category', uploadCategory);
+      formData.append('images', uploadState.selectedFile);
+      formData.append('category', uploadState.category.trim().toLowerCase());
 
       await axiosInstnace.post('/gallery/upload', formData, {
         headers: {
@@ -158,57 +214,95 @@ function Gallery() {
         },
       });
 
-      setUploadSuccess('Image uploaded successfully!');
-      setSelectedFile(null);
-      setUploadCategory('');
-      setImagePreview(null);
-      fetchImages();
+      setUploadState((prev) => ({
+        ...prev,
+        success: 'Image uploaded successfully!',
+        selectedFile: null,
+        category: '',
+        imagePreview: null,
+      }));
+      toast.success('Image uploaded successfully!');
+      await fetchImages();
 
       setTimeout(() => {
-        setIsDialogOpen(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+        handleUploadDialogChange(false);
       }, 1500);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error uploading image:', err);
-      setUploadError('Failed to upload image. Please try again.');
+      const errorMsg =
+        err.response?.data?.message ||
+        'Failed to upload image. Please try again.';
+      setUploadState((prev) => ({ ...prev, error: errorMsg }));
+      toast.error(errorMsg);
     } finally {
-      setIsUploading(false);
+      setUploadState((prev) => ({ ...prev, isUploading: false }));
     }
   };
 
-  const confirmDeleteImage = (imageId: string) => {
-    setImageToDelete(imageId);
-    setDeleteDialogOpen(true);
-    setDeleteError(null);
-    setDeleteSuccess(null);
-  };
+  const confirmDeleteImage = useCallback((imageId: string) => {
+    setDeleteState({
+      isDeleting: false,
+      imageToDelete: imageId,
+      isDialogOpen: true,
+      error: null,
+      success: null,
+    });
+  }, []);
+
+  const resetDeleteDialog = useCallback(() => {
+    setDeleteState({
+      isDeleting: false,
+      imageToDelete: null,
+      isDialogOpen: false,
+      error: null,
+      success: null,
+    });
+  }, []);
+
+  const handleDeleteDialogChange = useCallback(
+    (open: boolean) => {
+      setDeleteState((prev) => ({ ...prev, isDialogOpen: open }));
+      if (!open) {
+        setTimeout(() => {
+          resetDeleteDialog();
+        }, 300);
+      }
+    },
+    [resetDeleteDialog],
+  );
 
   const handleDeleteImage = async () => {
-    if (!imageToDelete) return;
+    if (!deleteState.imageToDelete) return;
 
-    setIsDeleting(true);
-    setDeleteError(null);
+    setDeleteState((prev) => ({
+      ...prev,
+      isDeleting: true,
+      error: null,
+      success: null,
+    }));
 
     try {
-      await axiosInstnace.delete(`/gallery/${imageToDelete}`, {
-        data: { imagePath: imageToDelete },
-      });
-      setDeleteSuccess('Image deleted successfully!');
-      fetchImages();
+      await axiosInstnace.delete(`/gallery/${deleteState.imageToDelete}`);
 
-      // Close dialog after successful deletion
+      setDeleteState((prev) => ({
+        ...prev,
+        success: 'Image deleted successfully!',
+      }));
+      toast.success('Image deleted successfully!');
+      await fetchImages();
+
       setTimeout(() => {
-        setDeleteDialogOpen(false);
-        setImageToDelete(null);
-        setDeleteSuccess(null);
+        handleDeleteDialogChange(false);
       }, 1500);
-    } catch (error) {
-      console.error('Error deleting image:', error);
-      setDeleteError('Failed to delete image. Please try again.');
+    } catch (err: any) {
+      console.error('Error deleting image:', err);
+      const errorMsg =
+        err.response?.data?.message ||
+        'Failed to delete image. Please try again.';
+      setDeleteState((prev) => ({ ...prev, error: errorMsg }));
+      toast.error(errorMsg);
     } finally {
-      setIsDeleting(false);
+      setDeleteState((prev) => ({ ...prev, isDeleting: false }));
     }
   };
 
@@ -216,13 +310,13 @@ function Gallery() {
     if (isLoading) {
       return <div className="py-8 text-center">Loading gallery...</div>;
     }
-    if (error) {
-      return <div className="py-8 text-center text-red-500">{error}</div>;
+    if (fetchError) {
+      return <div className="py-8 text-center text-red-500">{fetchError}</div>;
     }
-    if (filteredImages.length === 0) {
+    if (filteredImages.length === 0 && !isLoading) {
       return (
         <div className="py-8 text-center">
-          No images found for this category.
+          No images found for the '{filter}' category.
         </div>
       );
     }
@@ -236,20 +330,27 @@ function Gallery() {
           animate="visible"
         >
           {filteredImages.map((img) => (
-            <motion.div key={img.image} variants={itemVariants}>
+            <motion.div key={img._id} variants={itemVariants}>
               <GalleryCard
                 img={img.image}
-                onDelete={() => confirmDeleteImage(img._id)}
+                onDelete={
+                  isAdmin && isLoggedIn
+                    ? () => confirmDeleteImage(img._id)
+                    : undefined
+                }
               />
             </motion.div>
           ))}
           {isAdmin && isLoggedIn && (
-            <div className="">
-              <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
-                <DialogTrigger className="h-full w-full">
-                  <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 text-center text-gray-500 outline-none hover:bg-gray-200">
+            <motion.div variants={itemVariants}>
+              <Dialog
+                open={uploadState.isDialogOpen}
+                onOpenChange={handleUploadDialogChange}
+              >
+                <DialogTrigger asChild>
+                  <button className="flex h-full min-h-[150px] w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-center text-gray-500 outline-none ring-offset-background transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                     <span className="text-sm font-semibold">Add Image</span>
-                  </div>
+                  </button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader className="font-medium">
@@ -261,12 +362,15 @@ function Gallery() {
                       className="border-2 border-dashed"
                       accept="image/*"
                       onChange={handleFileSelected}
+                      key={
+                        uploadState.selectedFile ? 'file-selected' : 'no-file'
+                      }
                     />
 
-                    {imagePreview && (
-                      <div className="relative mx-auto max-h-56 overflow-hidden rounded-md">
+                    {uploadState.imagePreview && (
+                      <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
                         <img
-                          src={imagePreview}
+                          src={uploadState.imagePreview}
                           alt="Preview"
                           className="mx-auto max-h-56 object-contain"
                         />
@@ -275,67 +379,89 @@ function Gallery() {
 
                     <Input
                       type="text"
-                      placeholder="Enter Category"
-                      value={uploadCategory}
-                      onChange={(e) => setUploadCategory(e.target.value)}
+                      placeholder="Enter Category (e.g., classes, events)"
+                      value={uploadState.category}
+                      onChange={(e) =>
+                        setUploadState((prev) => ({
+                          ...prev,
+                          category: e.target.value,
+                          error: null,
+                        }))
+                      }
                       className=""
                     />
 
-                    {uploadError && (
-                      <p className="text-sm text-red-500">{uploadError}</p>
+                    {uploadState.error && (
+                      <p className="text-sm text-red-500">
+                        {uploadState.error}
+                      </p>
                     )}
-
-                    {uploadSuccess && (
-                      <p className="text-sm text-green-500">{uploadSuccess}</p>
+                    {uploadState.success && (
+                      <p className="text-sm text-green-500">
+                        {uploadState.success}
+                      </p>
                     )}
 
                     <Button
                       variant={'secondary'}
                       className="text-primary"
                       onClick={handleUpload}
-                      disabled={isUploading || !selectedFile}
+                      disabled={
+                        uploadState.isUploading ||
+                        !uploadState.selectedFile ||
+                        !uploadState.category.trim()
+                      }
                     >
-                      {isUploading ? 'Uploading...' : 'Upload'}
+                      {uploadState.isUploading ? 'Uploading...' : 'Upload'}
                     </Button>
                   </div>
                 </DialogContent>
               </Dialog>
-            </div>
+            </motion.div>
           )}
         </motion.div>
 
-        {/* Delete Confirmation Dialog */}
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <Dialog
+          open={deleteState.isDialogOpen}
+          onOpenChange={handleDeleteDialogChange}
+        >
           <DialogContent className="sm:max-w-md">
-            <DialogHeader className="font-medium">Delete Image</DialogHeader>
-            <div className="flex flex-col space-y-4">
-              <p className="text-center">
-                Are you sure you want to delete this image? This action cannot
-                be undone.
+            <DialogHeader className="font-medium">
+              Confirm Deletion
+            </DialogHeader>
+            <div className="flex flex-col space-y-4 py-4">
+              <p className="text-center text-sm text-muted-foreground">
+                Are you sure you want to delete this image? <br /> This action
+                cannot be undone.
               </p>
 
-              {deleteError && (
-                <p className="text-sm text-red-500">{deleteError}</p>
+              {deleteState.error && (
+                <p className="text-center text-sm text-red-500">
+                  {deleteState.error}
+                </p>
+              )}
+              {deleteState.success && (
+                <p className="text-center text-sm text-green-500">
+                  {deleteState.success}
+                </p>
               )}
 
-              {deleteSuccess && (
-                <p className="text-sm text-green-500">{deleteSuccess}</p>
-              )}
-
-              <div className="flex justify-end space-x-3">
+              <div className="flex justify-end space-x-3 pt-2">
                 <Button
                   variant="outline"
-                  onClick={() => setDeleteDialogOpen(false)}
-                  disabled={isDeleting}
+                  onClick={() => handleDeleteDialogChange(false)}
+                  disabled={deleteState.isDeleting}
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleDeleteImage}
-                  disabled={isDeleting || Boolean(deleteSuccess)}
+                  disabled={
+                    deleteState.isDeleting || Boolean(deleteState.success)
+                  }
                 >
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  {deleteState.isDeleting ? 'Deleting...' : 'Delete'}
                 </Button>
               </div>
             </div>
@@ -351,39 +477,34 @@ function Gallery() {
       id="gallery"
     >
       <div className="mb-8 md:mb-12">
-        {' '}
         <div className="flex flex-col space-y-3 text-left md:space-y-5">
-          {' '}
           <h1 className="text-2xl font-semibold md:text-3xl lg:text-4xl">
             A Journey in Rhythm, Grace & Celebration
           </h1>
           <p className="text-balance text-sm font-normal text-gray-700 md:text-base md:leading-relaxed">
-            {' '}
             A glimpse into our vibrant classes, soulful productions, and joyful
             community events.
           </p>
         </div>
       </div>
 
-      {/* Tab Buttons */}
-      <div className="mb-8 flex flex-wrap gap-2 md:gap-4">
-        {' '}
+      <div className="mb-8 flex flex-wrap items-center gap-2 md:mb-12 md:gap-4">
         {tabs.map((tab) => (
           <button
             key={tab.title}
             onClick={() => handleFilterChange(tab.title)}
-            className={`rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 md:px-4 md:py-1 md:text-base ${
+            className={`rounded-md border px-3 py-1.5 text-sm font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 md:px-4 md:py-1 md:text-base ${
               filter === tab.title
                 ? 'border-secondary bg-secondary text-primary'
-                : 'bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-100'
+                : 'border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-100'
             }`}
           >
-            {tab.title.charAt(0).toUpperCase() + tab.title.slice(1)}{' '}
+            {tab.title}
           </button>
         ))}
       </div>
 
-      <div className="mt-8 md:mt-12">{renderContent()}</div>
+      {renderContent()}
     </section>
   );
 }
