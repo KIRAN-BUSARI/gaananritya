@@ -28,7 +28,7 @@ const FounderPage = () => {
         </h1>
         <h2 className="mt-2 text-balance text-base font-normal leading-[170%] tracking-[-1%] md:text-lg">
           <span className="font-semibold">Vidyashree Radhakrishna</span> founded
-          <span className="text-secondary1 font-semibold">
+          <span className="font-semibold text-secondary1">
             {' '}
             Gaana Nritya Academy
           </span>{' '}
@@ -41,7 +41,7 @@ const FounderPage = () => {
       <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-12 md:gap-8 lg:gap-14">
         <div className="relative col-span-1 flex justify-center md:col-span-12 md:justify-start lg:col-span-6">
           <HeroSectionBgCarousel
-            className="h-[350px] w-full max-w-[565px] rounded-sm sm:h-[450px] md:h-[500px] lg:h-[600px]"
+            className="h-[350px] w-full max-w-[565px] rounded-lg sm:h-[450px] md:h-[500px] lg:h-[600px]"
             images={imgs}
           />
         </div>
@@ -49,7 +49,7 @@ const FounderPage = () => {
         <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-12 lg:col-span-6 lg:mt-0">
           <ul className="list-outside list-disc space-y-4 pl-5 text-base marker:text-[#1d6d8d] md:space-y-6 md:text-lg lg:space-y-8">
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
-              <span className="text-secondary1 font-semibold">
+              <span className="font-semibold text-secondary1">
                 Artistic Journey:
               </span>{' '}
               Trained under Guru Padma Subramanyam, Kalakshetra, and luminaries
@@ -57,7 +57,7 @@ const FounderPage = () => {
               vocalist and Natuvanar.
             </li>
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
-              <span className="text-secondary1 font-semibold">
+              <span className="font-semibold text-secondary1">
                 Achievements:
               </span>{' '}
               Karnataka Kala Jyothi awardee, ICCR Empaneled Artiste, and graded
@@ -66,12 +66,12 @@ const FounderPage = () => {
               national recognition in Bharatanatyam competitions.
             </li>
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
-              <span className="text-secondary1 font-semibold">Impact:</span>{' '}
+              <span className="font-semibold text-secondary1">Impact:</span>{' '}
               Reached 1,000+ rural students via Routes to Roots and promotes
               young artists through festivals like Aarohana.
             </li>
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
-              <span className="text-secondary1 font-semibold">
+              <span className="font-semibold text-secondary1">
                 Global Presence:
               </span>{' '}
               Performed in South Korea's Sarang Festival, UK, and more,

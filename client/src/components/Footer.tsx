@@ -1,67 +1,37 @@
-import facebook_logo from '@/assets/ion_logo-facebook.png';
-import instagram_logo from '@/assets/ri_instagram-fill.png';
-import gmail_logo from '@/assets/basil_gmail-solid.png';
-import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import {
+  Twitter,
+  Instagram,
+  Facebook,
+  Linkedin,
+  LucideProps,
+} from 'lucide-react/';
+import { ComponentType } from 'react';
 
-const socialLinks: { id: number; icon: string; link: string }[] = [
-  {
-    id: 1,
-    icon: facebook_logo,
-    link: 'https://www.facebook.com/chinnu.archana/',
-  },
-  {
-    id: 2,
-    icon: instagram_logo,
-    link: 'https://www.instagram.com/sanoopura_nrityalaya/',
-  },
-  {
-    id: 5,
-    icon: gmail_logo,
-    link: 'mailto:sa@gmail.com',
-  },
-];
-
-const footerItems: {
+const socialLinks: {
   id: string;
-  title: string;
+  icon: ComponentType<LucideProps>;
   link: string;
-  name?: string;
 }[] = [
   {
     id: '1',
-    title: 'Home',
-    link: '/',
+    icon: Twitter,
+    link: '',
   },
   {
     id: '2',
-    title: 'Gallery',
-    link: '#gallery',
-    name: 'gallery',
+    icon: Linkedin,
+    link: '',
+  },
+  {
+    id: '2',
+    icon: Instagram,
+    link: '',
   },
   {
     id: '3',
-    title: 'Events',
-    link: '#events',
-    name: 'events',
-  },
-  {
-    id: '4',
-    title: 'About me',
-    link: '#about',
-    name: 'about',
-  },
-  // {
-  //   id: "5",
-  //   title: "team",
-  //   link: "#team",
-  //   name: "team",
-  // },
-  {
-    id: '6',
-    title: 'contact',
-    link: '#footer',
-    name: 'contact',
+    icon: Facebook,
+    link: '',
   },
 ];
 
@@ -72,45 +42,70 @@ const Footer = () => {
       className="h-[320px] w-full bg-secondary px-4 text-white md:px-[120px]"
     >
       <div className="flex flex-col-reverse md:h-full md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-col gap-5">
-          <div className="hidden md:block">
+        <div className="flex gap-5">
+          <div className="">
             <Logo />
           </div>
-          <div className="flex space-x-5 pt-5 md:pt-0">
-            {socialLinks.map((link) => (
-              <Link to={link.link} target="_blank" key={link.id}>
-                <img src={link.icon} alt={link.icon} />
-              </Link>
-            ))}
+          <div className="">
+            <div className="flex flex-col space-y-2">
+              <h1 className="text-[#FFD45C]">Gaana Nritya Academy</h1>
+              <p className="text-balance">
+                Tharangini Raktheshwari,
+                <br /> Nagar Kottara Chowki, Mangaluru,
+                <br /> Karnataka - 575006
+              </p>
+              <p>9986563999</p>
+              <p>gaananritya@gmail.com</p>
+            </div>
           </div>
         </div>
-        <>
-          <ul className="-mr-[400px] hidden flex-col space-y-2.5 text-white md:block">
-            {footerItems.map((item) => (
-              <li key={item.id} className="capitalize">
-                <a href={item.link}>{item.title}</a>
-              </li>
-            ))}
-          </ul>
-        </>
-
-        <div className="flex flex-col space-y-8 pt-8 md:pt-0">
-          <div className="space-y-2">
-            <h1 className="font-samarkan text-2xl font-medium md:text-[36px]">
-              SANOOPURA NRITYALAYA
-            </h1>
-            <p className="text-sm font-normal md:text-base">
-              No 341 Sai Sparsh 2nd Floor, 8th Main Rd,
-              <br className="md:hidden" /> JHCS Layout,
-              <br className="hidden md:block" />
-              Uttarahalli Hobli, Bengaluru,
-              <br className="md:hidden" /> Karnataka 560061.
-            </p>
+        <div className="flex flex-col">
+          <div className="flex space-x-12">
+            <ul className="list-none space-y-4">
+              <h1 className="text-base font-semibold text-[#FFD45C]">
+                Classes
+              </h1>
+              <li>Bharatanatyam</li>
+              <li>Carnatic Music</li>
+              <li>Worshops</li>
+              <li>Registrations</li>
+            </ul>
+            <ul className="list-none space-y-4">
+              <h1 className="text-base font-semibold text-[#FFD45C]">Media</h1>
+              <li>Gallery</li>
+              <li>Videos</li>
+              <li>Press</li>
+              <li>Registrations</li>
+            </ul>
+            <ul className="list-none space-y-4">
+              <h1 className="text-base font-semibold text-[#FFD45C]">Events</h1>
+              <li>Upcoming Events</li>
+              <li>Productions</li>
+              <li>Past Events</li>
+              <li>Festivals</li>
+            </ul>
+            <ul className="list-none space-y-4">
+              <h1 className="text-base font-semibold text-[#FFD45C]">Home</h1>
+              <li>Founder</li>
+              <li>Achievements</li>
+              <li>Contact Form</li>
+              <li>Faq</li>
+            </ul>
           </div>
-
-          <h3 className="text-[24px] font-semibold">
-            Contact: + 91-9611494919
-          </h3>
+          <div className="mt-4 flex space-x-4">
+            {socialLinks.map((link) => {
+              const IconComponent = link.icon;
+              return (
+                <div key={link.id}>
+                  <a href={link.link} target="_blank" rel="noopener noreferrer">
+                    {IconComponent && (
+                      <IconComponent size={24} className="text-[#FFD45C]" />
+                    )}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
