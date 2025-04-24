@@ -89,10 +89,11 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="w-full bg-secondary px-4 py-8 text-white md:px-[120px] md:py-10"
+      className="w-full bg-secondary px-4 py-8 text-white sm:px-6 md:px-[120px] md:py-10"
     >
       <div className="mx-auto flex max-w-screen-xl flex-col gap-8 md:flex-row md:justify-between">
-        <div className="flex flex-col items-start gap-4 md:flex-row md:gap-5">
+        {/* Logo and Address Section */}
+        <div className="flex flex-col items-center gap-4 md:flex-row md:gap-5">
           <div className="shrink-0">
             <Logo />
           </div>
@@ -123,7 +124,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 md:items-end">
+        {/* Navigation Links Section */}
+        <div className="flex flex-col items-center gap-6 md:items-end">
           <nav className="hidden grid-cols-2 gap-x-8 gap-y-6 md:grid md:grid-cols-4 md:gap-x-12">
             {footerSections.map((section) => (
               <div key={section.title}>
@@ -146,6 +148,7 @@ const Footer = () => {
             ))}
           </nav>
 
+          {/* Social Links Section */}
           <div className="mt-4 flex space-x-4">
             {socialLinks.map((link) => {
               const IconComponent = link.icon;
@@ -165,6 +168,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer Bottom Section */}
       <div className="mt-8 border-t border-gray-700 pt-4 text-center text-xs text-gray-400 md:mt-10">
         © {new Date().getFullYear()} Gaana Nritya Academy. All rights reserved.
       </div>

@@ -85,7 +85,7 @@ const Achievements = () => {
 
       {/* Decorative Image */}
       <img
-        className="absolute right-0 top-[470px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[100px] md:block md:w-[200px] lg:top-[190px]"
+        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[100px] md:block md:w-[200px] lg:top-[190px]"
         src={handSign}
         alt="handsign"
       />
