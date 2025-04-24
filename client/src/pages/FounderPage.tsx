@@ -41,8 +41,9 @@ const FounderPage = () => {
       <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-12 md:gap-8 lg:gap-14">
         <div className="relative col-span-1 flex justify-center md:col-span-12 md:justify-start lg:col-span-6">
           <HeroSectionBgCarousel
-            className="h-[350px] w-full max-w-[565px] rounded-lg sm:h-[450px] md:h-[500px] lg:h-[600px]"
+            className="h-[475px] w-full max-w-[565px] rounded-2xl sm:h-[550px] md:h-[500px] lg:h-[600px]"
             images={imgs}
+            interval={4000}
           />
         </div>
 

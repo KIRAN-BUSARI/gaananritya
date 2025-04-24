@@ -13,41 +13,37 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
   interval = 5000,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [nextImageIndex, setNextImageIndex] = useState(1);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    if (!images || images.length === 0) return;
+
     const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setNextImageIndex((currentImageIndex + 1) % images.length);
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        setIsTransitioning(false);
-      }, 500);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, interval);
 
     return () => clearInterval(timer);
-  }, [images.length, interval, currentImageIndex]);
+  }, [images, interval]);
+
+  if (!images || images.length === 0) {
+    return <div className="text-center text-white">No images available</div>;
+  }
 
   return (
     <div
       className={cn(
-        'relative h-[calc(100vh-100px)] w-full overflow-hidden bg-black',
+        'relative w-full overflow-hidden bg-black',
+        'h-[350px] md:h-[calc(100vh-100px)]',
         className,
       )}
     >
       {images.map((imageUrl, index) => (
         <div
-          key={imageUrl}
-          className={`absolute inset-0 h-full w-full bg-cover bg-center transition-opacity duration-[1000ms] ${
-            index === currentImageIndex
-              ? `opacity-${isTransitioning ? '0' : '100'} z-10`
-              : index === nextImageIndex
-                ? `opacity-${isTransitioning ? '100' : '0'} z-0`
-                : '-z-10 opacity-0'
-          }`}
+          key={index}
+          className="absolute inset-0 h-full w-full bg-cover bg-center transition-opacity duration-1000"
           style={{
             backgroundImage: `url(${imageUrl})`,
+            opacity: index === currentImageIndex ? 1 : 0,
+            zIndex: index === currentImageIndex ? 10 : 0,
           }}
         />
       ))}

@@ -8,107 +8,167 @@ import {
 } from 'lucide-react/';
 import { ComponentType } from 'react';
 
-const socialLinks: {
+interface SocialLink {
   id: string;
   icon: ComponentType<LucideProps>;
   link: string;
-}[] = [
+  label: string;
+}
+
+interface FooterLinkSection {
+  title: string;
+  links: { name: string; href: string }[];
+}
+
+const socialLinks: SocialLink[] = [
   {
-    id: '1',
+    id: 'twitter',
     icon: Twitter,
-    link: '',
+    link: '#',
+    label: 'Twitter',
   },
   {
-    id: '2',
+    id: 'linkedin',
     icon: Linkedin,
-    link: '',
+    link: '#',
+    label: 'LinkedIn',
   },
   {
-    id: '2',
+    id: 'instagram',
     icon: Instagram,
-    link: '',
+    link: '#',
+    label: 'Instagram',
   },
   {
-    id: '3',
+    id: 'facebook',
     icon: Facebook,
-    link: '',
+    link: '#',
+    label: 'Facebook',
+  },
+];
+
+const footerSections: FooterLinkSection[] = [
+  {
+    title: 'Classes',
+    links: [
+      { name: 'Bharatanatyam', href: '#' },
+      { name: 'Carnatic Music', href: '#' },
+      { name: 'Workshops', href: '#' },
+      { name: 'Registrations', href: '#' },
+    ],
+  },
+  {
+    title: 'Media',
+    links: [
+      { name: 'Gallery', href: '#' },
+      { name: 'Videos', href: '#' },
+      { name: 'Press', href: '#' },
+    ],
+  },
+  {
+    title: 'Events',
+    links: [
+      { name: 'Upcoming Events', href: '#' },
+      { name: 'Productions', href: '#' },
+      { name: 'Past Events', href: '#' },
+      { name: 'Festivals', href: '#' },
+    ],
+  },
+  {
+    title: 'Home',
+    links: [
+      { name: 'Founder', href: '#' },
+      { name: 'Achievements', href: '#' },
+      { name: 'Contact Form', href: '#' },
+      { name: 'FAQ', href: '#' },
+    ],
   },
 ];
 
 const Footer = () => {
   return (
-    <div
+    <footer
       id="footer"
-      className="h-[320px] w-full bg-secondary px-4 text-white md:px-[120px]"
+      className="w-full bg-secondary px-4 py-8 text-white md:px-[120px] md:py-10"
     >
-      <div className="flex flex-col-reverse md:h-full md:flex-row md:items-center md:justify-between">
-        <div className="flex gap-5">
-          <div className="">
+      <div className="mx-auto flex max-w-screen-xl flex-col gap-8 md:flex-row md:justify-between">
+        <div className="flex flex-col items-start gap-4 md:flex-row md:gap-5">
+          <div className="shrink-0">
             <Logo />
           </div>
-          <div className="">
-            <div className="flex flex-col space-y-2">
-              <h1 className="text-[#FFD45C]">Gaana Nritya Academy</h1>
-              <p className="text-balance">
+          <div>
+            <h3 className="mb-2 text-lg font-semibold text-[#FFD45C]">
+              Gaana Nritya Academy
+            </h3>
+            <address className="not-italic">
+              <p className="text-sm leading-relaxed">
                 Tharangini Raktheshwari,
                 <br /> Nagar Kottara Chowki, Mangaluru,
                 <br /> Karnataka - 575006
               </p>
-              <p>9986563999</p>
-              <p>gaananritya@gmail.com</p>
-            </div>
+              <p className="mt-2 text-sm">
+                <a href="tel:9986563999" className="hover:text-[#FFD45C]">
+                  9986563999
+                </a>
+              </p>
+              <p className="mt-1 text-sm">
+                <a
+                  href="mailto:gaananritya@gmail.com"
+                  className="hover:text-[#FFD45C]"
+                >
+                  gaananritya@gmail.com
+                </a>
+              </p>
+            </address>
           </div>
         </div>
-        <div className="flex flex-col">
-          <div className="flex space-x-12">
-            <ul className="list-none space-y-4">
-              <h1 className="text-base font-semibold text-[#FFD45C]">
-                Classes
-              </h1>
-              <li>Bharatanatyam</li>
-              <li>Carnatic Music</li>
-              <li>Worshops</li>
-              <li>Registrations</li>
-            </ul>
-            <ul className="list-none space-y-4">
-              <h1 className="text-base font-semibold text-[#FFD45C]">Media</h1>
-              <li>Gallery</li>
-              <li>Videos</li>
-              <li>Press</li>
-              <li>Registrations</li>
-            </ul>
-            <ul className="list-none space-y-4">
-              <h1 className="text-base font-semibold text-[#FFD45C]">Events</h1>
-              <li>Upcoming Events</li>
-              <li>Productions</li>
-              <li>Past Events</li>
-              <li>Festivals</li>
-            </ul>
-            <ul className="list-none space-y-4">
-              <h1 className="text-base font-semibold text-[#FFD45C]">Home</h1>
-              <li>Founder</li>
-              <li>Achievements</li>
-              <li>Contact Form</li>
-              <li>Faq</li>
-            </ul>
-          </div>
+
+        <div className="flex flex-col gap-6 md:items-end">
+          <nav className="hidden grid-cols-2 gap-x-8 gap-y-6 md:grid md:grid-cols-4 md:gap-x-12">
+            {footerSections.map((section) => (
+              <div key={section.title}>
+                <h4 className="mb-3 text-base font-semibold text-[#FFD45C]">
+                  {section.title}
+                </h4>
+                <ul className="list-none space-y-2">
+                  {section.links.map((link) => (
+                    <li key={link.name}>
+                      <a
+                        href={link.href}
+                        className="text-sm hover:text-[#FFD45C]"
+                      >
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
           <div className="mt-4 flex space-x-4">
             {socialLinks.map((link) => {
               const IconComponent = link.icon;
               return (
-                <div key={link.id}>
-                  <a href={link.link} target="_blank" rel="noopener noreferrer">
-                    {IconComponent && (
-                      <IconComponent size={24} className="text-[#FFD45C]" />
-                    )}
-                  </a>
-                </div>
+                <a
+                  key={link.id}
+                  href={link.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="text-[#FFD45C] transition-opacity hover:opacity-80"
+                >
+                  {IconComponent && <IconComponent size={24} />}
+                </a>
               );
             })}
           </div>
         </div>
       </div>
-    </div>
+      <div className="mt-8 border-t border-gray-700 pt-4 text-center text-xs text-gray-400 md:mt-10">
+        © {new Date().getFullYear()} Gaana Nritya Academy. All rights reserved.
+      </div>
+    </footer>
   );
 };
 

@@ -49,36 +49,36 @@ const navbarItems: {
   {
     id: '1',
     title: 'Home',
-    link: '#',
+    link: '/',
   },
   {
     id: '2',
     title: 'Classes',
-    link: '#classes',
+    link: '/classes',
     name: 'classes',
   },
   {
     id: '3',
     title: 'About Us',
-    link: '#aboutus',
+    link: '/aboutus',
     name: 'aboutus',
   },
   {
     id: '4',
     title: 'Events',
-    link: '#events',
+    link: '/events',
     name: 'events',
   },
   {
     id: '5',
     title: 'Gallery',
-    link: '#gallery',
+    link: '/gallery',
     name: 'gallery',
   },
   {
     id: '6',
     title: 'contact',
-    link: '#footer',
+    link: '/contact',
     name: 'contact',
   },
 ];
