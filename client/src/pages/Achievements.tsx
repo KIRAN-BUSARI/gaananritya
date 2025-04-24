@@ -7,6 +7,7 @@ import Img2 from '@/assets/achievementsImg2.png';
 import Img3 from '@/assets/achievementsImg3.png';
 import Img4 from '@/assets/achievementsImg4.png';
 import GalleryCard from '@/components/Cards/GalleryCard';
+import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 
 interface AchievementData {
   id: string;
@@ -19,28 +20,28 @@ interface AchievementData {
 const achievements: AchievementData[] = [
   {
     id: '1',
-    title: 'Students Trained Under GNA so far',
+    title: 'Students Trained',
     number: '1500+',
     color: '#EEFAFF',
     textColor: '#1D6D8D',
   },
   {
     id: '2',
-    title: 'Arangetram or Rangapravesha',
+    title: 'Rangapravesha',
     number: '45+',
     color: '#FFEFEE',
     textColor: '#FF6F61',
   },
   {
     id: '3',
-    title: 'Performance all over India',
+    title: 'Performance',
     number: '738+',
     color: '#EEFAFF',
     textColor: '#1D6D8D',
   },
   {
     id: '4',
-    title: 'Contries travelled',
+    title: 'Countries',
     number: '13+',
     color: '#FFEFEE',
     textColor: '#FF6F61',
@@ -51,12 +52,13 @@ const achievementsImages: string[] = [Img1, Img2, Img3, Img4];
 
 const Achievements = () => {
   return (
-    <div className="relative px-[120px] py-20">
-      <div className="">
-        <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%]">
+    <div className="relative px-6 py-10 sm:px-10 lg:px-[120px] lg:py-20">
+      {/* Header Section */}
+      <div>
+        <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
           Milestones & Achievements That Shaped Our Journey
         </h1>
-        <p className="text-lg leading-[170%] tracking-[-1%]">
+        <p className="mt-2 text-lg leading-[170%] tracking-[-1%] sm:text-base lg:text-lg">
           A journey marked by{' '}
           <span className="font-semibold">
             national honors, artistic innovations,
@@ -64,8 +66,10 @@ const Achievements = () => {
           and the nurturing of future torchbearers of Indian classical dance.
         </p>
       </div>
+
+      {/* Achievement Cards */}
       <div
-        className="relative mt-8 grid max-w-[1100px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4"
         id="cards"
       >
         {achievements.map((data) => (
@@ -78,16 +82,19 @@ const Achievements = () => {
           />
         ))}
       </div>
+
+      {/* Decorative Image */}
       <img
-        className="absolute right-0 top-[190px]"
+        className="absolute right-0 top-[470px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[100px] md:block md:w-[200px] lg:top-[190px]"
         src={handSign}
         alt="handsign"
-        height={100}
-        width={260}
       />
-      <div className="my-12 grid grid-cols-2 place-content-between gap-8">
-        <div className="rounded-2xl bg-[#EEFAFF] px-6 py-12">
-          <ul className="list-outside list-disc space-y-6 pl-8">
+
+      {/* Achievements Details */}
+      <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8">
+        {/* Left Section */}
+        <div className="rounded-2xl bg-[#EEFAFF] px-4 py-8 sm:px-6 sm:py-12">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8">
             <li>
               Honored with prestigious titles such as Karnataka{' '}
               <span className="font-semibold">
@@ -119,8 +126,15 @@ const Achievements = () => {
             </li>
           </ul>
         </div>
-        <div className="rounded-2xl bg-[#FFEFEE] px-6 py-12">
-          <ul className="list-outside list-disc space-y-6 pl-8">
+
+        {/* Carousel for Mobile */}
+        <div className="block md:hidden">
+          <HeroSectionBgCarousel interval={2000} images={achievementsImages} />
+        </div>
+
+        {/* Right Section */}
+        <div className="rounded-2xl bg-[#FFEFEE] px-4 py-8 sm:px-6 sm:py-12">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8">
             <li>
               Directed and produced a Bharatanatyam fundamentals DVD titled{' '}
               <span className="font-semibold">&apos;Nrithyaksharam&apos;</span>,
@@ -145,7 +159,9 @@ const Achievements = () => {
           </ul>
         </div>
       </div>
-      <div className="flex gap-6">
+
+      {/* Gallery Section (Hidden on Mobile) */}
+      <div className="hidden gap-6 sm:flex">
         {achievementsImages.map((img) => (
           <GalleryCard key={img} img={img} />
         ))}
