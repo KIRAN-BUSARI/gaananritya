@@ -110,7 +110,7 @@ export default function Navbar() {
               <img
                 src="/logo.png"
                 alt="logo"
-                className="mr-2 h-8 w-auto object-contain md:h-10"
+                className="mr-4 h-14 w-auto object-contain md:h-10"
               />
               <div className="text-base font-medium md:text-base lg:text-lg">
                 <p className="truncate">
