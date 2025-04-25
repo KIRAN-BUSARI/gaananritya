@@ -112,7 +112,7 @@ export default function Navbar() {
                 alt="logo"
                 className="mr-2 h-8 w-auto object-contain md:h-10"
               />
-              <div className="text-lg font-medium md:text-base lg:text-lg">
+              <div className="text-base font-medium md:text-base lg:text-lg">
                 <p className="truncate">
                   Gaana Nritya Academy&reg;
                   <span className="xs:inline">, Mangalore</span>
