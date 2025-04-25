@@ -24,7 +24,7 @@ export default function Hero() {
 
       {/* Content Overlay */}
       <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
-        <div className="px-4 md:px-[120px]">
+        <div className="px-4 md:px-20">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
               images={mobileImages}

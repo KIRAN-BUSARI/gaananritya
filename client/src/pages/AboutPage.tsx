@@ -10,7 +10,7 @@ const AboutPage = () => {
   return (
     <div
       id="about"
-      className="relative flex h-auto flex-col items-center justify-center bg-[#F6F3F6] px-4 py-20 md:px-[120px] md:py-40"
+      className="relative flex h-auto flex-col items-center justify-center bg-[#F6F3F6] px-4 py-20 md:px-20 md:py-40"
     >
       <motion.img
         src={v3}

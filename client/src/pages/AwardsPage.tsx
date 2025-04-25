@@ -40,7 +40,7 @@ const AwardsPage = () => {
   return (
     <div
       id="awards"
-      className="flex min-h-screen flex-col items-center justify-center bg-secondary px-4 py-10 md:px-[120px]"
+      className="flex min-h-screen flex-col items-center justify-center bg-secondary px-4 py-10 md:px-20"
     >
       {/* Title and description animation */}
       <motion.div

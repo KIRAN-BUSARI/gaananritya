@@ -52,7 +52,7 @@ const achievementsImages: string[] = [Img1, Img2, Img3, Img4];
 
 const Achievements = () => {
   return (
-    <div className="relative px-6 py-10 sm:px-10 lg:px-[120px] lg:py-20">
+    <div className="relative px-6 py-10 sm:px-10 lg:px-20 lg:py-20">
       {/* Header Section */}
       <div>
         <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">

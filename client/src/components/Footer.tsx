@@ -89,7 +89,7 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="w-full bg-secondary px-4 py-8 text-white sm:px-6 md:px-[120px] md:py-10"
+      className="w-full bg-secondary px-4 py-8 text-white sm:px-6 md:px-20 md:py-10"
     >
       <div className="mx-auto flex max-w-screen-xl flex-col gap-8 md:flex-row md:justify-between">
         {/* Logo and Address Section */}

@@ -1,9 +1,6 @@
 function Performance() {
   return (
-    <section
-      id="performance"
-      className="h-auto px-4 py-10 md:px-[120px] md:py-40"
-    >
+    <section id="performance" className="h-auto px-4 py-10 md:px-20 md:py-40">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col space-y-5 text-left sm:text-center">
           <h1 className="text-2xl font-semibold md:text-4xl">Performance</h1>
