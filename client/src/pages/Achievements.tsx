@@ -85,7 +85,7 @@ const Achievements = () => {
 
       {/* Decorative Image */}
       <img
-        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[100px] md:block md:w-[200px] lg:top-[190px]"
+        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[260px] md:block md:w-[200px] lg:top-[190px]"
         src={handSign}
         alt="handsign"
       />
@@ -129,7 +129,11 @@ const Achievements = () => {
 
         {/* Carousel for Mobile */}
         <div className="block md:hidden">
-          <HeroSectionBgCarousel interval={2000} images={achievementsImages} />
+          <HeroSectionBgCarousel
+            className="rounded-2xl"
+            interval={2000}
+            images={achievementsImages}
+          />
         </div>
 
         {/* Right Section */}
