@@ -24,7 +24,7 @@ export default function Hero() {
 
       {/* Content Overlay */}
       <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
-        <div className="px-4 sm:px-[120px]">
+        <div className="px-4 md:px-[120px]">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
               images={mobileImages}
@@ -34,8 +34,9 @@ export default function Hero() {
           </div>
           <div className="flex flex-col justify-center md:items-start">
             <h1 className="mt-6 text-balance text-center text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-left md:text-[40px] md:font-medium md:text-primary">
-              Celebrating 30 Years of <br /> Nurturing Dreams Through <br />{' '}
-              Indian Music & Dance <br />
+              Celebrating 30 Years of <br className="hidden lg:block" />{' '}
+              Nurturing Dreams Through <br className="hidden lg:block" /> Indian
+              Music & Dance <br className="hidden lg:block" />
               <span className="text-secondary1 md:text-secondary">
                 Gaana Nritya Academy
               </span>

@@ -24,10 +24,10 @@ const FounderPage = () => {
     <div className="relative mx-auto my-8 min-h-[calc(100vh-100px)] w-full px-4 sm:px-6 md:my-12 md:px-8 lg:my-20 lg:px-12 xl:px-[120px]">
       {/* Header Section */}
       <div className="flex flex-col">
-        <h1 className="text-2xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
+        <h1 className="text-3xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
           Founder & Artistic Director: Guru. Vidyashree Radhakrishna
         </h1>
-        <h2 className="mt-6 text-base leading-[170%] tracking-[-1%] text-[#2b2b2e] sm:text-lg md:text-lg lg:text-xl">
+        <h2 className="mt-6 text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e] sm:text-lg md:text-lg lg:text-xl">
           <span className="font-semibold">Vidyashree Radhakrishna</span> founded
           <span className="font-semibold text-secondary1">
             {' '}
@@ -39,20 +39,17 @@ const FounderPage = () => {
         </h2>
       </div>
 
-      {/* Content Section */}
-      <div className="mt-6 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-12 md:gap-8 lg:gap-14">
-        {/* Carousel Section */}
-        <div className="relative col-span-1 flex justify-center md:col-span-12 md:justify-start lg:col-span-6">
+      <div className="mt-6 grid grid-cols-1 place-content-between lg:grid-cols-12">
+        <div className="relative col-span-1 flex justify-center md:col-span-5 md:justify-start lg:pr-20">
           <HeroSectionBgCarousel
-            className="h-[300px] w-full max-w-[565px] rounded-2xl sm:h-[400px] md:h-[500px] lg:h-[600px]"
+            className="h-[400px] w-full max-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
             images={imgs}
             interval={4000}
           />
         </div>
 
-        {/* Details Section */}
-        <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-12 lg:col-span-6 lg:mt-0 lg:pr-14">
-          <ul className="list-outside list-disc space-y-6 pl-5 text-base marker:text-[#1d6d8d] sm:text-lg md:space-y-6 md:text-lg lg:space-y-8 lg:text-xl">
+        <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-7 lg:mt-0">
+          <ul className="list-outside list-disc space-y-6 text-balance pl-5 text-lg marker:text-[#1d6d8d] sm:text-lg md:space-y-6 lg:space-y-8">
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
               <span className="font-semibold text-secondary1">
                 Artistic Journey:

@@ -59,27 +59,27 @@ const navbarItems: {
   },
   {
     id: '3',
-    title: 'About Us',
-    link: '/aboutus',
-    name: 'aboutus',
-  },
-  {
-    id: '4',
     title: 'Events',
     link: '/events',
     name: 'events',
   },
   {
-    id: '5',
+    id: '4',
     title: 'Gallery',
     link: '/gallery',
     name: 'gallery',
   },
   {
-    id: '6',
+    id: '5',
     title: 'contact',
     link: '/contact',
     name: 'contact',
+  },
+  {
+    id: '6',
+    title: 'blog',
+    link: '/blog',
+    name: 'blog',
   },
 ];
 
