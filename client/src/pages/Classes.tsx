@@ -97,7 +97,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9 md:w-auto"
+                className="mt-6 w-full text-primary md:mt-9"
               >
                 Join Now
               </Button>
@@ -123,7 +123,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9 md:w-auto"
+                className="mt-6 w-full text-primary md:mt-9"
               >
                 Join Now
               </Button>
@@ -164,7 +164,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9 md:w-auto"
+                className="mt-6 w-full text-primary md:mt-9"
               >
                 Join Now
               </Button>
