@@ -27,17 +27,16 @@ import { Button } from '@/components/ui/button';
 const Classes = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 max-h-40 w-full md:max-h-[500px]">
+      <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[800px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745645885/Untitled_design_nk3hv7.mp4"
-          className="aspect-video w-full"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745867383/Untitled_design_fiafpr.mp4"
+          className="aspect-video w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
           disablePictureInPicture
-          controls
         />
       </div>
       <div className="flex w-full flex-col bg-white px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
@@ -169,6 +168,26 @@ const Classes = () => {
                 Join Now
               </Button>
             </div>
+          </div>
+        </div>
+        <div className="mt-10 flex w-full flex-col">
+          <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+            Branches: Our Reach Across Karnataka
+          </h1>
+          <p className="mt-2 text-2xl font-medium leading-[170%] tracking-[-1%]">
+            Gaana Nritya Academy brings Indian classical music and dance to{' '}
+            <br />
+            communities statewide, nurturing talent in every corner
+          </p>
+        </div>
+        <div className="mt-10">
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-center font-semibold">Main Branch </h2>
+            <p className="">
+              <br /> 4-142/2(6) Tharangini <br /> Rakteshwari Nagar <br />{' '}
+              Malemar Road <br /> Kottara Chowki <br /> Mangalore, Karnataka,
+              575006 <br /> Ph. 9449244843. 9844481158
+            </p>
           </div>
         </div>
       </div>

@@ -27,17 +27,16 @@ import { Button } from '@/components/ui/button';
 const Events = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 max-h-40 w-full md:max-h-[500px]">
+      <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[800px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745645885/Untitled_design_nk3hv7.mp4"
-          className="aspect-video w-full"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745867383/Untitled_design_fiafpr.mp4"
+          className="aspect-video w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
           disablePictureInPicture
-          controls
         />
       </div>
       <div className="flex w-full flex-col bg-white px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
