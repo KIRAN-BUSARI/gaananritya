@@ -43,7 +43,7 @@ const navbarItems = [
   { id: '1', title: 'Home', link: '/' },
   { id: '2', title: 'Classes', link: '/classes' },
   { id: '3', title: 'Events', link: '/events' },
-  { id: '4', title: 'Gallery', link: '/gallery' },
+  { id: '4', title: 'Media', link: '/media' },
   { id: '5', title: 'Contact', link: '/contact' },
   { id: '6', title: 'Blog', link: '/blog' },
 ];
@@ -60,7 +60,6 @@ export default function Navbar() {
     setIsLoggedIn(storedIsLoggedIn);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -72,7 +71,6 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
@@ -99,18 +97,18 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-30 w-full bg-white/90 backdrop-blur-md transition-transform duration-300 ${
+        className={`sticky top-0 z-30 w-full bg-white/90 backdrop-blur-sm transition-transform duration-300 ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <nav className="px-4 py-8 md:px-12 lg:px-20">
+        <nav className="px-4 py-4 md:px-12 lg:px-20">
           <div className="flex items-center justify-between">
             {/* Logo Section - Improved for mobile */}
             <Link to="/" className="flex max-w-[70%] items-center">
               <img
                 src="/logo.png"
                 alt="logo"
-                className="mr-2 h-12 w-auto object-contain md:h-10"
+                className="mr-2 h-12 w-auto object-contain md:h-20"
               />
               <div className="text-base font-medium md:text-base lg:text-lg">
                 <p className="truncate">

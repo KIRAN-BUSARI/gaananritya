@@ -16,7 +16,7 @@ const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto w-full items-center justify-center overflow-hidden py-8 md:h-[calc(100vh-100px)]">
+    <div className="relative mx-auto w-full items-center justify-center overflow-hidden py-4 md:h-[calc(100vh-100px)]">
       {/* Background Carousel */}
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
@@ -33,7 +33,7 @@ export default function Hero() {
             />
           </div>
           <div className="flex flex-col justify-center md:items-start">
-            <h1 className="mt-6 text-balance text-center text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-left md:text-[40px] md:font-medium md:text-primary">
+            <h1 className="mt-6 text-balance text-center text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-left md:text-[42px] md:font-medium md:text-primary">
               Celebrating 30 Years of <br className="hidden lg:block" />{' '}
               Nurturing Dreams Through <br className="hidden lg:block" /> Indian
               Music & Dance <br className="hidden lg:block" />
