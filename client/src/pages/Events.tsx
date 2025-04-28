@@ -1,130 +1,175 @@
-import { motion } from 'framer-motion';
-import eventImg from '@/assets/EventPageImage.png';
-import EventCard from '@/components/Cards/EventCard';
+import ClassesCard from '@/components/Cards/ClassesCard';
 
-const events = [
+import img1 from '@/assets/classes/img1.png';
+import img2 from '@/assets/classes/img2.png';
+import img3 from '@/assets/classes/img3.png';
+
+const classList = [
   {
-    id: 1,
-    color: '#937DC2',
-    title: 'Guruvayur Temple',
-    description:
-      'Bharathanatyam Performance at Guruvayur Temple on 04.08.2018 10.30 AM to 12.00',
+    image: img1,
+    title: 'Bharatanatyam',
   },
   {
-    id: 2,
-    color: '#7B2869',
-    title: 'Shankara Jayanthi celebrations',
-    description:
-      'Bharathanatyam Performance at Guruvayur Temple on 04.08.2018 10.30 AM to 12.00',
+    image: img2,
+    title: 'Kathak',
   },
   {
-    id: 3,
-    color: '#C689C6',
-    title: 'Tata Institute of Fundamental Research',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 4,
-    color: '#9D3C72',
-    title: 'Padma Bhushan Mrinalini Sarabhai',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 5,
-    color: '#E8A0BF',
-    title: 'Shri Krishna Temple',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 6,
-    color: '#C85C8E',
-    // eslint-disable-next-line quotes
-    title: 'Kathak at "Soma"',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 7,
-    color: '#FCC5C0',
-    title: 'Chandana TV Award Function',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 8,
-    color: '#FFBABA',
-    title: 'Srushti Dance Festival',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 9,
-    color: '#628E90',
-    title: 'National Institute of Tuberculosis',
-    description: 'MFA In dance, Ph.D In Microbiology',
-  },
-  {
-    id: 10,
-    color: '#7895B2',
-    title: 'National Institute of Tuberculosis',
-    description: 'MFA In dance, Ph.D In Microbiology',
+    image: img3,
+    title: 'Carnatic Music',
   },
 ];
 
+import bharathanatyam from '@/assets/classes/bharathanatyam.png';
+import kathak from '@/assets/classes/kathak.png';
+import carnatic from '@/assets/classes/carnatic.png';
+import { Button } from '@/components/ui/button';
+
 const Events = () => {
   return (
-    <div
-      id="events"
-      className="relative h-auto flex-col items-center px-4 py-20 md:px-[60px] md:py-32 lg:px-20"
-    >
-      <img
-        src={eventImg}
-        alt="eventImage"
-        className="absolute right-0 top-[550px] -z-10 w-[300px] opacity-20 md:top-32 md:opacity-100"
-      />
+    <div className="relative flex h-auto w-full flex-col items-center justify-center">
+      <div className="-z-10 max-h-40 w-full md:max-h-[500px]">
+        <video
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745645885/Untitled_design_nk3hv7.mp4"
+          className="aspect-video w-full"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          controls
+        />
+      </div>
+      <div className="flex w-full flex-col bg-white px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
+        <div>
+          <h1 className="text-2xl font-semibold sm:text-3xl md:text-[32px]">
+            Events that Celebrate Tradition & Talent
+          </h1>
+          <p className="mt-2 text-lg font-medium sm:text-xl md:text-2xl">
+            From graceful performances to grand festivals — experience the
+            rhythm of GNA on stage.
+          </p>
+        </div>
+        <div className="mt-6 md:mt-9">
+          <p className="text-base leading-[170%] tracking-[-0.18px] md:text-lg">
+            At Gaana Nritya Academy, every event is a celebration of art,
+            culture, and community. Our calendar is filled with enriching
+            performances, vibrant festivals, and student showcases that bring
+            classical dance and music to diverse audiences. Whether it&apos;s a
+            quiet auditorium or a grand temple stage, our dancers and musicians
+            leave an impression wherever they perform. Stay updated with our
+            upcoming events or revisit the moments that moved hearts.
+          </p>
+        </div>
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 md:mt-12 md:gap-10 lg:grid-cols-3">
+          {classList.map((data, index) => (
+            <div key={index} className="w-full">
+              <ClassesCard image={data.image} title={data.title} />
+            </div>
+          ))}
+        </div>
+        <div className="mt-6">
+          {/* Bharatanatyam Section */}
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+              <img
+                src={bharathanatyam}
+                alt="Bharatanatyam"
+                className="h-auto w-full rounded-lg"
+              />
+            </div>
+            <div className="order-2 py-2 md:py-4">
+              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                Bharatanatyam
+              </h1>
+              <p className="my-2 text-lg font-medium sm:text-xl">
+                Grace in every step. Stories in every move.
+              </p>
+              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                Discover the soul of South Indian classical dance with our
+                Bharatanatyam classes designed for all age groups. From basic
+                adavus to intricate abhinaya and stage performances, students
+                learn discipline, expression, and tradition in every session.
+                Guided by experienced gurus, our curriculum nurtures both
+                beginners and advanced learners into confident performers.
+              </p>
+              <Button
+                variant={'secondary'}
+                className="mt-6 w-full text-primary md:mt-9"
+              >
+                Join Now
+              </Button>
+            </div>
+          </div>
 
-      <motion.div
-        className="mx-auto mb-10 flex flex-col space-y-2 text-left text-primary sm:text-center md:mb-20"
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="text-2xl font-semibold md:text-4xl">Events</h1>
-        <p className="text-sm font-normal leading-[22px] md:text-base">
-          Discover the remarkable achievements and recognition of our Indian
-          classical dance artists, who have received prestigious <br /> awards
-          and accolades for their exceptional talent and contribution to this
-          art form.
-        </p>
-      </motion.div>
+          {/* Carnatic Music Section */}
+          <div className="my-6 grid grid-cols-1 gap-6 p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+            <div className="order-2 py-2 md:order-1 md:py-4">
+              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                Carnatic Music
+              </h1>
+              <p className="my-2 text-lg font-medium sm:text-xl">
+                Tune into the rhythm of tradition.
+              </p>
+              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                Our Carnatic music classes offer a soulful journey into South
+                Indian classical vocals. With a strong focus on sruti, laya, and
+                raga development, students are trained to understand and
+                appreciate the depth of classical compositions. From basic
+                swaras to varnams and krithis, each learner gets personalized
+                attention and structured growth.
+              </p>
+              <Button
+                variant={'secondary'}
+                className="mt-6 w-full text-primary md:mt-9"
+              >
+                Join Now
+              </Button>
+            </div>
+            <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+              <img
+                src={carnatic}
+                alt="Carnatic Music"
+                className="h-auto w-full rounded-lg"
+              />
+            </div>
+          </div>
 
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2"
-        initial="hidden"
-        whileInView="visible"
-        variants={{
-          hidden: { opacity: 0, x: -100 },
-          visible: {
-            opacity: 1,
-            x: 0,
-            transition: { staggerChildren: 0.2 },
-          },
-        }}
-      >
-        {events.map((event) => (
-          <motion.div
-            key={event.id}
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
-            transition={{ duration: 0.8 }}
-          >
-            <EventCard
-              color={event.color}
-              title={event.title}
-              description={event.description}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
+          {/* Kathak Section */}
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#FFEFEE] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+              <img
+                src={kathak}
+                alt="Kathak"
+                className="h-auto w-full rounded-lg"
+              />
+            </div>
+            <div className="order-2 py-2 md:py-4">
+              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                Kathak
+              </h1>
+              <p className="my-2 text-lg font-medium sm:text-xl">
+                Where rhythm meets expression.
+              </p>
+              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                Step into the world of Kathak dance and experience the elegance
+                of North Indian storytelling through footwork, spins, and
+                gestures. Our Kathak classes blend tradition and creativity,
+                helping students master both technical precision and emotive
+                performance. Open to all levels, the program builds a strong
+                foundation rooted in classical knowledge and performance
+                artistry.
+              </p>
+              <Button
+                variant={'secondary'}
+                className="mt-6 w-full text-primary md:mt-9"
+              >
+                Join Now
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

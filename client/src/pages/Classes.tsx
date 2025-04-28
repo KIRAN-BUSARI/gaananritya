@@ -27,10 +27,10 @@ import { Button } from '@/components/ui/button';
 const Classes = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="w-full max-h-40 md:max-h-[500px] -z-10">
+      <div className="-z-10 max-h-40 w-full md:max-h-[500px]">
         <video
           src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745645885/Untitled_design_nk3hv7.mp4"
-          className="w-full aspect-video"
+          className="aspect-video w-full"
           autoPlay
           loop
           muted
@@ -40,7 +40,7 @@ const Classes = () => {
           controls
         />
       </div>
-      <div className="flex w-full flex-col px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24 bg-white">
+      <div className="flex w-full flex-col bg-white px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl md:text-[32px]">
             Classes That Move with Grace & Melody
