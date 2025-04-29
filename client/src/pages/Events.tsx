@@ -19,11 +19,6 @@ const classList = [
   },
 ];
 
-import bharathanatyam from '@/assets/classes/bharathanatyam.png';
-import kathak from '@/assets/classes/kathak.png';
-import carnatic from '@/assets/classes/carnatic.png';
-import { Button } from '@/components/ui/button';
-
 const Events = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
@@ -51,14 +46,64 @@ const Events = () => {
         </div>
         <div className="mt-6 md:mt-9">
           <p className="text-base leading-[170%] tracking-[-0.18px] md:text-lg">
-            At Gaana Nritya Academy, every event is a celebration of art,
-            culture, and community. Our calendar is filled with enriching
-            performances, vibrant festivals, and student showcases that bring
-            classical dance and music to diverse audiences. Whether it&apos;s a
-            quiet auditorium or a grand temple stage, our dancers and musicians
-            leave an impression wherever they perform. Stay updated with our
-            upcoming events or revisit the moments that moved hearts.
+            Every event is a celebration of art, culture, and community. Our
+            calendar is filled with enriching performances, vibrant festivals,
+            and student showcases that bring classical dance and music to
+            diverse audiences. Whether it’s a quiet auditorium or a grand temple
+            stage, our dancers and musicians leave an impression wherever they
+            perform. Stay updated with our upcoming events or revisit the
+            moments that moved hearts.
           </p>
+        </div>
+        <div className="mt-8">
+          <h1 className="text-2xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61]">
+            Upcoming Events
+          </h1>
+          <ul className="mt-6 list-inside list-disc space-y-4 text-lg">
+            <li>
+              Celebrating{' '}
+              <span className="font-semibold text-[#FF6F61]">
+                Aaronhan-2025{' '}
+              </span>{' '}
+              at Sullia Branch, Mangalore - Invitation
+            </li>
+            <li>
+              <span className="font-semibold text-[#FF6F61]">
+                Poorvi Radhakrishna&apos;s Rangapravesh
+              </span>{' '}
+              on 12th May 2025, Mangalore.
+            </li>
+            <li>
+              Annual Day Celebration{' '}
+              <span className="font-semibold text-[#FF6F61]">Hejje-Gejje,</span>{' '}
+              25th June, Gaana Nritya Academy, Branch Bangalore.
+            </li>
+          </ul>
+        </div>
+        <div className="mt-16">
+          <h1 className="text-2xl font-semibold leading-[170%] tracking-[-1%]">
+            Past Events
+          </h1>
+          <ul className="mt-6 list-inside list-disc space-y-4 text-lg">
+            <li>
+              Celebrating{' '}
+              <span className="font-semibold text-[#FF6F61]">
+                Aaronhan-2025{' '}
+              </span>{' '}
+              at Sullia Branch, Mangalore - Invitation
+            </li>
+            <li>
+              <span className="font-semibold text-[#FF6F61]">
+                Poorvi Radhakrishna&apos;s Rangapravesh
+              </span>{' '}
+              on 12th May 2025, Mangalore.
+            </li>
+            <li>
+              Annual Day Celebration{' '}
+              <span className="font-semibold text-[#FF6F61]">Hejje-Gejje,</span>{' '}
+              25th June, Gaana Nritya Academy, Branch Bangalore.
+            </li>
+          </ul>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 md:mt-12 md:gap-10 lg:grid-cols-3">
           {classList.map((data, index) => (
@@ -67,106 +112,55 @@ const Events = () => {
             </div>
           ))}
         </div>
-        <div className="mt-6">
-          {/* Bharatanatyam Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
-            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
-              <img
-                src={bharathanatyam}
-                alt="Bharatanatyam"
-                className="h-auto w-full rounded-lg"
-              />
-            </div>
-            <div className="order-2 py-2 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Bharatanatyam
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Grace in every step. Stories in every move.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Discover the soul of South Indian classical dance with our
-                Bharatanatyam classes designed for all age groups. From basic
-                adavus to intricate abhinaya and stage performances, students
-                learn discipline, expression, and tradition in every session.
-                Guided by experienced gurus, our curriculum nurtures both
-                beginners and advanced learners into confident performers.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
-              >
-                Join Now
-              </Button>
-            </div>
-          </div>
-
-          {/* Carnatic Music Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
-            <div className="order-2 py-2 md:order-1 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Carnatic Music
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Tune into the rhythm of tradition.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Our Carnatic music classes offer a soulful journey into South
-                Indian classical vocals. With a strong focus on sruti, laya, and
-                raga development, students are trained to understand and
-                appreciate the depth of classical compositions. From basic
-                swaras to varnams and krithis, each learner gets personalized
-                attention and structured growth.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
-              >
-                Join Now
-              </Button>
-            </div>
-            <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
-              <img
-                src={carnatic}
-                alt="Carnatic Music"
-                className="h-auto w-full rounded-lg"
-              />
-            </div>
-          </div>
-
-          {/* Kathak Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#FFEFEE] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
-            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
-              <img
-                src={kathak}
-                alt="Kathak"
-                className="h-auto w-full rounded-lg"
-              />
-            </div>
-            <div className="order-2 py-2 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Kathak
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Where rhythm meets expression.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Step into the world of Kathak dance and experience the elegance
-                of North Indian storytelling through footwork, spins, and
-                gestures. Our Kathak classes blend tradition and creativity,
-                helping students master both technical precision and emotive
-                performance. Open to all levels, the program builds a strong
-                foundation rooted in classical knowledge and performance
-                artistry.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
-              >
-                Join Now
-              </Button>
-            </div>
-          </div>
+        <div className="mt-8">
+          <h1 className="text-2xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61]">
+            Festivals
+          </h1>
+          <ul className="mt-6 list-inside list-disc space-y-4 text-lg">
+            <li>
+              Celebrating{' '}
+              <span className="font-semibold text-[#FF6F61]">
+                Aaronhan-2025{' '}
+              </span>{' '}
+              at Sullia Branch, Mangalore - Invitation
+            </li>
+            <li>
+              <span className="font-semibold text-[#FF6F61]">
+                Poorvi Radhakrishna&apos;s Rangapravesh
+              </span>{' '}
+              on 12th May 2025, Mangalore.
+            </li>
+            <li>
+              Annual Day Celebration{' '}
+              <span className="font-semibold text-[#FF6F61]">Hejje-Gejje,</span>{' '}
+              25th June, Gaana Nritya Academy, Branch Bangalore.
+            </li>
+          </ul>
+        </div>
+        <div className="mt-16">
+          <h1 className="text-2xl font-semibold leading-[170%] tracking-[-1%]">
+            Productions
+          </h1>
+          <ul className="mt-6 list-inside list-disc space-y-4 text-lg">
+            <li>
+              Celebrating{' '}
+              <span className="font-semibold text-[#FF6F61]">
+                Aaronhan-2025{' '}
+              </span>{' '}
+              at Sullia Branch, Mangalore - Invitation
+            </li>
+            <li>
+              <span className="font-semibold text-[#FF6F61]">
+                Poorvi Radhakrishna&apos;s Rangapravesh
+              </span>{' '}
+              on 12th May 2025, Mangalore.
+            </li>
+            <li>
+              Annual Day Celebration{' '}
+              <span className="font-semibold text-[#FF6F61]">Hejje-Gejje,</span>{' '}
+              25th June, Gaana Nritya Academy, Branch Bangalore.
+            </li>
+          </ul>
         </div>
       </div>
     </div>
