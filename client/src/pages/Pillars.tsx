@@ -57,7 +57,7 @@ const Pillars = () => {
           Academy's legacy, nurturing talent and leading our branches.
         </p>
       </div>
-      <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:mt-10 md:gap-10 lg:grid-cols-3 lg:gap-12">
+      <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:mt-10 md:gap-10 lg:grid-cols-4 lg:gap-12">
         {pillarsData.map((pillar, index) => (
           <PillarsCard
             key={index}
