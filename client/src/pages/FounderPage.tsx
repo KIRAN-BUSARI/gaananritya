@@ -27,7 +27,7 @@ const FounderPage = () => {
         <h1 className="text-3xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
           Founder & Artistic Director: Guru. Vidyashree Radhakrishna
         </h1>
-        <h2 className="mt-6 text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e] sm:text-lg md:text-lg lg:text-xl">
+        <h2 className="mt-6 text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e]">
           <span className="font-semibold">Vidyashree Radhakrishna</span> founded
           <span className="font-semibold text-secondary1">
             {' '}

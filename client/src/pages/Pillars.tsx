@@ -10,38 +10,32 @@ const pillarsData: PillarData[] = [
   {
     image: img1,
     name: 'Mr. Radhakrishna Bhat',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
   {
     image: img1,
     name: 'Ankita K',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
   {
     image: img1,
     name: 'Poorvi Radhakrishna',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
   {
     image: img1,
     name: 'Mr. Radhakrishna Bhat',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
   {
     image: img1,
     name: 'Mr. Radhakrishna Bhat',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
   {
     image: img1,
     name: 'Mr. Radhakrishna Bhat',
-    description:
-      'A cornerstone of Gaana Nritya Academy, Mr. Radha Krishna elevates our performances through.',
+    description: 'A cornerstone ',
   },
 ];
 
@@ -52,7 +46,7 @@ const Pillars = () => {
         <h1 className="text-left text-3xl font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
           Pillars & Strength of Gaana Nritya Academy
         </h1>
-        <p className="mt-3 text-left text-base font-medium leading-[170%] tracking-[-1%] sm:text-lg md:mt-4">
+        <p className="mt-3 text-left text-base font-medium leading-[170%] tracking-[-1%] sm:text-lg md:mt-4 md:text-lg">
           Meet the dedicated artists and senior students who uphold Gaana Nritya
           Academy's legacy, nurturing talent and leading our branches.
         </p>
