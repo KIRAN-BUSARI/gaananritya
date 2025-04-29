@@ -6,7 +6,7 @@ export default function PageNotFound() {
           404
         </span>
         <h1 className="flex text-secondary">
-          Page Not Found <span className="ml-5 animate-bounce">🧐</span>
+          Page is getting ready <span className="ml-5 animate-bounce">😎</span>
         </h1>
       </div>
     </div>
