@@ -21,7 +21,7 @@ const FounderPage = () => {
   const imgs = [carousal1, carousal2, carousal3];
 
   return (
-    <div className="relative mx-auto my-8 min-h-[calc(100vh-100px)] w-full px-4 sm:px-6 md:my-12 md:px-8 lg:my-20 lg:px-12 xl:px-20">
+    <div className="relative mx-auto my-8 h-auto w-full px-4 sm:px-6 md:mt-12 md:px-8 lg:mt-20 lg:px-12 xl:px-20">
       {/* Header Section */}
       <div className="flex flex-col">
         <h1 className="text-3xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
@@ -39,8 +39,8 @@ const FounderPage = () => {
         </h2>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 place-content-between lg:grid-cols-12">
-        <div className="relative col-span-1 flex justify-center md:col-span-5 md:justify-start lg:pr-20">
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-12">
+        <div className="relative col-span-1 flex justify-center md:col-span-6 md:justify-start lg:pr-20">
           <HeroSectionBgCarousel
             className="h-[400px] w-full max-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
             images={imgs}
@@ -48,7 +48,7 @@ const FounderPage = () => {
           />
         </div>
 
-        <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-7 lg:mt-0">
+        <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-6 lg:mt-0">
           <ul className="list-outside list-disc space-y-6 text-balance pl-5 text-lg marker:text-[#1d6d8d] sm:text-lg md:space-y-6 lg:space-y-8">
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
               <span className="font-semibold text-secondary1">
