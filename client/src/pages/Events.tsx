@@ -1,4 +1,3 @@
-import ClassesCard from '@/components/Cards/ClassesCard';
 import { motion } from 'framer-motion';
 
 import img1 from '@/assets/classes/img1.png';
@@ -6,21 +5,6 @@ import img2 from '@/assets/classes/img2.png';
 import img3 from '@/assets/classes/img3.png';
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import EventCard from '@/components/Cards/EventCard';
-
-const classList = [
-  {
-    image: img1,
-    title: 'Bharatanatyam',
-  },
-  {
-    image: img2,
-    title: 'Kathak',
-  },
-  {
-    image: img3,
-    title: 'Carnatic Music',
-  },
-];
 
 interface Tab {
   title: string;
@@ -239,9 +223,7 @@ const Events = () => {
           {renderContent()}
         </div>
 
-        {/* Event sections */}
         <div className="mt-8 space-y-12 sm:mt-12 lg:mt-16">
-          {/* Upcoming Events Section */}
           <div>
             <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61] sm:text-2xl">
               Upcoming Events
@@ -270,7 +252,6 @@ const Events = () => {
             </ul>
           </div>
 
-          {/* Past Events Section */}
           <div>
             <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] sm:text-2xl">
               Past Events
@@ -299,16 +280,6 @@ const Events = () => {
             </ul>
           </div>
 
-          {/* Classes Grid */}
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 lg:gap-10">
-            {classList.map((data, index) => (
-              <div key={index} className="w-full">
-                <ClassesCard image={data.image} title={data.title} />
-              </div>
-            ))}
-          </div>
-
-          {/* Festivals Section */}
           <div>
             <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61] sm:text-2xl">
               Festivals
@@ -337,7 +308,6 @@ const Events = () => {
             </ul>
           </div>
 
-          {/* Productions Section */}
           <div>
             <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] sm:text-2xl">
               Productions

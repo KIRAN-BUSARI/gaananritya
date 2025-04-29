@@ -45,7 +45,7 @@ const navbarItems = [
   { id: '3', title: 'Events', link: '/events' },
   { id: '4', title: 'Media', link: '/media' },
   { id: '5', title: 'Contact', link: '/contact' },
-  { id: '6', title: 'Blog', link: '/blog' },
+  { id: '6', title: 'Blog', link: '/blogs' },
 ];
 
 export default function Navbar() {
