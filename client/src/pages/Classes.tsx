@@ -27,7 +27,7 @@ import { Button } from '@/components/ui/button';
 const Classes = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[800px]">
+      <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[600px]">
         <video
           src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745867383/Untitled_design_fiafpr.mp4"
           className="aspect-video w-full object-cover"
@@ -96,7 +96,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
+                className="mt-6 text-primary md:mt-9"
               >
                 Join Now
               </Button>
@@ -122,7 +122,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
+                className="mt-6 text-primary md:mt-9"
               >
                 Join Now
               </Button>
@@ -163,7 +163,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 w-full text-primary md:mt-9"
+                className="mt-6 text-primary md:mt-9"
               >
                 Join Now
               </Button>
