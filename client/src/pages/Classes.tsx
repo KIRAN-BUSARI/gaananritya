@@ -161,8 +161,8 @@ const Classes = () => {
             presence.
           </p>
         </div>
-        <div className="mt-6">
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+        <div className="mt-8">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={bharathanatyam}
@@ -170,7 +170,7 @@ const Classes = () => {
                 className="h-auto w-full rounded-lg"
               />
             </div>
-            <div className="order-2 py-2 md:py-4">
+            <div className="order-2 content-center py-2 md:py-4">
               <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                 Bharatanatyam
               </h1>
@@ -194,8 +194,8 @@ const Classes = () => {
             </div>
           </div>
 
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
-            <div className="order-2 py-2 md:order-1 md:py-4">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="order-2 content-center py-2 md:order-1 md:py-4">
               <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                 Carnatic Music
               </h1>
@@ -226,7 +226,7 @@ const Classes = () => {
             </div>
           </div>
 
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={kathak}
@@ -234,7 +234,7 @@ const Classes = () => {
                 className="h-auto w-full rounded-lg"
               />
             </div>
-            <div className="order-2 py-2 md:py-4">
+            <div className="order-2 content-center py-2 md:py-4">
               <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                 Kathak
               </h1>
@@ -256,6 +256,37 @@ const Classes = () => {
               >
                 Join Now
               </Button>
+            </div>
+          </div>
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="order-2 content-center py-2 md:order-1 md:py-4">
+              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                Workshops
+              </h1>
+              <p className="my-2 text-lg font-medium sm:text-xl">
+                Tune into the rhythm of tradition.
+              </p>
+              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                Our Carnatic music classes offer a soulful journey into South
+                Indian classical vocals. With a strong focus on sruti, laya, and
+                raga development, students are trained to understand and
+                appreciate the depth of classical compositions. From basic
+                swaras to varnams and krithis, each learner gets personalized
+                attention and structured growth.
+              </p>
+              <Button
+                variant={'secondary'}
+                className="mt-6 text-primary md:mt-9"
+              >
+                Join Now
+              </Button>
+            </div>
+            <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+              <img
+                src={carnatic}
+                alt="Carnatic Music"
+                className="h-auto w-full rounded-lg"
+              />
             </div>
           </div>
         </div>
