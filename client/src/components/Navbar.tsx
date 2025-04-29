@@ -97,7 +97,7 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-30 w-full bg-white/90 backdrop-blur-sm transition-transform duration-300 ${
+        className={`sticky top-0 z-30 w-full bg-white transition-transform duration-300 ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >

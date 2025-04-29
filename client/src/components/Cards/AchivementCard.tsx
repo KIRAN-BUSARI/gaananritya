@@ -20,7 +20,7 @@ const AchievementCard = ({
 
   return (
     <div
-      className="flex min-h-[150px] max-w-[250px] flex-col rounded-[8px] p-6 sm:min-h-[150px] sm:p-6 md:max-w-[260px]"
+      className="flex min-h-[150px] flex-col rounded-lg p-6"
       style={cardStyle}
     >
       <h1 className="line-clamp-1 text-2xl capitalize leading-[130%] tracking-[-1%] sm:text-lg md:text-2xl lg:text-2xl">

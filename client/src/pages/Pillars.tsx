@@ -47,17 +47,17 @@ const pillarsData: PillarData[] = [
 
 const Pillars = () => {
   return (
-    <div className="mx-auto flex flex-col px-20 py-20">
-      <div className="">
-        <h1 className="font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
+    <div className="mx-auto flex flex-col px-4 py-10 sm:px-6 md:px-10 lg:px-20 lg:py-20">
+      <div className="mx-auto text-center md:mx-0 md:text-left">
+        <h1 className="text-left text-3xl font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
           Pillars & Strength of Gaana Nritya Academy
         </h1>
-        <p className="mt-4 text-lg font-medium leading-[170%] tracking-[-1%] sm:text-base lg:text-lg">
+        <p className="mt-3 text-left text-base font-medium leading-[170%] tracking-[-1%] sm:text-lg md:mt-4">
           Meet the dedicated artists and senior students who uphold Gaana Nritya
-          Academy&apos;s legacy, nurturing talent and leading our branches.
+          Academy's legacy, nurturing talent and leading our branches.
         </p>
       </div>
-      <div className="mt-10 grid gap-12 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:mt-10 md:gap-10 lg:grid-cols-3 lg:gap-12">
         {pillarsData.map((pillar, index) => (
           <PillarsCard
             key={index}

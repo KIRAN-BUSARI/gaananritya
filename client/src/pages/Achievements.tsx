@@ -67,9 +67,8 @@ const Achievements = () => {
         </p>
       </div>
 
-      {/* Achievement Cards */}
       <div
-        className="relative left-0 mt-8 grid max-w-6xl grid-cols-1 gap-2 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4"
+        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4 xl:max-w-6xl 2xl:max-w-screen-xl"
         id="cards"
       >
         {achievements.map((data) => (
@@ -83,23 +82,19 @@ const Achievements = () => {
         ))}
       </div>
 
-      {/* Decorative Image */}
       <img
-        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[290px] lg:top-[150px]"
+        className="absolute right-0 top-[550px] block h-auto w-[230px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[250px] lg:top-[150px] 2xl:w-[290px]"
         src={handSign}
         alt="handsign"
       />
-      {/* Gallery Section (Hidden on Mobile) */}
       <div className="mt-14 hidden gap-6 sm:flex">
         {achievementsImages.map((img) => (
           <GalleryCard key={img} img={img} />
         ))}
       </div>
-      {/* Achievements Details */}
-      <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8">
-        {/* Left Section */}
-        <div className="rounded-2xl bg-[#EEFAFF] px-4 py-8 sm:px-6 sm:py-12">
-          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8">
+      <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8 2xl:mx-auto 2xl:my-16 2xl:gap-10">
+        <div className="rounded-2xl bg-[#EEFAFF] px-4 py-8 sm:px-6 sm:py-12 2xl:px-8 2xl:py-14">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7 2xl:text-xl">
             <li>
               Honored with prestigious titles such as Karnataka{' '}
               <span className="font-semibold">
@@ -135,15 +130,15 @@ const Achievements = () => {
         {/* Carousel for Mobile */}
         <div className="block md:hidden">
           <HeroSectionBgCarousel
-            className="rounded-2xl"
+            className="h-[400px] rounded-2xl"
             interval={2000}
             images={achievementsImages}
           />
         </div>
 
         {/* Right Section */}
-        <div className="rounded-2xl bg-[#FFEFEE] px-4 py-8 sm:px-6 sm:py-12">
-          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8">
+        <div className="rounded-2xl bg-[#FFEFEE] px-4 py-8 sm:px-6 sm:py-12 2xl:px-8 2xl:py-14">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7 2xl:text-xl">
             <li>
               Directed and produced a Bharatanatyam fundamentals DVD titled{' '}
               <span className="font-semibold">&apos;Nrithyaksharam&apos;</span>,
