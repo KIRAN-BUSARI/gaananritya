@@ -33,16 +33,15 @@ const FounderPage = () => {
             {' '}
             Gaana Nritya Academy
           </span>{' '}
-          in 1994 to preserve Indian classical music and dance, inspiring youth
-          in rural and urban Karnataka. A leading academy, it nurtures
+          in 1994 to preserve Indian classical music and dance, <br /> inspiring
+          youth in rural and urban Karnataka. A leading academy, it nurtures
           Bharatanatyam and music talent.
         </h2>
       </div>
-
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-12">
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-12">
         <div className="relative col-span-1 flex justify-center md:col-span-6 md:justify-start lg:pr-20">
           <HeroSectionBgCarousel
-            className="h-[400px] w-full max-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
+            className="h-[400px] w-full min-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
             images={imgs}
             interval={4000}
           />
