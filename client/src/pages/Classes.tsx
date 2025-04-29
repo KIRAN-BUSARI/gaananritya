@@ -10,7 +10,7 @@ import AddressCard from '@/components/Cards/AddressCard';
 const addressList = [
   {
     id: 1,
-    city: 'Main Branch, Mangalore',
+    city: 'Mangalore, Main Branch',
     name: 'Gaana-Nritya Academy',
     address: [
       '4, 142/2 (6) – Tharangini,',
@@ -22,12 +22,11 @@ const addressList = [
   },
   {
     id: 2,
-    city: 'Mangalore, Branch 2',
+    city: 'Branch 2',
     name: 'Gaana-Nritya Academy',
     address: [
       'Devanga Bhavana,',
-      'Ashok Nagar,',
-      'Urva Store,',
+      'Ashok Nagar, Urva Store,',
       'Mangalore – 575006,',
       'Karnataka, India',
     ],
@@ -35,7 +34,7 @@ const addressList = [
   },
   {
     id: 3,
-    city: 'Mangalore, Branch 3',
+    city: 'Branch 3',
     name: 'Gaana-Nritya Academy',
     address: [
       'Srikrishna Jnanodaya Bhajana Mandira,',
@@ -47,7 +46,7 @@ const addressList = [
   },
   {
     id: 4,
-    city: 'Mangalore, Branch 4',
+    city: 'Branch 4',
     name: 'Gaana-Nritya Academy',
     address: [
       'Sri Narayana Guru Mandira,',
@@ -59,7 +58,7 @@ const addressList = [
   },
   {
     id: 5,
-    city: 'Mangalore, Branch 4',
+    city: 'Branch 4',
     name: 'Gaana-Nritya Academy',
     address: [
       'Sri Nandaneshwara Temple,',
