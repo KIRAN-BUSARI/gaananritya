@@ -1,7 +1,128 @@
 import bharathanatyam from '@/assets/classes/bharathanatyam.png';
 import kathak from '@/assets/classes/kathak.png';
 import carnatic from '@/assets/classes/carnatic.png';
+
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+
+import AddressCard from '@/components/Cards/AddressCard';
+
+const addressList = [
+  {
+    id: 1,
+    city: 'Main Branch, Mangalore',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      '4, 142/2 (6) – Tharangini,',
+      'Malemar Road, Kottara Chowki,',
+      'Mangalore – 575006,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9844481158 , 9449244843',
+  },
+  {
+    id: 2,
+    city: 'Mangalore, Branch 2',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Devanga Bhavana,',
+      'Ashok Nagar,',
+      'Urva Store,',
+      'Mangalore – 575006,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9591773721',
+  },
+  {
+    id: 3,
+    city: 'Mangalore, Branch 3',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Srikrishna Jnanodaya Bhajana Mandira,',
+      'Kottara Chowki,',
+      'Mangalore – 575006,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9844481158 , 9449244843',
+  },
+  {
+    id: 4,
+    city: 'Mangalore, Branch 4',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Sri Narayana Guru Mandira,',
+      'Marry Hill,',
+      'Mangalore – 575006,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9844481158 , 9449244843',
+  },
+  {
+    id: 5,
+    city: 'Mangalore, Branch 4',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Sri Nandaneshwara Temple,',
+      'Panamboor,',
+      'Mangalore – 575006,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9591773721',
+  },
+  {
+    id: 6,
+    city: 'Sullia',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Yuva Jana Samyukta Mandali,',
+      'Junior Collage Road Sullia,',
+      'Dakshina Kannada,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '8951889737',
+  },
+  {
+    id: 7,
+    city: 'Karkala',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Yajna,',
+      'Rotory Club,',
+      'Bhuvanendra Collage Road,',
+      'Karkala,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9591773721',
+  },
+  {
+    id: 8,
+    city: 'Bangalore',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      '99/1, Ground Floor,',
+      'RS complex, opp. To BET School,',
+      'Hesargatta Main road,',
+      'Chikka Banaavaraa,',
+      'Bangalore – 590090,',
+      'Karnataka, India',
+    ],
+    phoneNumber: '7760034551',
+  },
+  {
+    id: 9,
+    city: 'Surat Sub Branch',
+    name: 'Gaana-Nritya Academy',
+    address: [
+      'Akshata Nishanth,',
+      'Sangitaranga Dance and Music school,',
+      '193A Sai rachana Row House,',
+      'Near Palgam circle, Adajan,',
+      'Surat',
+      'Karnataka, India',
+    ],
+    phoneNumber: '9099084814',
+  },
+];
 
 const Classes = () => {
   return (
@@ -42,7 +163,6 @@ const Classes = () => {
           </p>
         </div>
         <div className="mt-6">
-          {/* Bharatanatyam Section */}
           <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
@@ -75,7 +195,6 @@ const Classes = () => {
             </div>
           </div>
 
-          {/* Carnatic Music Section */}
           <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
             <div className="order-2 py-2 md:order-1 md:py-4">
               <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
@@ -108,7 +227,6 @@ const Classes = () => {
             </div>
           </div>
 
-          {/* Kathak Section */}
           <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
@@ -146,20 +264,48 @@ const Classes = () => {
           <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
             Branches: Our Reach Across Karnataka
           </h1>
-          <p className="mt-2 text-2xl font-medium leading-[170%] tracking-[-1%]">
-            Gaana Nritya Academy brings Indian classical music and dance to{' '}
-            <br />
+          <p className="mt-2 text-lg leading-[170%] tracking-[-1%] sm:text-xl md:text-2xl lg:font-normal 2xl:font-medium">
+            Gaana Nritya Academy brings Indian classical music and dance to
             communities statewide, nurturing talent in every corner
           </p>
         </div>
         <div className="mt-10">
-          <div className="flex flex-col items-center justify-center">
-            <h2 className="text-center font-semibold">Main Branch </h2>
-            <p className="">
-              <br /> 4-142/2(6) Tharangini <br /> Rakteshwari Nagar <br />{' '}
-              Malemar Road <br /> Kottara Chowki <br /> Mangalore, Karnataka,
-              575006 <br /> Ph. 9449244843. 9844481158
-            </p>
+          <div className="grid grid-cols-1 gap-x-20 gap-y-6 sm:grid-cols-2 md:grid-cols-3">
+            {addressList.map((address, index) => (
+              <div key={address.id} className="flex flex-col">
+                {/* Address Card */}
+                <div className="relative flex justify-center">
+                  <AddressCard address={address} />
+
+                  {/* Vertical separators for tablet (2-column) */}
+                  {index % 2 !== 1 && index !== addressList.length - 1 && (
+                    <div className="absolute -right-10 top-0 hidden h-full sm:block md:hidden">
+                      <Separator
+                        className="h-[80%] translate-y-[12%] bg-[#FF6F61]"
+                        orientation="vertical"
+                      />
+                    </div>
+                  )}
+
+                  {/* Vertical separators for desktop (3-column) */}
+                  {index % 3 !== 2 && index !== addressList.length - 1 && (
+                    <div className="absolute -right-10 top-0 hidden h-full md:block">
+                      <Separator
+                        className="h-[80%] translate-y-[12%] bg-[#FF6F61]"
+                        orientation="vertical"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Horizontal separator for mobile only - show after every card except the last one */}
+                {index !== addressList.length - 1 && (
+                  <div className="mt-6 block sm:hidden">
+                    <Separator className="h-[2px] w-full bg-[#FF6F61]" />
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
