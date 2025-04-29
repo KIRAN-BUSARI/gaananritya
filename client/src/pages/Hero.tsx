@@ -16,7 +16,7 @@ const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto w-full items-center justify-center overflow-hidden py-4 md:h-[calc(100vh-100px)]">
+    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden py-4 md:mb-0 md:h-[calc(100vh-100px)]">
       {/* Background Carousel */}
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
@@ -29,7 +29,7 @@ export default function Hero() {
             <HeroSectionBgCarousel
               images={mobileImages}
               interval={2000}
-              className="relative max-h-[350px] rounded-2xl"
+              className="relative h-[450px] rounded-2xl"
             />
           </div>
           <div className="flex flex-col justify-center md:items-start">
@@ -41,7 +41,7 @@ export default function Hero() {
                 Gaana Nritya Academy
               </span>
             </h1>
-            <p className="mt-4 text-balance text-center text-2xl font-normal leading-[35px] md:text-start md:leading-[30px] md:text-primary">
+            <p className="mt-4 text-balance text-center text-base font-normal leading-[25px] md:text-start md:leading-[30px] md:text-primary">
               Spreading the Joy of Art to Generations Across{' '}
               <br className="hidden md:block" /> Cities and Rural Communities{' '}
               <span className="text-secondary1 md:text-secondary">
@@ -49,12 +49,12 @@ export default function Hero() {
               </span>
             </p>
             <div className="mt-4 flex w-full flex-col items-center space-y-6 md:flex-row md:space-x-4 md:space-y-0">
-              <Button className="w-full rounded-[8px] bg-secondary px-8 py-2 text-xl text-[#FAFAFA]">
+              <Button className="w-full rounded-[8px] bg-secondary px-8 py-7 text-xl text-[#FAFAFA]">
                 Classes
               </Button>
               <Button
                 variant={'outline'}
-                className="w-full border-2 border-[#1D6D8D] bg-transparent px-8 py-2 text-xl hover:bg-transparent md:text-primary md:hover:text-primary"
+                className="w-full border-2 border-[#1D6D8D] bg-transparent px-8 py-7 text-xl hover:bg-transparent md:text-primary md:hover:text-primary"
               >
                 Achievements
               </Button>
