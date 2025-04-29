@@ -24,7 +24,7 @@ function GalleryCard({ img, onDelete }: GalleryCardProps) {
         src={img}
         alt="galleryImg"
         height="100%"
-        className="bg-center object-cover"
+        className="h-full w-full bg-center object-cover"
         width="100%"
       />
 

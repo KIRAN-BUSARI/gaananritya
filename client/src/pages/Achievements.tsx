@@ -89,7 +89,12 @@ const Achievements = () => {
         src={handSign}
         alt="handsign"
       />
-
+      {/* Gallery Section (Hidden on Mobile) */}
+      <div className="mt-14 hidden gap-6 sm:flex">
+        {achievementsImages.map((img) => (
+          <GalleryCard key={img} img={img} />
+        ))}
+      </div>
       {/* Achievements Details */}
       <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8">
         {/* Left Section */}
@@ -162,13 +167,6 @@ const Achievements = () => {
             </li>
           </ul>
         </div>
-      </div>
-
-      {/* Gallery Section (Hidden on Mobile) */}
-      <div className="hidden gap-6 sm:flex">
-        {achievementsImages.map((img) => (
-          <GalleryCard key={img} img={img} />
-        ))}
       </div>
     </div>
   );

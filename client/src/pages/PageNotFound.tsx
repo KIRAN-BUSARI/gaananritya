@@ -1,6 +1,6 @@
 export default function PageNotFound() {
   return (
-    <div className="flex h-[80vh] items-center justify-center">
+    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="text-5xl font-bold">
         <span className="flex justify-center text-7xl text-secondary1">
           404

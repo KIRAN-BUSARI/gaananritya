@@ -16,7 +16,7 @@ const PillarsCard = ({
         <h1 className="font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-xl">
           {name}
         </h1>
-        <p className="mt-4 text-lg font-medium leading-[170%] tracking-[-1%] sm:text-base lg:text-base">
+        <p className="mt-4 text-lg font-medium leading-[170%] tracking-[-1%] text-secondary1 sm:text-base lg:text-base">
           {description}
         </p>
       </div>
