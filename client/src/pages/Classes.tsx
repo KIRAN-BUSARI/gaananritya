@@ -1,24 +1,3 @@
-import ClassesCard from '@/components/Cards/ClassesCard';
-
-import img1 from '@/assets/classes/img1.png';
-import img2 from '@/assets/classes/img2.png';
-import img3 from '@/assets/classes/img3.png';
-
-const classList = [
-  {
-    image: img1,
-    title: 'Bharatanatyam',
-  },
-  {
-    image: img2,
-    title: 'Kathak',
-  },
-  {
-    image: img3,
-    title: 'Carnatic Music',
-  },
-];
-
 import bharathanatyam from '@/assets/classes/bharathanatyam.png';
 import kathak from '@/assets/classes/kathak.png';
 import carnatic from '@/assets/classes/carnatic.png';
@@ -62,16 +41,9 @@ const Classes = () => {
             presence.
           </p>
         </div>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 md:mt-12 md:gap-10 lg:grid-cols-3">
-          {classList.map((data, index) => (
-            <div key={index} className="w-full">
-              <ClassesCard image={data.image} title={data.title} />
-            </div>
-          ))}
-        </div>
         <div className="mt-6">
           {/* Bharatanatyam Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={bharathanatyam}
@@ -104,7 +76,7 @@ const Classes = () => {
           </div>
 
           {/* Carnatic Music Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
             <div className="order-2 py-2 md:order-1 md:py-4">
               <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                 Carnatic Music
@@ -137,7 +109,7 @@ const Classes = () => {
           </div>
 
           {/* Kathak Section */}
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#FFEFEE] p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-14 lg:gap-20">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-10 sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={kathak}
