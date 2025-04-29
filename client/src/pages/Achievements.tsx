@@ -69,7 +69,7 @@ const Achievements = () => {
 
       {/* Achievement Cards */}
       <div
-        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4"
+        className="relative left-0 mt-8 grid max-w-6xl grid-cols-1 gap-2 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4"
         id="cards"
       >
         {achievements.map((data) => (
@@ -85,7 +85,7 @@ const Achievements = () => {
 
       {/* Decorative Image */}
       <img
-        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[260px] md:block md:w-[200px] lg:top-[190px]"
+        className="absolute right-0 top-[590px] block h-auto w-[150px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[290px] lg:top-[150px]"
         src={handSign}
         alt="handsign"
       />

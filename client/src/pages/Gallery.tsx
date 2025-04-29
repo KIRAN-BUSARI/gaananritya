@@ -29,6 +29,7 @@ const tabs: Tab[] = [
   { title: 'productions' },
   { title: 'classes' },
   { title: 'events' },
+  { title: 'videos' },
   { title: 'archive' },
 ];
 
