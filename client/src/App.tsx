@@ -7,6 +7,7 @@ import Classes from '@/pages/Classes';
 import Events from '@/pages/Events';
 import Gallery from '@/pages/Gallery';
 import BlogPage from '@/pages/BlogPage';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/classes" element={<Classes />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
