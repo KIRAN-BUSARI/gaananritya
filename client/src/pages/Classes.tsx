@@ -117,7 +117,7 @@ const addressList = [
       '193A Sai rachana Row House,',
       'Near Palgam circle, Adajan,',
       'Surat',
-      'Karnataka, India',
+      'Gujarat, India',
     ],
     phoneNumber: '9099084814',
   },

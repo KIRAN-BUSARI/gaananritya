@@ -2,11 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from '@/components/Layout/Layout';
 import Home from '@/pages/Home';
 import PageNotFound from '@/pages/PageNotFound';
-import SigninPage from './pages/SigninPage';
-import Classes from './pages/Classes';
-import Events from './pages/Events';
-import Gallery from './pages/Gallery';
-import BlogPage from './pages/BlogPage';
+import SigninPage from '@/pages/SigninPage';
+import Classes from '@/pages/Classes';
+import Events from '@/pages/Events';
+import Gallery from '@/pages/Gallery';
+import BlogPage from '@/pages/BlogPage';
 
 function App() {
   return (

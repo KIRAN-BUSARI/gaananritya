@@ -3,7 +3,8 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GalleryCard from '@/components/Cards/GalleryCard';
-import axiosInstnace from '@/helper/axiosInstance';
+import VideoCarousel from '@/components/VideoCarousel';
+import axiosInstance from '@/helper/axiosInstance';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { getYouTubeVideoId } from '@/utils/youtube';
 
 interface GalleryImage {
   _id: string;
@@ -20,17 +22,23 @@ interface GalleryImage {
   category: string;
 }
 
+interface VideoItem {
+  _id: string;
+  videoUrl: string;
+  category: string;
+  title?: string;
+  thumbnailUrl?: string;
+}
+
 interface Tab {
   title: string;
 }
 
 const tabs: Tab[] = [
-  { title: 'all' },
-  { title: 'productions' },
-  { title: 'classes' },
-  { title: 'events' },
-  { title: 'videos' },
-  { title: 'archive' },
+  { title: 'Gallery' },
+  { title: 'Press' },
+  { title: 'Wallpaper' },
+  { title: 'Videos' },
 ];
 
 const containerVariants = {
@@ -59,6 +67,16 @@ interface UploadState {
   imagePreview: string | null;
 }
 
+interface UploadVideoState {
+  isUploading: boolean;
+  error: string | null;
+  success: string | null;
+  videoUrl: string;
+  videoTitle: string;
+  category: string;
+  isDialogOpen: boolean;
+}
+
 interface DeleteState {
   isDeleting: boolean;
   imageToDelete: string | null;
@@ -67,9 +85,28 @@ interface DeleteState {
   success: string | null;
 }
 
+interface DeleteVideoState {
+  isDeleting: boolean;
+  videoToDelete: string | null;
+  isDialogOpen: boolean;
+  error: string | null;
+  success: string | null;
+}
+
+// Maximum file size in bytes (5MB)
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// Allowed file types
+const ALLOWED_FILE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+];
+
 function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
-  const [filter, setFilter] = useState<string>('all');
+  const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [filter, setFilter] = useState<string>('Gallery');
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -91,24 +128,52 @@ function Gallery() {
     success: null,
   });
 
+  const [uploadVideoState, setUploadVideoState] = useState<UploadVideoState>({
+    isUploading: false,
+    error: null,
+    success: null,
+    videoUrl: '',
+    videoTitle: '',
+    category: 'videos',
+    isDialogOpen: false,
+  });
+
+  const [deleteVideoState, setDeleteVideoState] = useState<DeleteVideoState>({
+    isDeleting: false,
+    videoToDelete: null,
+    isDialogOpen: false,
+    error: null,
+    success: null,
+  });
+
   const isAdmin = useMemo(() => localStorage.getItem('isAdmin') === 'true', []);
   const isLoggedIn = useMemo(
     () => localStorage.getItem('isLoggedIn') === 'true',
     [],
   );
 
+  interface ApiResponse {
+    data?: {
+      message?: string;
+    };
+  }
+
+  interface ApiError extends Error {
+    response?: ApiResponse;
+  }
+
   const fetchImages = useCallback(async () => {
     setFetchError(null);
     setIsLoading(true);
     try {
-      const { data } = await axiosInstnace.get<{ data: GalleryImage[] }>(
+      const { data } = await axiosInstance.get<{ data: GalleryImage[] }>(
         '/gallery/all',
       );
       setImages(data.data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching images:', err);
       const errorMsg =
-        err.response?.data?.message ||
+        (err as ApiError).response?.data?.message ||
         'Failed to fetch images. Please try again later.';
       setFetchError(errorMsg);
       toast.error(errorMsg);
@@ -118,12 +183,49 @@ function Gallery() {
     }
   }, []);
 
+  const fetchVideos = useCallback(async () => {
+    setFetchError(null);
+    try {
+      // Add loading indicator for videos when in video tab
+      if (filter.toLowerCase() === 'videos') {
+        setIsLoading(true);
+      }
+
+      const response = await axiosInstance.get<{
+        data: VideoItem[];
+        message: string;
+      }>('/videos');
+
+      // Check if response has the expected structure
+      if (response.data && Array.isArray(response.data.data)) {
+        setVideos(response.data.data);
+      } else {
+        console.error('Unexpected API response format:', response);
+        throw new Error('Invalid response format from server');
+      }
+    } catch (err: unknown) {
+      console.error('Error fetching videos:', err);
+      const errorMsg =
+        (err as ApiError).response?.data?.message ||
+        'Failed to fetch videos. Please try again later.';
+      setFetchError(errorMsg);
+      toast.error(errorMsg);
+      setVideos([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [filter]);
+
   useEffect(() => {
     fetchImages();
-  }, [fetchImages]);
+    fetchVideos();
+  }, [fetchImages, fetchVideos]);
 
   const filteredImages = useMemo(() => {
-    if (filter === 'all') return images;
+    // Don't filter images when Videos is selected
+    if (filter.toLowerCase() === 'videos') {
+      return [];
+    }
     return images.filter(
       (image) => image.category.toLowerCase() === filter.toLowerCase(),
     );
@@ -133,17 +235,45 @@ function Gallery() {
     setFilter(category);
   }, []);
 
+  const validateFile = (file: File): string | null => {
+    if (!file) return 'Please select an image to upload';
+
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      return 'Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.';
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return 'File size exceeds 5MB limit. Please upload a smaller image.';
+    }
+
+    return null;
+  };
+
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
+    if (!file) {
+      setUploadState((prev) => ({
+        ...prev,
+        selectedFile: null,
+        error: null,
+        success: null,
+        imagePreview: null,
+      }));
+      return;
+    }
+
+    const errorMessage = validateFile(file);
+
     setUploadState((prev) => ({
       ...prev,
-      selectedFile: file || null,
-      error: null,
+      selectedFile: errorMessage ? null : file,
+      error: errorMessage,
       success: null,
       imagePreview: null,
     }));
 
-    if (file) {
+    if (!errorMessage) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadState((prev) => ({
@@ -209,7 +339,7 @@ function Gallery() {
       formData.append('images', uploadState.selectedFile);
       formData.append('category', uploadState.category.trim().toLowerCase());
 
-      await axiosInstnace.post('/gallery/upload', formData, {
+      await axiosInstance.post('/gallery/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -228,10 +358,10 @@ function Gallery() {
       setTimeout(() => {
         handleUploadDialogChange(false);
       }, 1500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error uploading image:', err);
       const errorMsg =
-        err.response?.data?.message ||
+        (err as ApiError).response?.data?.message ||
         'Failed to upload image. Please try again.';
       setUploadState((prev) => ({ ...prev, error: errorMsg }));
       toast.error(errorMsg);
@@ -283,7 +413,7 @@ function Gallery() {
     }));
 
     try {
-      await axiosInstnace.delete(`/gallery/${deleteState.imageToDelete}`);
+      await axiosInstance.delete(`/gallery/${deleteState.imageToDelete}`);
 
       setDeleteState((prev) => ({
         ...prev,
@@ -295,10 +425,10 @@ function Gallery() {
       setTimeout(() => {
         handleDeleteDialogChange(false);
       }, 1500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error deleting image:', err);
       const errorMsg =
-        err.response?.data?.message ||
+        (err as ApiError).response?.data?.message ||
         'Failed to delete image. Please try again.';
       setDeleteState((prev) => ({ ...prev, error: errorMsg }));
       toast.error(errorMsg);
@@ -307,169 +437,613 @@ function Gallery() {
     }
   };
 
+  const resetUploadVideoDialogForm = useCallback(() => {
+    setUploadVideoState({
+      isUploading: false,
+      error: null,
+      success: null,
+      videoUrl: '',
+      videoTitle: '',
+      category: 'videos',
+      isDialogOpen: false,
+    });
+  }, []);
+
+  const handleUploadVideoDialogChange = useCallback(
+    (open: boolean) => {
+      setUploadVideoState((prev) => ({ ...prev, isDialogOpen: open }));
+      if (!open) {
+        setTimeout(() => {
+          resetUploadVideoDialogForm();
+        }, 300);
+      }
+    },
+    [resetUploadVideoDialogForm],
+  );
+
+  const handleUploadVideo = async () => {
+    if (!uploadVideoState.videoUrl.trim()) {
+      setUploadVideoState((prev) => ({
+        ...prev,
+        error: 'Please enter a YouTube video URL',
+      }));
+      return;
+    }
+
+    // Validate YouTube URL on client side
+    const videoId = getYouTubeVideoId(uploadVideoState.videoUrl);
+    if (!videoId) {
+      setUploadVideoState((prev) => ({
+        ...prev,
+        error: 'Invalid YouTube URL. Please enter a valid YouTube video URL.',
+      }));
+      return;
+    }
+
+    setUploadVideoState((prev) => ({
+      ...prev,
+      isUploading: true,
+      error: null,
+      success: null,
+    }));
+
+    try {
+      const videoData = {
+        videoUrl: uploadVideoState.videoUrl.trim(),
+        title: uploadVideoState.videoTitle.trim() || 'Untitled Video',
+        category: uploadVideoState.category.trim() || 'videos',
+      };
+
+      const { data } = await axiosInstance.post('/videos/add', videoData);
+
+      setUploadVideoState((prev) => ({
+        ...prev,
+        success: 'Video added successfully!',
+        videoUrl: '',
+        videoTitle: '',
+      }));
+      toast.success('Video added successfully!');
+
+      // Refresh videos list
+      await fetchVideos();
+
+      setTimeout(() => {
+        handleUploadVideoDialogChange(false);
+      }, 1500);
+    } catch (err: unknown) {
+      console.error('Error adding video:', err);
+
+      // Get detailed error message from response if available
+      const errorMsg =
+        (err as ApiError).response?.data?.message ||
+        'Failed to add video. Please try again.';
+
+      setUploadVideoState((prev) => ({
+        ...prev,
+        error: errorMsg,
+      }));
+      toast.error(errorMsg);
+    } finally {
+      setUploadVideoState((prev) => ({ ...prev, isUploading: false }));
+    }
+  };
+
+  const handleVideoCardDelete = useCallback((videoId: string) => {
+    setDeleteVideoState({
+      isDeleting: false,
+      videoToDelete: videoId,
+      isDialogOpen: true,
+      error: null,
+      success: null,
+    });
+  }, []);
+
+  const resetDeleteVideoDialog = useCallback(() => {
+    setDeleteVideoState({
+      isDeleting: false,
+      videoToDelete: null,
+      isDialogOpen: false,
+      error: null,
+      success: null,
+    });
+  }, []);
+
+  const handleDeleteVideoDialogChange = useCallback(
+    (open: boolean) => {
+      setDeleteVideoState((prev) => ({ ...prev, isDialogOpen: open }));
+      if (!open) {
+        setTimeout(() => {
+          resetDeleteVideoDialog();
+        }, 300);
+      }
+    },
+    [resetDeleteVideoDialog],
+  );
+
+  const handleDeleteVideo = async () => {
+    if (!deleteVideoState.videoToDelete) return;
+
+    setDeleteVideoState((prev) => ({
+      ...prev,
+      isDeleting: true,
+      error: null,
+      success: null,
+    }));
+
+    try {
+      await axiosInstance.delete(`/videos/${deleteVideoState.videoToDelete}`);
+
+      setDeleteVideoState((prev) => ({
+        ...prev,
+        success: 'Video deleted successfully!',
+      }));
+      toast.success('Video deleted successfully!');
+
+      // Refresh videos list
+      await fetchVideos();
+
+      setTimeout(() => {
+        handleDeleteVideoDialogChange(false);
+      }, 1500);
+    } catch (err: unknown) {
+      console.error('Error deleting video:', err);
+      const errorMsg =
+        (err as ApiError).response?.data?.message ||
+        'Failed to delete video. Please try again.';
+      setDeleteVideoState((prev) => ({
+        ...prev,
+        error: errorMsg,
+      }));
+      toast.error(errorMsg);
+    } finally {
+      setDeleteVideoState((prev) => ({ ...prev, isDeleting: false }));
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
-      return <div className="py-8 text-center">Loading gallery...</div>;
-    }
-    if (fetchError) {
-      return <div className="py-8 text-center text-red-500">{fetchError}</div>;
-    }
-    if (filteredImages.length === 0 && !isLoading) {
       return (
-        <div className="py-8 text-center">
-          No images found for the '{filter}' category.
+        <div className="flex h-40 w-full items-center justify-center py-8 text-center">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-secondary"></div>
+            <p className="text-gray-600">Loading gallery...</p>
+          </div>
         </div>
       );
     }
 
-    return (
-      <>
-        <motion.div
-          className="grid grid-cols-2 place-content-between justify-between gap-4 md:grid-cols-4"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filteredImages.map((img) => (
-            <motion.div key={img._id} variants={itemVariants}>
-              <GalleryCard
-                img={img.image}
-                onDelete={
-                  isAdmin && isLoggedIn
-                    ? () => confirmDeleteImage(img._id)
-                    : undefined
+    if (fetchError) {
+      return (
+        <div className="flex h-40 flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-red-500">{fetchError}</div>
+          <Button variant="outline" onClick={fetchImages} className="mt-2">
+            Try Again
+          </Button>
+        </div>
+      );
+    }
+
+    // Show images grid only when not on Videos filter
+    if (filter.toLowerCase() !== 'videos') {
+      return (
+        <>
+          {/* Section Heading */}
+          <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
+
+          <motion.div
+            className={`grid grid-cols-1 gap-4 ${
+              filter.toLowerCase() === 'wallpaper'
+                ? 'sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                : 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+            }`}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {filteredImages.map((img) => (
+              <motion.div
+                key={img._id}
+                variants={itemVariants}
+                className={
+                  filter.toLowerCase() === 'wallpaper' ? 'aspect-video' : ''
                 }
-              />
-            </motion.div>
-          ))}
+              >
+                <GalleryCard
+                  img={img.image}
+                  title={img.category}
+                  showDownload={filter.toLowerCase() === 'wallpaper'}
+                  isWallpaper={filter.toLowerCase() === 'wallpaper'}
+                  onDelete={
+                    isAdmin && isLoggedIn
+                      ? () => confirmDeleteImage(img._id)
+                      : undefined
+                  }
+                />
+              </motion.div>
+            ))}
+            {isAdmin && isLoggedIn && (
+              <motion.div variants={itemVariants}>
+                <Dialog
+                  open={uploadState.isDialogOpen}
+                  onOpenChange={handleUploadDialogChange}
+                >
+                  <DialogTrigger asChild>
+                    <button
+                      className="flex h-full min-h-[200px] w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-center text-gray-500 outline-none ring-offset-background transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      aria-label="Add new image to gallery"
+                    >
+                      <div className="flex flex-col items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mb-2 h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        <span className="text-sm font-semibold">
+                          {filter.toLowerCase() === 'all' && 'Add Image'}
+                          {filter.toLowerCase() === 'gallery' &&
+                            'Add Gallery Image'}
+                          {filter.toLowerCase() === 'press' && 'Add Article'}
+                          {filter.toLowerCase() === 'wallpaper' &&
+                            'Add Wallpaper'}
+                        </span>
+                      </div>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader className="font-medium">
+                      Add Image To Gallery
+                    </DialogHeader>
+                    <div className="flex flex-col space-y-4">
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="image-upload"
+                          className="text-sm font-medium"
+                        >
+                          Select Image
+                        </label>
+                        <Input
+                          id="image-upload"
+                          type="file"
+                          className="border-2 border-dashed"
+                          accept="image/jpeg, image/png, image/gif, image/webp"
+                          onChange={handleFileSelected}
+                          key={
+                            uploadState.selectedFile
+                              ? 'file-selected'
+                              : 'no-file'
+                          }
+                          aria-describedby="file-restrictions"
+                        />
+                        <p
+                          id="file-restrictions"
+                          className="text-xs text-gray-500"
+                        >
+                          Accepted formats: JPG, PNG, GIF, WebP. Maximum size:
+                          5MB
+                        </p>
+                      </div>
+
+                      {uploadState.imagePreview && (
+                        <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
+                          <img
+                            src={uploadState.imagePreview}
+                            alt="Preview"
+                            className="mx-auto max-h-56 object-contain"
+                          />
+                        </div>
+                      )}
+
+                      <div className="space-y-1">
+                        <label
+                          htmlFor="category-input"
+                          className="text-sm font-medium"
+                        >
+                          Category
+                        </label>
+                        <Input
+                          id="category-input"
+                          type="text"
+                          placeholder="Enter Category (e.g., gallery, press)"
+                          value={uploadState.category}
+                          onChange={(e) =>
+                            setUploadState((prev) => ({
+                              ...prev,
+                              category: e.target.value,
+                              error: null,
+                            }))
+                          }
+                        />
+                      </div>
+
+                      {uploadState.error && (
+                        <div className="rounded-md bg-red-50 p-2 text-sm text-red-500">
+                          {uploadState.error}
+                        </div>
+                      )}
+
+                      {uploadState.success && (
+                        <div className="rounded-md bg-green-50 p-2 text-sm text-green-500">
+                          {uploadState.success}
+                        </div>
+                      )}
+
+                      <Button
+                        variant={'secondary'}
+                        className="text-primary"
+                        onClick={handleUpload}
+                        disabled={
+                          uploadState.isUploading ||
+                          !uploadState.selectedFile ||
+                          !uploadState.category.trim()
+                        }
+                      >
+                        {uploadState.isUploading ? (
+                          <>
+                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-b-transparent"></div>
+                            Uploading...
+                          </>
+                        ) : (
+                          'Upload'
+                        )}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </motion.div>
+            )}
+          </motion.div>
+
+          <Dialog
+            open={deleteState.isDialogOpen}
+            onOpenChange={handleDeleteDialogChange}
+          >
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader className="font-medium">
+                Confirm Deletion
+              </DialogHeader>
+              <div className="flex flex-col space-y-4 py-4">
+                <p className="text-center text-sm text-muted-foreground">
+                  Are you sure you want to delete this image? <br /> This action
+                  cannot be undone.
+                </p>
+
+                {deleteState.error && (
+                  <div className="rounded-md bg-red-50 p-2 text-center text-sm text-red-500">
+                    {deleteState.error}
+                  </div>
+                )}
+
+                {deleteState.success && (
+                  <div className="rounded-md bg-green-50 p-2 text-center text-sm text-green-500">
+                    {deleteState.success}
+                  </div>
+                )}
+
+                <div className="flex justify-end space-x-3 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDeleteDialogChange(false)}
+                    disabled={deleteState.isDeleting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteImage}
+                    disabled={
+                      deleteState.isDeleting || Boolean(deleteState.success)
+                    }
+                  >
+                    {deleteState.isDeleting ? (
+                      <>
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent"></div>
+                        Deleting...
+                      </>
+                    ) : (
+                      'Delete'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
+
+          <div className="mb-6">
+            <VideoCarousel
+              videos={videos}
+              onDeleteVideo={handleVideoCardDelete}
+              isAdmin={isAdmin && isLoggedIn}
+            />
+          </div>
+
           {isAdmin && isLoggedIn && (
-            <motion.div variants={itemVariants}>
+            <motion.div
+              variants={itemVariants}
+              className="mx-auto mt-8 w-full max-w-md"
+            >
               <Dialog
-                open={uploadState.isDialogOpen}
-                onOpenChange={handleUploadDialogChange}
+                open={uploadVideoState.isDialogOpen}
+                onOpenChange={handleUploadVideoDialogChange}
               >
                 <DialogTrigger asChild>
-                  <button className="flex h-full min-h-[150px] w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-center text-gray-500 outline-none ring-offset-background transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    <span className="text-sm font-semibold">Add Image</span>
-                  </button>
+                  <div className="flex h-full min-h-[120px] w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-center text-gray-500 outline-none ring-offset-background transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                    <div className="flex flex-col items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="mb-2 h-8 w-8"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      <span className="text-sm font-semibold">Add Video</span>
+                    </div>
+                  </div>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader className="font-medium">
-                    Add Image To Gallery
+                    Add Video To Gallery
                   </DialogHeader>
                   <div className="flex flex-col space-y-4">
-                    <Input
-                      type="file"
-                      className="border-2 border-dashed"
-                      accept="image/*"
-                      onChange={handleFileSelected}
-                      key={
-                        uploadState.selectedFile ? 'file-selected' : 'no-file'
-                      }
-                    />
+                    <div className="space-y-1">
+                      <label
+                        htmlFor="video-url"
+                        className="text-sm font-medium"
+                      >
+                        YouTube Video URL
+                      </label>
+                      <Input
+                        id="video-url"
+                        type="text"
+                        placeholder="Enter YouTube Video URL"
+                        value={uploadVideoState.videoUrl}
+                        onChange={(e) =>
+                          setUploadVideoState((prev) => ({
+                            ...prev,
+                            videoUrl: e.target.value,
+                            error: null,
+                          }))
+                        }
+                      />
+                    </div>
 
-                    {uploadState.imagePreview && (
-                      <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
-                        <img
-                          src={uploadState.imagePreview}
-                          alt="Preview"
-                          className="mx-auto max-h-56 object-contain"
-                        />
+                    <div className="space-y-1">
+                      <label
+                        htmlFor="video-title"
+                        className="text-sm font-medium"
+                      >
+                        Video Title
+                      </label>
+                      <Input
+                        id="video-title"
+                        type="text"
+                        placeholder="Enter Video Title"
+                        value={uploadVideoState.videoTitle}
+                        onChange={(e) =>
+                          setUploadVideoState((prev) => ({
+                            ...prev,
+                            videoTitle: e.target.value,
+                            error: null,
+                          }))
+                        }
+                      />
+                    </div>
+
+                    {uploadVideoState.error && (
+                      <div className="rounded-md bg-red-50 p-2 text-sm text-red-500">
+                        {uploadVideoState.error}
                       </div>
                     )}
 
-                    <Input
-                      type="text"
-                      placeholder="Enter Category (e.g., classes, events)"
-                      value={uploadState.category}
-                      onChange={(e) =>
-                        setUploadState((prev) => ({
-                          ...prev,
-                          category: e.target.value,
-                          error: null,
-                        }))
-                      }
-                      className=""
-                    />
-
-                    {uploadState.error && (
-                      <p className="text-sm text-red-500">
-                        {uploadState.error}
-                      </p>
-                    )}
-                    {uploadState.success && (
-                      <p className="text-sm text-green-500">
-                        {uploadState.success}
-                      </p>
+                    {uploadVideoState.success && (
+                      <div className="rounded-md bg-green-50 p-2 text-sm text-green-500">
+                        {uploadVideoState.success}
+                      </div>
                     )}
 
                     <Button
                       variant={'secondary'}
                       className="text-primary"
-                      onClick={handleUpload}
+                      onClick={handleUploadVideo}
                       disabled={
-                        uploadState.isUploading ||
-                        !uploadState.selectedFile ||
-                        !uploadState.category.trim()
+                        uploadVideoState.isUploading ||
+                        !uploadVideoState.videoUrl.trim()
                       }
                     >
-                      {uploadState.isUploading ? 'Uploading...' : 'Upload'}
+                      {uploadVideoState.isUploading ? (
+                        <>
+                          <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-b-transparent"></div>
+                          Uploading...
+                        </>
+                      ) : (
+                        'Upload'
+                      )}
                     </Button>
                   </div>
                 </DialogContent>
               </Dialog>
             </motion.div>
           )}
-        </motion.div>
 
-        <Dialog
-          open={deleteState.isDialogOpen}
-          onOpenChange={handleDeleteDialogChange}
-        >
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader className="font-medium">
-              Confirm Deletion
-            </DialogHeader>
-            <div className="flex flex-col space-y-4 py-4">
-              <p className="text-center text-sm text-muted-foreground">
-                Are you sure you want to delete this image? <br /> This action
-                cannot be undone.
-              </p>
-
-              {deleteState.error && (
-                <p className="text-center text-sm text-red-500">
-                  {deleteState.error}
+          <Dialog
+            open={deleteVideoState.isDialogOpen}
+            onOpenChange={handleDeleteVideoDialogChange}
+          >
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader className="font-medium">
+                Confirm Deletion
+              </DialogHeader>
+              <div className="flex flex-col space-y-4 py-4">
+                <p className="text-center text-sm text-muted-foreground">
+                  Are you sure you want to delete this video? <br /> This action
+                  cannot be undone.
                 </p>
-              )}
-              {deleteState.success && (
-                <p className="text-center text-sm text-green-500">
-                  {deleteState.success}
-                </p>
-              )}
 
-              <div className="flex justify-end space-x-3 pt-2">
-                <Button
-                  variant="outline"
-                  onClick={() => handleDeleteDialogChange(false)}
-                  disabled={deleteState.isDeleting}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={handleDeleteImage}
-                  disabled={
-                    deleteState.isDeleting || Boolean(deleteState.success)
-                  }
-                >
-                  {deleteState.isDeleting ? 'Deleting...' : 'Delete'}
-                </Button>
+                {deleteVideoState.error && (
+                  <div className="rounded-md bg-red-50 p-2 text-center text-sm text-red-500">
+                    {deleteVideoState.error}
+                  </div>
+                )}
+
+                {deleteVideoState.success && (
+                  <div className="rounded-md bg-green-50 p-2 text-center text-sm text-green-500">
+                    {deleteVideoState.success}
+                  </div>
+                )}
+
+                <div className="flex justify-end space-x-3 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDeleteVideoDialogChange(false)}
+                    disabled={deleteVideoState.isDeleting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteVideo}
+                    disabled={
+                      deleteVideoState.isDeleting ||
+                      Boolean(deleteVideoState.success)
+                    }
+                  >
+                    {deleteVideoState.isDeleting ? (
+                      <>
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent"></div>
+                        Deleting...
+                      </>
+                    ) : (
+                      'Delete'
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </>
-    );
+            </DialogContent>
+          </Dialog>
+        </>
+      );
+    }
   };
 
   return (
@@ -506,6 +1080,14 @@ function Gallery() {
       </div>
 
       {renderContent()}
+
+      {!isLoading && filteredImages.length > 0 && (
+        <div className="mt-8 text-center text-sm text-gray-500">
+          Showing {filteredImages.length}{' '}
+          {filteredImages.length === 1 ? 'image' : 'images'}
+          {filter.toLowerCase() !== 'all' && <span> in {filter}</span>}
+        </div>
+      )}
     </section>
   );
 }

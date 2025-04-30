@@ -6,7 +6,7 @@ import Img1 from '@/assets/achievementsImg1.png';
 import Img2 from '@/assets/achievementsImg2.png';
 import Img3 from '@/assets/achievementsImg3.png';
 import Img4 from '@/assets/achievementsImg4.png';
-import GalleryCard from '@/components/Cards/GalleryCard';
+import AchievementGalleryCard from '@/components/Cards/AchievementGalleryCard';
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 
 interface AchievementData {
@@ -89,7 +89,7 @@ const Achievements = () => {
       />
       <div className="mt-14 hidden gap-6 sm:flex">
         {achievementsImages.map((img) => (
-          <GalleryCard key={img} img={img} />
+          <AchievementGalleryCard key={img} img={img} />
         ))}
       </div>
       <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8 2xl:mx-auto 2xl:my-16 2xl:gap-10">
