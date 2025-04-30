@@ -494,7 +494,7 @@ function Gallery() {
         category: uploadVideoState.category.trim() || 'videos',
       };
 
-      const { data } = await axiosInstance.post('/videos/add', videoData);
+      await axiosInstance.post('/videos/add', videoData);
 
       setUploadVideoState((prev) => ({
         ...prev,
