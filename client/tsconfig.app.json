@@ -33,5 +33,8 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/assets/Gaana Nritya Academy_files/**"
   ]
 }
