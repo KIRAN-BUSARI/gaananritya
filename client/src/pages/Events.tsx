@@ -57,7 +57,7 @@ const eventsData = [
 ];
 
 const Events = () => {
-  const [filter, setFilter] = useState<string>('Upcoming Events');
+  const [filter, setFilter] = useState<string>('All Events');
   const [isLoading, setIsLoading] = useState(true);
 
   const handleFilterChange = useCallback((category: string) => {
