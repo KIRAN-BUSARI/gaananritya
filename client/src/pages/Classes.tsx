@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 import AddressCard from '@/components/Cards/AddressCard';
+import { Link } from 'react-router-dom';
 
 const addressList = [
   {
@@ -58,7 +59,7 @@ const addressList = [
   },
   {
     id: 5,
-    city: 'Branch 4',
+    city: 'Branch 5',
     name: 'Gaana-Nritya Academy',
     address: [
       'Sri Nandaneshwara Temple,',
@@ -162,7 +163,7 @@ const Classes = () => {
           </p>
         </div>
         <div className="mt-8">
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={bharathanatyam}
@@ -189,7 +190,7 @@ const Classes = () => {
                 variant={'secondary'}
                 className="mt-6 text-primary md:mt-9"
               >
-                Join Now
+                <Link to="/contact">Join Now</Link>
               </Button>
             </div>
           </div>
@@ -214,7 +215,7 @@ const Classes = () => {
                 variant={'secondary'}
                 className="mt-6 text-primary md:mt-9"
               >
-                Join Now
+                <Link to="/contact">Join Now</Link>
               </Button>
             </div>
             <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
@@ -254,7 +255,7 @@ const Classes = () => {
                 variant={'secondary'}
                 className="mt-6 text-primary md:mt-9"
               >
-                Join Now
+                <Link to="/contact">Join Now</Link>
               </Button>
             </div>
           </div>
@@ -278,7 +279,7 @@ const Classes = () => {
                 variant={'secondary'}
                 className="mt-6 text-primary md:mt-9"
               >
-                Join Now
+                <Link to="/contact">Join Now</Link>
               </Button>
             </div>
             <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
