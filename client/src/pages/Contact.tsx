@@ -213,8 +213,10 @@ const Contact = () => {
         <div className="flex flex-1 flex-col">
           <div className="md:my-auto">
             {/* Contact Form */}
-            <div className="mb-8 rounded-lg bg-white p-6 shadow-md">
-              <h2 className="mb-6 text-2xl font-semibold">Get in Touch</h2>
+            <div className="mx-20 mb-8 rounded-lg bg-white p-6 shadow-md">
+              <h2 className="mb-6 text-center text-2xl font-semibold">
+                Get in Touch
+              </h2>
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <label
