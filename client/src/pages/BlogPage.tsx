@@ -1,12 +1,16 @@
+import { useEffect } from 'react';
 import Blogs from './Blogs';
 
 function BlogPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <div
-      id="blog"
-      className="font-madeTommy ml-[16px] mr-[16px] bg-[#FBFFFE] lg:ml-[150px] lg:mr-[150px]"
-    >
-      <Blogs />
+    <div className="flex min-h-screen px-4 md:px-20">
+      <div>
+        <Blogs />
+      </div>
     </div>
   );
 }
