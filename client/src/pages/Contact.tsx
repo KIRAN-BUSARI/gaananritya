@@ -213,7 +213,7 @@ const Contact = () => {
         <div className="flex flex-1 flex-col">
           <div className="md:my-auto">
             {/* Contact Form */}
-            <div className="mb-8 max-w-sm rounded-lg bg-white p-6 shadow-md">
+            <div className="mb-8 max-w-md rounded-lg bg-white p-6 shadow-md">
               <h2 className="mb-6 text-center text-2xl font-semibold">
                 Get in Touch
               </h2>
