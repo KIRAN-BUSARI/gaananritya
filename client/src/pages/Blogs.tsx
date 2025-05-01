@@ -72,7 +72,7 @@ function Blogs() {
     title: '',
     content: '',
     author: '',
-    date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+    date: new Date().toISOString().split('T')[0],
     image: null,
   });
 
@@ -85,14 +85,11 @@ function Blogs() {
       const response = await axiosInstance.get('/blog/all');
       const fetchedBlogs = response.data.data;
 
-      // Enhance blogs with additional properties for better UI
       const enhancedBlogs = fetchedBlogs.map((blog: Blog) => ({
         ...blog,
-        // Generate avatar if author image doesn't exist
         authorImage:
           blog.authorImage ||
           `https://api.dicebear.com/7.x/initials/svg?seed=${blog.author.replace(/\s+/g, '')}`,
-        // Add default tags if none exist
         tags: blog.tags || ['Classical Dance', 'Bharatanatyam'],
       }));
 
@@ -115,7 +112,6 @@ function Blogs() {
     fetchBlogs();
   }, []);
 
-  // Check if user is admin on component mount
   useEffect(() => {
     const isAdminUser = localStorage.getItem('isAdmin') === 'true';
     setIsAdmin(isAdminUser);
@@ -129,7 +125,6 @@ function Blogs() {
   const handleClick = (clickedBlog: Blog) => {
     if (!mainBlog) return;
 
-    // Scroll to top of blog content when switching blogs
     document
       .getElementById('main-blog-content')
       ?.scrollIntoView({ behavior: 'smooth' });
@@ -160,7 +155,6 @@ function Blogs() {
         })
         .catch((error) => console.log('Error sharing', error));
     } else {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard
         .writeText(window.location.href)
         .then(() => alert('Link copied to clipboard!'))
@@ -175,7 +169,6 @@ function Blogs() {
     return readingTime;
   };
 
-  // Handle form input changes
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -183,18 +176,15 @@ function Blogs() {
     setBlogFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image file selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setBlogFormData((prev) => ({ ...prev, image: e.target.files![0] }));
     }
   };
 
-  // Handle blog form submission
   const handleAddBlog = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form
     if (
       !blogFormData.title ||
       !blogFormData.content ||
@@ -209,7 +199,22 @@ function Blogs() {
     try {
       setIsSubmitting(true);
 
-      // Create form data for multipart/form-data request
+      // Check if admin is logged in
+      const isAdminUser = localStorage.getItem('isAdmin') === 'true';
+      if (!isAdminUser) {
+        toast.error('You must be logged in as an admin to create blogs.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get auth token
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        setIsSubmitting(false);
+        return;
+      }
+
       const formData = new FormData();
       formData.append('title', blogFormData.title);
       formData.append('content', blogFormData.content);
@@ -220,14 +225,19 @@ function Blogs() {
         formData.append('image', blogFormData.image);
       }
 
-      // Submit the form data
-      await axiosInstance.post('/blog/create', formData, {
+      toast.info('Uploading blog post...');
+
+      // Explicitly set the headers for this specific request
+      const res = await axiosInstance.post('/blog/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // Reset form and close dialog
+      console.log('Blog creation response:', res.data);
+
+      // Reset form data
       setBlogFormData({
         title: '',
         content: '',
@@ -240,10 +250,18 @@ function Blogs() {
       // Refresh blogs
       await fetchBlogs();
 
-      toast.success('Blog post created successfully!');
-    } catch (err) {
+      toast.success(res.data.message || 'Blog post created successfully!');
+    } catch (err: any) {
       console.error('Error creating blog:', err);
-      toast.error('Failed to create blog. Please try again.');
+
+      // More detailed error reporting
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        err.message ||
+        'Failed to create blog. Please try again.';
+
+      toast.error(`Error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
