@@ -203,7 +203,7 @@ const Contact = () => {
   return (
     <div className="">
       <div className="md:flex">
-        <div className="mr-20">
+        <div className="mr-28">
           <img
             src={contactImg}
             alt="contact"
