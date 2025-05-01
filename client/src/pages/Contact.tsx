@@ -203,7 +203,7 @@ const Contact = () => {
   return (
     <div className="">
       <div className="md:flex">
-        <div className="md:mr-20">
+        <div className="">
           <img
             src={contactImg}
             alt="contact"
@@ -213,7 +213,7 @@ const Contact = () => {
         <div className="flex flex-1 flex-col">
           <div className="md:my-auto">
             {/* Contact Form */}
-            <div className="mx-20 mb-8 rounded-lg bg-white p-6 shadow-md">
+            <div className="mx-32 mb-8 rounded-lg bg-white p-6 shadow-md">
               <h2 className="mb-6 text-center text-2xl font-semibold">
                 Get in Touch
               </h2>
