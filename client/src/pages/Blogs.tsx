@@ -202,11 +202,7 @@ function Blogs() {
       !blogFormData.date ||
       !blogFormData.image
     ) {
-      toast({
-        title: 'Missing Fields',
-        description: 'Please fill in all required fields and upload an image.',
-        variant: 'destructive',
-      });
+      toast.error('Please fill in all required fields and upload an image.');
       return;
     }
 
@@ -244,17 +240,10 @@ function Blogs() {
       // Refresh blogs
       await fetchBlogs();
 
-      toast({
-        title: 'Success',
-        description: 'Blog post created successfully!',
-      });
+      toast.success('Blog post created successfully!');
     } catch (err) {
       console.error('Error creating blog:', err);
-      toast({
-        title: 'Error',
-        description: 'Failed to create blog. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error('Failed to create blog. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -276,17 +265,10 @@ function Blogs() {
       // Refresh blogs
       await fetchBlogs();
 
-      toast({
-        title: 'Success',
-        description: 'Blog deleted successfully!',
-      });
+      toast.success('Blog deleted successfully!');
     } catch (err) {
       console.error('Error deleting blog:', err);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete blog. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error('Failed to delete blog. Please try again.');
     } finally {
       setIsSubmitting(false);
       setIsDeleteDialogOpen(false);
