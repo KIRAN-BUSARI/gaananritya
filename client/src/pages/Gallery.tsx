@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GalleryCard from '@/components/Cards/GalleryCard';
-import VideoCarousel from '@/components/VideoCarousel';
+import VideoCard from '@/components/Cards/VideoCard';
 import axiosInstance from '@/helper/axiosInstance';
 import {
   Dialog,
@@ -1026,13 +1026,39 @@ function Gallery() {
         <>
           <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
 
-          <div className="mb-6">
-            <VideoCarousel
-              videos={videos}
-              onDeleteVideo={handleVideoCardDelete}
-              isAdmin={isAdmin && isLoggedIn}
-            />
-          </div>
+          {videos.length === 0 ? (
+            <div className="flex h-48 w-full items-center justify-center rounded-lg bg-gray-100">
+              <p className="text-gray-500">No videos available</p>
+            </div>
+          ) : (
+            <motion.div
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {videos.map((video) => (
+                <motion.div
+                  key={video._id}
+                  variants={itemVariants}
+                  className="h-full w-full"
+                >
+                  <div className="h-full overflow-hidden rounded-lg shadow-md">
+                    <VideoCard
+                      videoUrl={video.videoUrl}
+                      title={video.title || 'Untitled Video'}
+                      thumbnailUrl={video.thumbnailUrl}
+                      onDelete={
+                        isAdmin && isLoggedIn
+                          ? () => handleVideoCardDelete(video._id)
+                          : undefined
+                      }
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
 
           {isAdmin && isLoggedIn && (
             <motion.div

@@ -224,30 +224,29 @@ const Events = () => {
           {renderContent()}
         </div>
 
-        {/* Only show section labels when filter is "All Events" */}
         {filter === 'All Events' && (
           <div className="mt-8 space-y-12 sm:mt-12 lg:mt-16">
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61] sm:text-2xl">
+              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-secondary1 sm:text-2xl">
                 Upcoming Events
               </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Aaronhan-2025{' '}
                   </span>{' '}
                   at Sullia Branch, Mangalore - Invitation
                 </li>
                 <li>
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Poorvi Radhakrishna&apos;s Rangapravesh
                   </span>{' '}
                   on 12th May 2025, Mangalore.
                 </li>
                 <li>
                   Annual Day Celebration{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Hejje-Gejje,
                   </span>{' '}
                   25th June, Gaana Nritya Academy, Branch Bangalore.
@@ -262,20 +261,20 @@ const Events = () => {
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Aaronhan-2025{' '}
                   </span>{' '}
                   at Sullia Branch, Mangalore - Invitation
                 </li>
                 <li>
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Poorvi Radhakrishna&apos;s Rangapravesh
                   </span>{' '}
                   on 12th May 2025, Mangalore.
                 </li>
                 <li>
                   Annual Day Celebration{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Hejje-Gejje,
                   </span>{' '}
                   25th June, Gaana Nritya Academy, Branch Bangalore.
@@ -284,26 +283,26 @@ const Events = () => {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-[#FF6F61] sm:text-2xl">
+              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-secondary1 sm:text-2xl">
                 Festivals
               </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Aaronhan-2025{' '}
                   </span>{' '}
                   at Sullia Branch, Mangalore - Invitation
                 </li>
                 <li>
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Poorvi Radhakrishna&apos;s Rangapravesh
                   </span>{' '}
                   on 12th May 2025, Mangalore.
                 </li>
                 <li>
                   Annual Day Celebration{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Hejje-Gejje,
                   </span>{' '}
                   25th June, Gaana Nritya Academy, Branch Bangalore.
@@ -318,20 +317,20 @@ const Events = () => {
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Aaronhan-2025{' '}
                   </span>{' '}
                   at Sullia Branch, Mangalore - Invitation
                 </li>
                 <li>
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Poorvi Radhakrishna&apos;s Rangapravesh
                   </span>{' '}
                   on 12th May 2025, Mangalore.
                 </li>
                 <li>
                   Annual Day Celebration{' '}
-                  <span className="font-semibold text-[#FF6F61]">
+                  <span className="font-semibold text-secondary1">
                     Hejje-Gejje,
                   </span>{' '}
                   25th June, Gaana Nritya Academy, Branch Bangalore.
