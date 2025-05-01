@@ -4,6 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useState } from 'react';
+import axiosInstance from '@/helper/axiosInstance';
+import { toast } from 'sonner';
 
 const Faqs = [
   // Dance FAQs
@@ -91,16 +94,117 @@ const Faqs = [
   },
 ];
 
-const Contact = () => {
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="mb-8 text-center text-[32px] font-bold">Contact Us</h1>
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
-      <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+const Contact = () => {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!formData.subject.trim()) {
+      newErrors.subject = 'Subject is required';
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error when user types
+    if (errors[name as keyof FormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+
+    // Reset submit status when user starts typing again
+    if (submitStatus) {
+      setSubmitStatus(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // Using axiosInstance to make the API call
+      await axiosInstance.post('/contact', formData);
+
+      setSubmitStatus({
+        success: true,
+        message:
+          'Your message has been sent successfully! We will get back to you soon.',
+      });
+
+      // Clear form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+      });
+
+      toast.success('Message sent successfully!');
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setSubmitStatus({
+        success: false,
+        message:
+          'Failed to send your message. Please try again later or contact us directly.',
+      });
+
+      toast.error('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="container mx-auto items-center justify-center px-4 py-12">
+      <div className="mx-auto grid max-w-3xl grid-cols-1 gap-12 md:grid-cols-1">
         {/* Contact Form */}
         <div className="rounded-lg bg-white p-6 shadow-md">
           <h2 className="mb-6 text-2xl font-semibold">Get in Touch</h2>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"
@@ -111,9 +215,17 @@ const Contact = () => {
               <input
                 type="text"
                 id="name"
-                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]"
+                name="name"
+                className={`w-full rounded-md border ${
+                  errors.name ? 'border-red-500' : 'border-gray-300'
+                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
                 placeholder="Your Name"
+                value={formData.name}
+                onChange={handleInputChange}
               />
+              {errors.name && (
+                <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+              )}
             </div>
             <div>
               <label
@@ -125,9 +237,17 @@ const Contact = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]"
+                name="email"
+                className={`w-full rounded-md border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
                 placeholder="Your Email"
+                value={formData.email}
+                onChange={handleInputChange}
               />
+              {errors.email && (
+                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+              )}
             </div>
             <div>
               <label
@@ -139,9 +259,17 @@ const Contact = () => {
               <input
                 type="text"
                 id="subject"
-                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]"
+                name="subject"
+                className={`w-full rounded-md border ${
+                  errors.subject ? 'border-red-500' : 'border-gray-300'
+                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
                 placeholder="Subject"
+                value={formData.subject}
+                onChange={handleInputChange}
               />
+              {errors.subject && (
+                <p className="mt-1 text-xs text-red-500">{errors.subject}</p>
+              )}
             </div>
             <div>
               <label
@@ -152,16 +280,66 @@ const Contact = () => {
               </label>
               <textarea
                 id="message"
+                name="message"
                 rows={5}
-                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]"
+                className={`w-full rounded-md border ${
+                  errors.message ? 'border-red-500' : 'border-gray-300'
+                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
                 placeholder="Your Message"
+                value={formData.message}
+                onChange={handleInputChange}
               ></textarea>
+              {errors.message && (
+                <p className="mt-1 text-xs text-red-500">{errors.message}</p>
+              )}
             </div>
+            {submitStatus && (
+              <div
+                className={`rounded-md ${
+                  submitStatus.success ? 'bg-green-50' : 'bg-red-50'
+                } p-3`}
+              >
+                <p
+                  className={`text-sm ${
+                    submitStatus.success ? 'text-green-700' : 'text-red-700'
+                  }`}
+                >
+                  {submitStatus.message}
+                </p>
+              </div>
+            )}
             <button
               type="submit"
-              className="w-full rounded-md bg-secondary px-4 py-2 text-white transition duration-300 hover:bg-secondary/80"
+              className="w-full rounded-md bg-secondary px-4 py-2 text-white transition duration-300 hover:bg-secondary/80 disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Send Message
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="mr-2 h-4 w-4 animate-spin text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Sending...
+                </span>
+              ) : (
+                'Send Message'
+              )}
             </button>
           </form>
         </div>
@@ -230,82 +408,85 @@ const Contact = () => {
       </div>
 
       {/* FAQs Section */}
-      <div className="mt-16">
+      <div className="my-20">
         <h2 className="mb-10 text-center text-2xl font-bold">
           Frequently Asked Questions
         </h2>
 
-        {/* Dance FAQs */}
-        <div className="mb-12">
-          <h3 className="mb-6 text-center text-2xl font-semibold">
-            Dance FAQs
-          </h3>
-          <div className="mx-auto max-w-3xl">
-            <Accordion type="single" collapsible className="space-y-4">
-              {Faqs.slice(0, 6).map((faq, index) => (
-                <AccordionItem
-                  key={`dance-${index}`}
-                  value={`dance-${index}`}
-                  className="rounded-lg bg-white shadow-md"
-                >
-                  <AccordionTrigger className="px-6 py-4 text-left font-medium hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 pt-2 text-gray-600">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Dance FAQs */}
+          <div className="mb-12 md:mb-0">
+            <h3 className="mb-6 text-center text-xl font-semibold">
+              Dance FAQs
+            </h3>
+            <div>
+              <Accordion type="single" collapsible className="space-y-4">
+                {Faqs.slice(0, 6).map((faq, index) => (
+                  <AccordionItem
+                    key={`dance-${index}`}
+                    value={`dance-${index}`}
+                    className="rounded-lg bg-white shadow-md"
+                  >
+                    <AccordionTrigger className="px-4 py-3 text-left text-sm font-medium hover:no-underline md:px-6 md:py-4 md:text-base">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-3 pt-2 text-sm text-gray-600 md:px-6 md:pb-4 md:text-base">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
-        </div>
 
-        {/* Music FAQs */}
-        <div className="mb-12">
-          <h3 className="mb-6 text-center text-2xl font-semibold">
-            Music FAQs
-          </h3>
-          <div className="mx-auto max-w-3xl">
-            <Accordion type="single" collapsible className="space-y-4">
-              {Faqs.slice(6, 10).map((faq, index) => (
-                <AccordionItem
-                  key={`music-${index}`}
-                  value={`music-${index}`}
-                  className="rounded-lg bg-white shadow-md"
-                >
-                  <AccordionTrigger className="px-6 py-4 text-left font-medium hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 pt-2 text-gray-600">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+          {/* Music FAQs */}
+          <div className="mb-12 md:mb-0">
+            <h3 className="mb-6 text-center text-xl font-semibold">
+              Music FAQs
+            </h3>
+            <div>
+              <Accordion type="single" collapsible className="space-y-4">
+                {Faqs.slice(6, 10).map((faq, index) => (
+                  <AccordionItem
+                    key={`music-${index}`}
+                    value={`music-${index}`}
+                    className="rounded-lg bg-white shadow-md"
+                  >
+                    <AccordionTrigger className="px-4 py-3 text-left text-sm font-medium hover:no-underline md:px-6 md:py-4 md:text-base">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-3 pt-2 text-sm text-gray-600 md:px-6 md:pb-4 md:text-base">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <h3 className="mb-6 text-center text-2xl font-semibold">
-            Academy & General FAQs
-          </h3>
-          <div className="mx-auto max-w-3xl">
-            <Accordion type="single" collapsible className="space-y-4">
-              {Faqs.slice(10).map((faq, index) => (
-                <AccordionItem
-                  key={`general-${index}`}
-                  value={`general-${index}`}
-                  className="rounded-lg bg-white shadow-md"
-                >
-                  <AccordionTrigger className="px-6 py-4 text-left font-medium hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 pt-2 text-secondary1">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+          {/* Academy & General FAQs */}
+          <div>
+            <h3 className="mb-6 text-center text-xl font-semibold">
+              Academy & General FAQs
+            </h3>
+            <div>
+              <Accordion type="single" collapsible className="space-y-4">
+                {Faqs.slice(10).map((faq, index) => (
+                  <AccordionItem
+                    key={`general-${index}`}
+                    value={`general-${index}`}
+                    className="rounded-lg bg-white shadow-md"
+                  >
+                    <AccordionTrigger className="px-4 py-3 text-left text-sm font-medium hover:no-underline md:px-6 md:py-4 md:text-base">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-3 pt-2 text-sm text-gray-600 md:px-6 md:pb-4 md:text-base">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </div>
       </div>
