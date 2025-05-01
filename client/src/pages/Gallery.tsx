@@ -35,6 +35,7 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
+  { title: 'All' },
   { title: 'Gallery' },
   { title: 'Press' },
   { title: 'Wallpaper' },
@@ -106,7 +107,7 @@ const ALLOWED_FILE_TYPES = [
 function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [videos, setVideos] = useState<VideoItem[]>([]);
-  const [filter, setFilter] = useState<string>('Gallery');
+  const [filter, setFilter] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -222,10 +223,14 @@ function Gallery() {
   }, [fetchImages, fetchVideos]);
 
   const filteredImages = useMemo(() => {
-    // Don't filter images when Videos is selected
     if (filter.toLowerCase() === 'videos') {
       return [];
     }
+
+    if (filter.toLowerCase() === 'all') {
+      return images;
+    }
+
     return images.filter(
       (image) => image.category.toLowerCase() === filter.toLowerCase(),
     );
@@ -303,14 +308,25 @@ function Gallery() {
 
   const handleUploadDialogChange = useCallback(
     (open: boolean) => {
-      setUploadState((prev) => ({ ...prev, isDialogOpen: open }));
-      if (!open) {
+      if (open) {
+        let defaultCategory = '';
+        if (filter.toLowerCase() !== 'all') {
+          defaultCategory = filter.toLowerCase();
+        }
+
+        setUploadState((prev) => ({
+          ...prev,
+          isDialogOpen: open,
+          category: defaultCategory,
+        }));
+      } else {
+        setUploadState((prev) => ({ ...prev, isDialogOpen: open }));
         setTimeout(() => {
           resetUploadDialogForm();
         }, 300);
       }
     },
-    [resetUploadDialogForm],
+    [resetUploadDialogForm, filter],
   );
 
   const handleUpload = async () => {
@@ -625,6 +641,141 @@ function Gallery() {
 
     // Show images grid only when not on Videos filter
     if (filter.toLowerCase() !== 'videos') {
+      // Check if there are no images for the selected category
+      if (filteredImages.length === 0) {
+        return (
+          <>
+            <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
+            <div className="flex h-40 flex-col items-center justify-center py-8 text-center">
+              <p className="text-gray-600">
+                No images available in this category.
+              </p>
+              {isAdmin && isLoggedIn && (
+                <motion.div variants={itemVariants} className="mt-4">
+                  <Dialog
+                    open={uploadState.isDialogOpen}
+                    onOpenChange={handleUploadDialogChange}
+                  >
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Add {filter} Image</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader className="font-medium">
+                        {filter.toLowerCase() === 'press'
+                          ? 'Add Press Coverage'
+                          : 'Add Image To Gallery'}
+                      </DialogHeader>
+                      <div className="flex flex-col space-y-4">
+                        <div className="space-y-1">
+                          <label
+                            htmlFor="image-upload"
+                            className="text-sm font-medium"
+                          >
+                            {filter.toLowerCase() === 'press'
+                              ? 'Select Press Image'
+                              : 'Select Image'}
+                          </label>
+                          <Input
+                            id="image-upload"
+                            type="file"
+                            className="border-2 border-dashed"
+                            accept="image/jpeg, image/png, image/gif, image/webp"
+                            onChange={handleFileSelected}
+                            key={
+                              uploadState.selectedFile
+                                ? 'file-selected'
+                                : 'no-file'
+                            }
+                            aria-describedby="file-restrictions"
+                          />
+                          <p
+                            id="file-restrictions"
+                            className="text-xs text-gray-500"
+                          >
+                            Accepted formats: JPG, PNG, GIF, WebP. Maximum size:
+                            5MB
+                          </p>
+                        </div>
+
+                        {uploadState.imagePreview && (
+                          <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
+                            <img
+                              src={uploadState.imagePreview}
+                              alt="Preview"
+                              className="mx-auto max-h-56 object-contain"
+                            />
+                          </div>
+                        )}
+
+                        <div className="space-y-1">
+                          <label
+                            htmlFor="category-input"
+                            className="text-sm font-medium"
+                          >
+                            Category
+                          </label>
+                          <Input
+                            id="category-input"
+                            type="text"
+                            placeholder={
+                              filter.toLowerCase() === 'press'
+                                ? 'Enter press or publication name'
+                                : 'Enter Category (e.g., gallery, press)'
+                            }
+                            value={uploadState.category}
+                            onChange={(e) =>
+                              setUploadState((prev) => ({
+                                ...prev,
+                                category: e.target.value,
+                                error: null,
+                              }))
+                            }
+                          />
+                        </div>
+
+                        {uploadState.error && (
+                          <div className="rounded-md bg-red-50 p-2 text-sm text-red-500">
+                            {uploadState.error}
+                          </div>
+                        )}
+
+                        {uploadState.success && (
+                          <div className="rounded-md bg-green-50 p-2 text-sm text-green-500">
+                            {uploadState.success}
+                          </div>
+                        )}
+
+                        <Button
+                          variant={'secondary'}
+                          className="text-primary"
+                          onClick={handleUpload}
+                          disabled={
+                            uploadState.isUploading ||
+                            !uploadState.selectedFile ||
+                            !uploadState.category.trim()
+                          }
+                        >
+                          {uploadState.isUploading ? (
+                            <>
+                              <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-b-transparent"></div>
+                              Uploading...
+                            </>
+                          ) : filter.toLowerCase() === 'press' ? (
+                            'Upload Press Coverage'
+                          ) : (
+                            'Upload'
+                          )}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </motion.div>
+              )}
+            </div>
+          </>
+        );
+      }
+
       return (
         <>
           {/* Section Heading */}
@@ -691,7 +842,8 @@ function Gallery() {
                           {filter.toLowerCase() === 'all' && 'Add Image'}
                           {filter.toLowerCase() === 'gallery' &&
                             'Add Gallery Image'}
-                          {filter.toLowerCase() === 'press' && 'Add Article'}
+                          {filter.toLowerCase() === 'press' &&
+                            'Add Press Image'}
                           {filter.toLowerCase() === 'wallpaper' &&
                             'Add Wallpaper'}
                         </span>
@@ -700,7 +852,9 @@ function Gallery() {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader className="font-medium">
-                      Add Image To Gallery
+                      {filter.toLowerCase() === 'press'
+                        ? 'Add Press Coverage'
+                        : 'Add Image To Gallery'}
                     </DialogHeader>
                     <div className="flex flex-col space-y-4">
                       <div className="space-y-1">
@@ -708,7 +862,9 @@ function Gallery() {
                           htmlFor="image-upload"
                           className="text-sm font-medium"
                         >
-                          Select Image
+                          {filter.toLowerCase() === 'press'
+                            ? 'Select Press Image'
+                            : 'Select Image'}
                         </label>
                         <Input
                           id="image-upload"
@@ -752,7 +908,11 @@ function Gallery() {
                         <Input
                           id="category-input"
                           type="text"
-                          placeholder="Enter Category (e.g., gallery, press)"
+                          placeholder={
+                            filter.toLowerCase() === 'press'
+                              ? 'Enter press or publication name'
+                              : 'Enter Category (e.g., gallery, press)'
+                          }
                           value={uploadState.category}
                           onChange={(e) =>
                             setUploadState((prev) => ({
@@ -791,6 +951,8 @@ function Gallery() {
                             <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-b-transparent"></div>
                             Uploading...
                           </>
+                        ) : filter.toLowerCase() === 'press' ? (
+                          'Upload Press Coverage'
                         ) : (
                           'Upload'
                         )}
@@ -859,6 +1021,7 @@ function Gallery() {
         </>
       );
     } else {
+      // Videos section
       return (
         <>
           <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>

@@ -164,11 +164,11 @@ function GalleryCard({
               <Button
                 variant="secondary"
                 size="sm"
-                className="flex items-center gap-1.5 px-3 py-2 font-medium transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-white"
+                className="flex items-center gap-1.5 px-3 py-2 font-medium text-white transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-white"
                 onClick={handleDownload}
                 aria-label="Save wallpaper image"
               >
-                <Download size={16} />
+                <Download className="text-white" size={16} />
                 Save
               </Button>
             )}
