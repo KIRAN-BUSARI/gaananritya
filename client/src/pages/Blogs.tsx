@@ -7,6 +7,9 @@ import {
   X,
   Maximize2,
   Tag,
+  Plus,
+  Trash2,
+  Upload,
 } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -15,7 +18,18 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogHeader,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 import axiosInstance from '@/helper/axiosInstance';
 import { motion } from 'framer-motion';
 
@@ -30,6 +44,14 @@ interface Blog {
   tags?: string[];
 }
 
+interface BlogFormData {
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  image: File | null;
+}
+
 function Blogs() {
   const [mainBlog, setMainBlog] = useState<Blog | null>(null);
   const [sideBlogsData, setSideBlogsData] = useState<Blog[]>([]);
@@ -38,6 +60,21 @@ function Blogs() {
   const [retrying, setRetrying] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
+
+  // Admin state
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] =
+    useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [blogToDelete, setBlogToDelete] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [blogFormData, setBlogFormData] = useState<BlogFormData>({
+    title: '',
+    content: '',
+    author: '',
+    date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+    image: null,
+  });
 
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +113,12 @@ function Blogs() {
 
   useEffect(() => {
     fetchBlogs();
+  }, []);
+
+  // Check if user is admin on component mount
+  useEffect(() => {
+    const isAdminUser = localStorage.getItem('isAdmin') === 'true';
+    setIsAdmin(isAdminUser);
   }, []);
 
   const handleRetry = () => {
@@ -132,6 +175,125 @@ function Blogs() {
     return readingTime;
   };
 
+  // Handle form input changes
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setBlogFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle image file selection
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setBlogFormData((prev) => ({ ...prev, image: e.target.files![0] }));
+    }
+  };
+
+  // Handle blog form submission
+  const handleAddBlog = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate form
+    if (
+      !blogFormData.title ||
+      !blogFormData.content ||
+      !blogFormData.author ||
+      !blogFormData.date ||
+      !blogFormData.image
+    ) {
+      toast({
+        title: 'Missing Fields',
+        description: 'Please fill in all required fields and upload an image.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      // Create form data for multipart/form-data request
+      const formData = new FormData();
+      formData.append('title', blogFormData.title);
+      formData.append('content', blogFormData.content);
+      formData.append('author', blogFormData.author);
+      formData.append('date', blogFormData.date);
+
+      if (blogFormData.image) {
+        formData.append('image', blogFormData.image);
+      }
+
+      // Submit the form data
+      await axiosInstance.post('/blog/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Reset form and close dialog
+      setBlogFormData({
+        title: '',
+        content: '',
+        author: '',
+        date: new Date().toISOString().split('T')[0],
+        image: null,
+      });
+      setIsAddBlogDialogOpen(false);
+
+      // Refresh blogs
+      await fetchBlogs();
+
+      toast({
+        title: 'Success',
+        description: 'Blog post created successfully!',
+      });
+    } catch (err) {
+      console.error('Error creating blog:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to create blog. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle blog deletion
+  const confirmDeleteBlog = (blogId: string) => {
+    setBlogToDelete(blogId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteBlog = async () => {
+    if (!blogToDelete) return;
+
+    try {
+      setIsSubmitting(true);
+      await axiosInstance.delete(`/blog/delete/${blogToDelete}`);
+
+      // Refresh blogs
+      await fetchBlogs();
+
+      toast({
+        title: 'Success',
+        description: 'Blog deleted successfully!',
+      });
+    } catch (err) {
+      console.error('Error deleting blog:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete blog. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+      setIsDeleteDialogOpen(false);
+      setBlogToDelete('');
+    }
+  };
+
   return (
     <section
       id="blogs"
@@ -146,12 +308,23 @@ function Blogs() {
             Insights, stories, and updates from Gaana Nritya Academy
           </p>
         </div>
-        <Link to="/" aria-label="Back to home">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-5 w-5" />
-            <span className="sr-only">Back to home</span>
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {isAdmin && (
+            <Button
+              variant="outline"
+              onClick={() => setIsAddBlogDialogOpen(true)}
+              className="flex items-center gap-1"
+            >
+              <Plus className="h-4 w-4" /> Add Blog
+            </Button>
+          )}
+          <Link to="/" aria-label="Back to home">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+              <span className="sr-only">Back to home</span>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {loading ? (
@@ -232,15 +405,28 @@ function Blogs() {
                     <Clock className="ml-0 h-4 w-4 sm:ml-0" />
                     <span>{getReadingTime(mainBlog.content)} min read</span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleShareClick}
-                    className="flex items-center gap-2"
-                  >
-                    <Share2 className="h-4 w-4" />
-                    <span className="sr-only sm:not-sr-only">Share</span>
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    {isAdmin && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => confirmDeleteBlog(mainBlog._id)}
+                        className="flex items-center gap-1 text-red-500 hover:bg-red-50 hover:text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only sm:not-sr-only">Delete</span>
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleShareClick}
+                      className="flex items-center gap-2"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      <span className="sr-only sm:not-sr-only">Share</span>
+                    </Button>
+                  </div>
                 </div>
 
                 <h2 className="mb-4 text-2xl font-bold leading-tight md:text-3xl md:font-semibold">
@@ -330,39 +516,36 @@ function Blogs() {
                             </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-secondary1">
-                          <Calendar className="h-3 w-3" />
-                          <time dateTime={new Date(blog.date).toISOString()}>
-                            {new Date(blog.date).toLocaleDateString('en-US', {
-                              day: 'numeric',
-                              month: 'long',
-                              year: 'numeric',
-                            })}
-                          </time>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          className="p-0 text-left hover:bg-transparent"
-                          onClick={() => handleClick(blog)}
-                        >
-                          <h3 className="line-clamp-2 text-sm font-semibold hover:text-primary">
-                            {blog.title}
-                          </h3>
-                        </Button>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6">
+                              <AvatarImage
+                                src={blog.authorImage}
+                                alt={blog.author}
+                              />
+                              <AvatarFallback>
+                                {blog.author.charAt(0)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <p className="text-xs text-secondary1">
+                              By {blog.author}
+                            </p>
+                          </div>
 
-                        <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6">
-                            <AvatarImage
-                              src={blog.authorImage}
-                              alt={blog.author}
-                            />
-                            <AvatarFallback>
-                              {blog.author.charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <p className="text-xs text-secondary1">
-                            By {blog.author}
-                          </p>
+                          {isAdmin && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                confirmDeleteBlog(blog._id);
+                              }}
+                              className="flex h-7 w-7 items-center justify-center p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                              <span className="sr-only">Delete</span>
+                            </Button>
+                          )}
                         </div>
                       </motion.div>
                     ))}
@@ -401,6 +584,165 @@ function Blogs() {
               className="max-h-[80vh] rounded-lg object-contain"
             />
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Admin: Add Blog Dialog */}
+      <Dialog open={isAddBlogDialogOpen} onOpenChange={setIsAddBlogDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Add New Blog Post</DialogTitle>
+            <DialogDescription>
+              Create a new blog post for Gaana Nritya Academy
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddBlog} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                placeholder="Enter blog title"
+                value={blogFormData.title}
+                onChange={handleFormChange}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="author">Author</Label>
+                <Input
+                  id="author"
+                  name="author"
+                  placeholder="Author name"
+                  value={blogFormData.author}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date">Date</Label>
+                <Input
+                  id="date"
+                  name="date"
+                  type="date"
+                  value={blogFormData.date}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="content">Blog Content</Label>
+              <Textarea
+                id="content"
+                name="content"
+                placeholder="Write your blog content here..."
+                rows={8}
+                value={blogFormData.content}
+                onChange={handleFormChange}
+                required
+                className="resize-y"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="image">Cover Image</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="image"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="flex-1"
+                  required
+                />
+                {blogFormData.image && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      setBlogFormData((prev) => ({ ...prev, image: null }))
+                    }
+                    aria-label="Clear selected image"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              {blogFormData.image && (
+                <div className="mt-2 flex items-center gap-2 rounded-md border p-2">
+                  <Upload className="h-4 w-4 text-muted-foreground" />
+                  <span className="truncate text-sm text-muted-foreground">
+                    {blogFormData.image.name} (
+                    {Math.round(blogFormData.image.size / 1024)} KB)
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddBlogDialogOpen(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Publishing...
+                  </>
+                ) : (
+                  'Publish Blog'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Admin: Delete Blog Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this blog post? This action cannot
+              be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex items-center justify-end space-x-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteBlog}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete Blog'
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </section>
