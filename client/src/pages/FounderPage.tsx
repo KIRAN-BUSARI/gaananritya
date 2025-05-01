@@ -38,8 +38,8 @@ const FounderPage = () => {
           Bharatanatyam and music talent.
         </h2>
       </div>
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-12">
-        <div className="relative col-span-1 flex justify-center md:col-span-6 md:justify-start lg:pr-20">
+      <div className="mt-12 flex flex-col lg:flex-row lg:gap-8 xl:gap-12">
+        <div className="relative flex justify-center pr-4 md:justify-start lg:w-full xl:w-5/12">
           <HeroSectionBgCarousel
             className="h-[400px] w-full max-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
             images={imgs}
@@ -47,7 +47,7 @@ const FounderPage = () => {
           />
         </div>
 
-        <div className="col-span-1 mt-6 flex flex-col justify-center md:col-span-6 lg:mt-0">
+        <div className="mt-6 flex flex-col justify-center lg:mt-0 lg:w-1/2 xl:w-7/12">
           <ul className="list-outside list-disc space-y-6 text-balance pl-5 text-lg marker:text-[#1d6d8d] sm:text-lg md:space-y-6 lg:space-y-8">
             <li className="leading-[160%] tracking-[-1%] md:leading-[170%]">
               <span className="font-semibold text-secondary1">
