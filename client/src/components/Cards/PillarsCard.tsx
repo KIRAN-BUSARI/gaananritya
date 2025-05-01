@@ -19,7 +19,7 @@ const PillarsCard = ({
         />
       </div>
       <div className="text-center sm:text-left">
-        <h1 className="text-xl font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-xl">
+        <h1 className="text-xl font-medium leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-xl">
           {name}
         </h1>
         <p className="mt-2 text-balance text-base leading-[170%] tracking-[-1%] sm:text-lg lg:text-base">
