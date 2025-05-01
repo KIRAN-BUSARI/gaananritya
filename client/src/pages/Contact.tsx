@@ -8,6 +8,8 @@ import { useState } from 'react';
 import axiosInstance from '@/helper/axiosInstance';
 import { toast } from 'sonner';
 
+import contactImg from '@/assets/contact.png';
+
 const Faqs = [
   // Dance FAQs
   {
@@ -166,8 +168,8 @@ const Contact = () => {
     setSubmitStatus(null);
 
     try {
-      // Using axiosInstance to make the API call
-      await axiosInstance.post('/contact', formData);
+      // Using axiosInstance to make the API call with correct endpoint
+      await axiosInstance.post('/api/v1/contact', formData);
 
       setSubmitStatus({
         success: true,
@@ -199,221 +201,236 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto items-center justify-center px-4 py-12">
-      <div className="mx-auto grid max-w-3xl grid-cols-1 gap-12 md:grid-cols-1">
-        {/* Contact Form */}
-        <div className="rounded-lg bg-white p-6 shadow-md">
-          <h2 className="mb-6 text-2xl font-semibold">Get in Touch</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="name"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className={`w-full rounded-md border ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleInputChange}
-              />
-              {errors.name && (
-                <p className="mt-1 text-xs text-red-500">{errors.name}</p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className={`w-full rounded-md border ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="subject"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Subject
-              </label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                className={`w-full rounded-md border ${
-                  errors.subject ? 'border-red-500' : 'border-gray-300'
-                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
-                placeholder="Subject"
-                value={formData.subject}
-                onChange={handleInputChange}
-              />
-              {errors.subject && (
-                <p className="mt-1 text-xs text-red-500">{errors.subject}</p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="message"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                className={`w-full rounded-md border ${
-                  errors.message ? 'border-red-500' : 'border-gray-300'
-                } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
-                placeholder="Your Message"
-                value={formData.message}
-                onChange={handleInputChange}
-              ></textarea>
-              {errors.message && (
-                <p className="mt-1 text-xs text-red-500">{errors.message}</p>
-              )}
-            </div>
-            {submitStatus && (
-              <div
-                className={`rounded-md ${
-                  submitStatus.success ? 'bg-green-50' : 'bg-red-50'
-                } p-3`}
-              >
-                <p
-                  className={`text-sm ${
-                    submitStatus.success ? 'text-green-700' : 'text-red-700'
-                  }`}
-                >
-                  {submitStatus.message}
-                </p>
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full rounded-md bg-secondary px-4 py-2 text-white transition duration-300 hover:bg-secondary/80 disabled:opacity-50"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="mr-2 h-4 w-4 animate-spin text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Sending...
-                </span>
-              ) : (
-                'Send Message'
-              )}
-            </button>
-          </form>
+    <div className="">
+      <div className="md:flex">
+        <div className="md:mr-20">
+          <img
+            src={contactImg}
+            alt="contact"
+            className="max-h-[800px] w-[750px] object-cover"
+          />
         </div>
+        <div className="flex flex-col md:flex-row"></div>
+        <div className="flex flex-1 flex-col">
+          <div>
+            {/* Contact Form */}
+            <div className="mb-8 rounded-lg bg-white p-6 shadow-md">
+              <h2 className="mb-6 text-2xl font-semibold">Get in Touch</h2>
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className={`w-full rounded-md border ${
+                      errors.name ? 'border-red-500' : 'border-gray-300'
+                    } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className={`w-full rounded-md border ${
+                      errors.email ? 'border-red-500' : 'border-gray-300'
+                    } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                  {errors.email && (
+                    <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    className={`w-full rounded-md border ${
+                      errors.subject ? 'border-red-500' : 'border-gray-300'
+                    } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
+                    placeholder="Subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                  />
+                  {errors.subject && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.subject}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    className={`w-full rounded-md border ${
+                      errors.message ? 'border-red-500' : 'border-gray-300'
+                    } p-2 focus:outline-none focus:ring-2 focus:ring-[#1d6d8d]`}
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                  ></textarea>
+                  {errors.message && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+                {submitStatus && (
+                  <div
+                    className={`rounded-md ${
+                      submitStatus.success ? 'bg-green-50' : 'bg-red-50'
+                    } p-3`}
+                  >
+                    <p
+                      className={`text-sm ${
+                        submitStatus.success ? 'text-green-700' : 'text-red-700'
+                      }`}
+                    >
+                      {submitStatus.message}
+                    </p>
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  className="w-full rounded-md bg-secondary px-4 py-2 text-white transition duration-300 hover:bg-secondary/80 disabled:opacity-50"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg
+                        className="mr-2 h-4 w-4 animate-spin text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Sending...
+                    </span>
+                  ) : (
+                    'Send Message'
+                  )}
+                </button>
+              </form>
+            </div>
 
-        {/* Contact Info */}
-        <div>
-          <div className="mb-8 rounded-lg bg-white p-6 shadow-md">
-            <h2 className="mb-6 text-2xl font-semibold">Contact Information</h2>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="mr-3 mt-1 text-secondary1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+            {/* Contact Info */}
+            <div className="rounded-lg bg-white p-6 shadow-md">
+              <h2 className="mb-6 text-2xl font-semibold">
+                Contact Information
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1 text-secondary1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-800">Address</h3>
+                    <p className="text-gray-600">Karnataka, India</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-medium text-gray-800">Address</h3>
-                  <p className="text-gray-600">Karnataka, India</p>
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1 text-secondary1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-800">Phone</h3>
+                    <p className="text-gray-600">+91 XXXXX XXXXX</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <div className="mr-3 mt-1 text-secondary1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-800">Phone</h3>
-                  <p className="text-gray-600">+91 XXXXX XXXXX</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="mr-3 mt-1 text-secondary1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-800">Email</h3>
-                  <p className="text-gray-600">info@gaananritya.com</p>
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1 text-secondary1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-800">Email</h3>
+                    <p className="text-gray-600">info@gaananritya.com</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       {/* FAQs Section */}
-      <div className="my-20 px-20">
+      <div className="my-20 px-4 md:px-10 lg:px-20">
         <h2 className="mb-10 text-center text-2xl font-bold">
           Frequently Asked Questions
         </h2>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Dance FAQs */}
           <div className="mb-12 md:mb-0">
             <h3 className="mb-6 text-center text-xl font-semibold">
