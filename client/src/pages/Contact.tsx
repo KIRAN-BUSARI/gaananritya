@@ -408,7 +408,7 @@ const Contact = () => {
       </div>
 
       {/* FAQs Section */}
-      <div className="my-20">
+      <div className="my-20 px-20">
         <h2 className="mb-10 text-center text-2xl font-bold">
           Frequently Asked Questions
         </h2>
