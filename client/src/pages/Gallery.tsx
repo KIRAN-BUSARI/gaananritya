@@ -62,10 +62,10 @@ interface UploadState {
   isUploading: boolean;
   error: string | null;
   success: string | null;
-  selectedFile: File | null;
+  selectedFiles: File[] | null;
   category: string;
   isDialogOpen: boolean;
-  imagePreview: string | null;
+  imagePreviews: string[];
 }
 
 interface UploadVideoState {
@@ -115,10 +115,10 @@ function Gallery() {
     isUploading: false,
     error: null,
     success: null,
-    selectedFile: null,
+    selectedFiles: null,
     category: '',
     isDialogOpen: false,
-    imagePreview: null,
+    imagePreviews: [],
   });
 
   const [deleteState, setDeleteState] = useState<DeleteState>({
@@ -255,42 +255,73 @@ function Gallery() {
   };
 
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const files = event.target.files;
 
-    if (!file) {
+    if (!files || files.length === 0) {
       setUploadState((prev) => ({
         ...prev,
-        selectedFile: null,
+        selectedFiles: null,
         error: null,
         success: null,
-        imagePreview: null,
+        imagePreviews: [],
       }));
       return;
     }
 
-    const errorMessage = validateFile(file);
+    const errorMessages: string[] = [];
+    const selectedFiles: File[] = [];
+    const fileArray = Array.from(files);
 
+    // First validate all files
+    fileArray.forEach((file) => {
+      const errorMessage = validateFile(file);
+      if (errorMessage) {
+        errorMessages.push(errorMessage);
+      } else {
+        selectedFiles.push(file);
+      }
+    });
+
+    // Set initial state with files but no previews yet
     setUploadState((prev) => ({
       ...prev,
-      selectedFile: errorMessage ? null : file,
-      error: errorMessage,
+      selectedFiles: selectedFiles.length > 0 ? selectedFiles : null,
+      error: errorMessages.length > 0 ? errorMessages.join(', ') : null,
       success: null,
-      imagePreview: null,
+      imagePreviews: [],
     }));
 
-    if (!errorMessage) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadState((prev) => ({
-          ...prev,
-          imagePreview: e.target?.result as string,
-        }));
-      };
-      reader.onerror = () => {
-        setUploadState((prev) => ({ ...prev, error: 'Failed to read file.' }));
-        toast.error('Failed to read file.');
-      };
-      reader.readAsDataURL(file);
+    // Only process previews if we have valid files
+    if (selectedFiles.length > 0) {
+      // Create an array to store all preview promises
+      const previewPromises = selectedFiles.map(
+        (file) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target?.result as string);
+            reader.onerror = () => reject(new Error('Failed to read file'));
+            reader.readAsDataURL(file);
+          }),
+      );
+
+      // Wait for all previews to be processed
+      Promise.all(previewPromises)
+        .then((previews) => {
+          setUploadState((prev) => ({
+            ...prev,
+            imagePreviews: previews,
+          }));
+        })
+        .catch((error) => {
+          console.error('Error generating previews:', error);
+          toast.error('Failed to generate image previews');
+          setUploadState((prev) => ({
+            ...prev,
+            error: prev.error
+              ? `${prev.error}, Failed to generate image previews`
+              : 'Failed to generate image previews',
+          }));
+        });
     }
   };
 
@@ -299,10 +330,10 @@ function Gallery() {
       isUploading: false,
       error: null,
       success: null,
-      selectedFile: null,
+      selectedFiles: null,
       category: '',
       isDialogOpen: false,
-      imagePreview: null,
+      imagePreviews: [],
     });
   }, []);
 
@@ -330,7 +361,7 @@ function Gallery() {
   );
 
   const handleUpload = async () => {
-    if (!uploadState.selectedFile) {
+    if (!uploadState.selectedFiles || uploadState.selectedFiles.length === 0) {
       setUploadState((prev) => ({
         ...prev,
         error: 'Please select an image to upload',
@@ -352,7 +383,9 @@ function Gallery() {
 
     try {
       const formData = new FormData();
-      formData.append('images', uploadState.selectedFile);
+      uploadState.selectedFiles.forEach((file) => {
+        formData.append('images', file);
+      });
       formData.append('category', uploadState.category.trim().toLowerCase());
 
       await axiosInstance.post('/gallery/upload', formData, {
@@ -364,9 +397,9 @@ function Gallery() {
       setUploadState((prev) => ({
         ...prev,
         success: 'Image uploaded successfully!',
-        selectedFile: null,
+        selectedFiles: null,
         category: '',
-        imagePreview: null,
+        imagePreviews: [],
       }));
       toast.success('Image uploaded successfully!');
       await fetchImages();
@@ -659,7 +692,7 @@ function Gallery() {
                     <DialogTrigger asChild>
                       <Button variant="outline">Add {filter} Image</Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
+                    <DialogContent className="max-w-7xl">
                       <DialogHeader className="font-medium">
                         {filter.toLowerCase() === 'press'
                           ? 'Add Press Coverage'
@@ -681,8 +714,9 @@ function Gallery() {
                             className="border-2 border-dashed"
                             accept="image/jpeg, image/png, image/gif, image/webp"
                             onChange={handleFileSelected}
+                            multiple
                             key={
-                              uploadState.selectedFile
+                              uploadState.selectedFiles
                                 ? 'file-selected'
                                 : 'no-file'
                             }
@@ -697,15 +731,25 @@ function Gallery() {
                           </p>
                         </div>
 
-                        {uploadState.imagePreview && (
-                          <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
-                            <img
-                              src={uploadState.imagePreview}
-                              alt="Preview"
-                              className="mx-auto max-h-56 object-contain"
-                            />
-                          </div>
-                        )}
+                        {uploadState.imagePreviews &&
+                          uploadState.imagePreviews.length > 0 && (
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+                              {uploadState.imagePreviews.map(
+                                (preview, index) => (
+                                  <div
+                                    key={index}
+                                    className="relative aspect-square overflow-hidden rounded-md border"
+                                  >
+                                    <img
+                                      src={preview}
+                                      alt={`Preview ${index + 1}`}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          )}
 
                         <div className="space-y-1">
                           <label
@@ -751,7 +795,8 @@ function Gallery() {
                           onClick={handleUpload}
                           disabled={
                             uploadState.isUploading ||
-                            !uploadState.selectedFile ||
+                            !uploadState.selectedFiles ||
+                            uploadState.selectedFiles.length === 0 ||
                             !uploadState.category.trim()
                           }
                         >
@@ -872,8 +917,9 @@ function Gallery() {
                           className="border-2 border-dashed"
                           accept="image/jpeg, image/png, image/gif, image/webp"
                           onChange={handleFileSelected}
+                          multiple
                           key={
-                            uploadState.selectedFile
+                            uploadState.selectedFiles
                               ? 'file-selected'
                               : 'no-file'
                           }
@@ -888,15 +934,23 @@ function Gallery() {
                         </p>
                       </div>
 
-                      {uploadState.imagePreview && (
-                        <div className="relative mx-auto max-h-56 overflow-hidden rounded-md border">
-                          <img
-                            src={uploadState.imagePreview}
-                            alt="Preview"
-                            className="mx-auto max-h-56 object-contain"
-                          />
-                        </div>
-                      )}
+                      {uploadState.imagePreviews &&
+                        uploadState.imagePreviews.length > 0 && (
+                          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+                            {uploadState.imagePreviews.map((preview, index) => (
+                              <div
+                                key={index}
+                                className="relative aspect-square overflow-hidden rounded-md border"
+                              >
+                                <img
+                                  src={preview}
+                                  alt={`Preview ${index + 1}`}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
 
                       <div className="space-y-1">
                         <label
@@ -942,7 +996,8 @@ function Gallery() {
                         onClick={handleUpload}
                         disabled={
                           uploadState.isUploading ||
-                          !uploadState.selectedFile ||
+                          !uploadState.selectedFiles ||
+                          uploadState.selectedFiles.length === 0 ||
                           !uploadState.category.trim()
                         }
                       >
