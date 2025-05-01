@@ -312,7 +312,7 @@ const Classes = () => {
                   {index % 2 !== 1 && index !== addressList.length - 1 && (
                     <div className="absolute -right-10 top-0 hidden h-full sm:block md:hidden">
                       <Separator
-                        className="h-[80%] translate-y-[12%] bg-[#FF6F61]"
+                        className="h-[80%] translate-y-[12%] bg-secondary"
                         orientation="vertical"
                       />
                     </div>
@@ -322,7 +322,7 @@ const Classes = () => {
                   {index % 3 !== 2 && index !== addressList.length - 1 && (
                     <div className="absolute -right-10 top-0 hidden h-full md:block">
                       <Separator
-                        className="h-[80%] translate-y-[12%] bg-[#FF6F61]"
+                        className="h-[80%] translate-y-[12%] bg-secondary"
                         orientation="vertical"
                       />
                     </div>
@@ -332,7 +332,7 @@ const Classes = () => {
                 {/* Horizontal separator for mobile only - show after every card except the last one */}
                 {index !== addressList.length - 1 && (
                   <div className="mt-6 block sm:hidden">
-                    <Separator className="h-[2px] w-full bg-[#FF6F61]" />
+                    <Separator className="h-[2px] w-full bg-secondary" />
                   </div>
                 )}
               </div>

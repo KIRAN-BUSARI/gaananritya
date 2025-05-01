@@ -13,7 +13,7 @@ type AddressCardProps = {
 const AddressCard = ({ address }: AddressCardProps) => {
   return (
     <div className="flex w-full flex-col text-balance p-4 text-base sm:text-lg">
-      <h2 className="font-semibold capitalize text-[#FF6F61]">
+      <h2 className="font-semibold capitalize text-secondary1">
         {address.city}
       </h2>
       <p className="mt-2 font-medium">{address.name} &reg;</p>
