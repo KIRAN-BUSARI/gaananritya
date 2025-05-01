@@ -171,7 +171,7 @@ const Events = () => {
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
       <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[700px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745867383/Untitled_design_fiafpr.mp4"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745476384/WEBSITE_1_etlc3p.mp4"
           className="aspect-video w-full object-cover"
           autoPlay
           loop

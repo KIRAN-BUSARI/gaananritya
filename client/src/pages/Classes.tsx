@@ -1,6 +1,7 @@
 import bharathanatyam from '@/assets/classes/bharathanatyam.png';
 import kathak from '@/assets/classes/kathak.png';
 import carnatic from '@/assets/classes/carnatic.png';
+import workshop from '@/assets/classes/workshop.png';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -127,9 +128,9 @@ const addressList = [
 const Classes = () => {
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 -m-9 max-h-64 w-full md:-m-28 md:max-h-[700px]">
+      <div className="-z-10 -m-9 max-h-64 w-full object-contain md:-m-28 md:max-h-[700px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745867383/Untitled_design_fiafpr.mp4"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1746128361/WhatsApp_Video_2025-05-02_at_12.49.16_AM_abmx0q.mp4"
           className="aspect-video w-full object-cover"
           autoPlay
           loop
@@ -284,7 +285,7 @@ const Classes = () => {
             </div>
             <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
               <img
-                src={carnatic}
+                src={workshop}
                 alt="Carnatic Music"
                 className="h-auto w-full rounded-lg"
               />
