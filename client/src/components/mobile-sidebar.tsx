@@ -1,16 +1,24 @@
 import { useEffect, useState } from 'react';
 import { MenuIcon } from 'lucide-react';
-// import Pathname from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet';
-// import { Sidebar } from './sidebar';
 
 export const MobileSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const pathname = Pathname();
+  const location = useLocation();
+
+  // Close sidebar when route changes and implement smooth scrolling to top
   useEffect(() => {
     setIsOpen(false);
-  }, []);
+    // Scroll to top with smooth behavior when navigating to a new page
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, [location.pathname, setIsOpen]);
+
   return (
     <Sheet modal={false} open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -20,7 +28,6 @@ export const MobileSidebar = () => {
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
         <SheetTitle>Menu</SheetTitle>
-        {/* <Sidebar /> */}
       </SheetContent>
     </Sheet>
   );
