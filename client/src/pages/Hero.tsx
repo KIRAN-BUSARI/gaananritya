@@ -71,7 +71,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-8 flex w-full flex-row flex-col items-start space-x-0 space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
+              className="mt-8 flex w-full flex-col items-start space-x-0 space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
             >
               <Link to="/classes" className="w-full sm:w-auto">
                 <Button className="group w-full overflow-hidden rounded-lg border-secondary bg-secondary px-8 py-6 text-lg font-medium text-primary transition-all duration-300 hover:shadow-lg sm:w-auto md:text-xl">
