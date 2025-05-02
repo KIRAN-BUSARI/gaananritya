@@ -27,7 +27,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
-        <div className="container px-2">
+        <div className="px-2">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
               images={mobileImages}
@@ -35,12 +35,12 @@ export default function Hero() {
               className="relative h-[450px] rounded-2xl shadow-xl"
             />
           </div>
-          <div className="flex flex-col justify-center md:items-start">
+          <div className="flex flex-col items-start justify-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="mt-6 text-balance text-center text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-left md:text-[42px] md:font-medium md:text-primary"
+              className="mt-6 text-balance text-left text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-[42px] md:font-medium md:text-primary"
             >
               Celebrating{' '}
               <span className="text-secondary1 md:text-secondary">
@@ -58,7 +58,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="mt-4 text-balance text-center text-base font-normal leading-[25px] md:text-start md:leading-[30px] md:text-primary lg:text-lg"
+              className="mt-4 text-balance text-left text-base font-normal leading-[25px] md:leading-[30px] md:text-primary lg:text-lg"
             >
               Spreading the Joy of Art to Generations Across{' '}
               <br className="hidden md:block" /> Cities and Rural Communities{' '}
@@ -71,7 +71,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-8 flex w-full flex-col items-center space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
+              className="mt-8 flex w-full flex-row flex-col items-start space-x-0 space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
             >
               <Link to="/classes" className="w-full sm:w-auto">
                 <Button className="group w-full overflow-hidden rounded-lg border-secondary bg-secondary px-8 py-6 text-lg font-medium text-primary transition-all duration-300 hover:shadow-lg sm:w-auto md:text-xl">
@@ -112,7 +112,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="mt-6 flex w-full justify-center md:hidden"
+              className="mt-6 flex w-full justify-start md:hidden"
             >
               <div className="rounded-full bg-white/10 px-2 py-2 backdrop-blur-sm">
                 <span className="flex items-center text-xs font-medium text-secondary1">
