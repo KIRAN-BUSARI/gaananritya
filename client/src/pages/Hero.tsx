@@ -19,6 +19,14 @@ const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
+  // Function to scroll to the achievements section
+  const handleScrollToAchievements = () => {
+    const achievementsSection = document.getElementById('achievements');
+    if (achievementsSection) {
+      achievementsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 py-4 md:mb-0 md:h-[calc(100vh-100px)] md:px-20">
       <div className="absolute inset-0 z-0 hidden md:block">
@@ -26,7 +34,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
+      <div className="relative z-10 flex h-full w-full items-center lg:justify-start">
         <div className="px-2">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
@@ -71,7 +79,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-8 flex w-full flex-row flex-col items-start space-x-0 space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
+              className="mt-8 flex w-full flex-col items-start space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
             >
               <Link to="/classes" className="w-full sm:w-auto">
                 <Button className="group w-full overflow-hidden rounded-lg border-secondary bg-secondary px-8 py-6 text-lg font-medium text-primary transition-all duration-300 hover:shadow-lg sm:w-auto md:text-xl">
@@ -82,16 +90,15 @@ export default function Hero() {
                   <ArrowRight className="ml-2 h-5 w-5 transform transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
               </Link>
-              <Link to="/achievements" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  className="group w-full overflow-hidden rounded-lg border-2 border-secondary bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-white hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
-                >
-                  <span className="relative text-secondary1 md:text-secondary">
-                    Our Achievements
-                  </span>
-                </Button>
-              </Link>
+              <Button
+                variant="outline"
+                className="group w-full overflow-hidden rounded-lg border-2 border-secondary bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-white hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
+                onClick={handleScrollToAchievements}
+              >
+                <span className="relative text-secondary1 md:text-secondary">
+                  Our Achievements
+                </span>
+              </Button>
             </motion.div>
 
             {/* Desktop notification */}
