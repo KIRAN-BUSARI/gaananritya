@@ -20,16 +20,14 @@ const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden py-4 md:mb-0 md:h-[calc(100vh-100px)]">
-      {/* Background Carousel with overlay gradient */}
+    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-20 py-4 md:mb-0 md:h-[calc(100vh-100px)]">
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
-      {/* Content Overlay */}
       <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
-        <div className="container px-4 md:px-10 lg:px-20">
+        <div className="container px-4">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
               images={mobileImages}
