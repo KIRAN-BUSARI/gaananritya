@@ -5,7 +5,7 @@ const ImageBanner = ({ image }: { image: string }) => {
       height={100}
       width={100}
       alt="Banner"
-      className="hidden w-auto px-20 md:block"
+      className="w-auto md:px-20 px-4"
     />
   );
 };
