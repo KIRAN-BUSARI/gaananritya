@@ -122,13 +122,13 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({
       {/* Videos Container */}
       <div
         ref={carouselRef}
-        className="hide-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto py-2 md:gap-4"
+        className="hide-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto py-2 md:gap-6"
         style={{ scrollBehavior: 'smooth' }}
       >
         {videos.map((video) => (
           <div
             key={video._id}
-            className="min-w-[calc(50%-8px)] snap-start sm:min-w-[calc(50%-8px)]"
+            className="min-w-[calc(100%-16px)] snap-start sm:min-w-[calc(50%-16px)] md:min-w-[calc(33.333%-16px)] lg:min-w-[calc(25%-20px)] xl:min-w-[calc(20%-20px)]"
           >
             <VideoCard
               videoUrl={video.videoUrl}

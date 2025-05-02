@@ -100,24 +100,27 @@ const categorizedFaqs = {
 export default function FaqPage() {
   return (
     <section
-      className="flex h-[calc(100vh-100px)] w-full flex-col items-center justify-center px-6 py-10 text-secondary1"
+      className="w-full px-4 py-8 text-secondary1 sm:px-6 sm:py-10 md:min-h-[calc(100vh-100px)] md:py-16"
       aria-labelledby="faq-heading"
     >
-      <h1 id="faq-heading" className="mb-2 text-center text-5xl font-bold">
+      <h1
+        id="faq-heading"
+        className="mb-2 text-center text-3xl font-bold sm:text-4xl md:text-5xl"
+      >
         Frequently asked questions
       </h1>
-      <p className="mb-8 text-center text-base text-gray-400">
+      <p className="mb-6 text-center text-sm text-gray-400 sm:mb-8 sm:text-base">
         Ask everything you need to know about our services
       </p>
 
       <Tabs defaultValue="Dance" className="w-full">
         <div className="flex flex-col gap-4 md:flex-row md:gap-8">
-          <TabsList className="h-auto flex-wrap justify-start rounded-md bg-transparent p-0 md:flex md:w-48 md:flex-col">
+          <TabsList className="flex h-auto flex-row flex-wrap justify-center rounded-md bg-transparent p-0 md:w-48 md:flex-col md:justify-start">
             {Object.keys(categorizedFaqs).map((category) => (
               <TabsTrigger
                 key={category}
                 value={category}
-                className="w-auto rounded-md px-3 py-2 text-left text-sm data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-gray-400 md:w-full"
+                className="m-1 rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-gray-400 md:m-0 md:mb-2 md:w-full md:py-2"
               >
                 {category}
               </TabsTrigger>
@@ -129,11 +132,11 @@ export default function FaqPage() {
               <TabsContent
                 key={category}
                 value={category}
-                className="mt-0 border-0"
+                className="mt-4 border-0 md:mt-0"
               >
                 <h2
                   id={`${category.toLowerCase()}-faq-section`}
-                  className="mb-4 text-xl font-semibold"
+                  className="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl"
                 >
                   {category} Questions
                 </h2>
@@ -144,10 +147,10 @@ export default function FaqPage() {
                       value={`${category}-item-${index}`}
                       className="border-b border-gray-800"
                     >
-                      <AccordionTrigger className="py-3 text-left text-base font-medium">
+                      <AccordionTrigger className="py-2 text-left text-sm font-medium sm:py-3 sm:text-base">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="pb-3 pt-1 text-sm">
+                      <AccordionContent className="pb-2 pt-1 text-xs sm:pb-3 sm:text-sm">
                         {faq.answer}
                       </AccordionContent>
                     </AccordionItem>

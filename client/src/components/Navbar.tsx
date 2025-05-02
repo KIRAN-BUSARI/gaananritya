@@ -108,12 +108,14 @@ export default function Navbar() {
               <img
                 src="/logo.png"
                 alt="logo"
-                className="mr-2 h-12 w-auto object-contain md:h-20"
+                className="mr-1 h-10 w-auto object-contain sm:mr-2 sm:h-12 md:h-16 lg:h-20"
               />
-              <div className="text-base font-medium md:text-base lg:text-lg">
-                <p className="truncate">
-                  Gaana Nritya Academy&reg;
-                  <span className="xs:inline">, Mangalore</span>
+              <div className="flex items-center">
+                <p className="whitespace-nowrap text-[14px] font-medium sm:text-xs md:text-sm lg:text-base xl:text-lg">
+                  Gaana Nritya Academy&reg;,&nbsp;
+                </p>
+                <p className="text-[14px] font-medium sm:text-xs md:text-sm lg:text-base xl:text-lg">
+                  Mangalore
                 </p>
               </div>
             </Link>

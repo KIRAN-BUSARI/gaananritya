@@ -49,7 +49,7 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
   }, [delay, images.length]);
 
   return (
-    <div className="w-full max-w-[100%] overflow-hidden rounded-sm lg:max-w-[100%]">
+    <div className="w-full overflow-hidden rounded-sm">
       <div
         className="flex transition-transform duration-500 ease-linear"
         ref={carouselRef}
@@ -59,17 +59,18 @@ const CarouselComponent: FC<CarouselProps> = ({ images, delay = 2000 }) => {
             <img
               src={image.image}
               alt={`Slide ${image.id}`}
+              className="h-auto w-full object-cover sm:h-[300px] md:h-[400px] lg:h-[500px]"
               width={1000}
               height={1000}
             />
           </div>
         ))}
       </div>
-      <div className="mt-5 flex justify-center space-x-5">
+      <div className="mt-3 flex justify-center space-x-3 md:mt-5 md:space-x-5">
         {images.map((_, index) => (
           <button
             key={index}
-            className={`h-3 w-3 rounded-full ${
+            className={`h-2 w-2 rounded-full md:h-3 md:w-3 ${
               index === currentIndex ? 'bg-secondary/50' : 'bg-gray-300'
             }`}
           />
