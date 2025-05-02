@@ -48,7 +48,7 @@ const AudioPlayer = () => {
   return (
     <button
       onClick={togglePlay}
-      className="bg-secondary1 fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full text-secondary1 shadow-lg transition-all duration-200 hover:scale-105"
+      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-secondary1 shadow-lg transition-all duration-200 hover:scale-105"
       aria-label={isPlaying ? 'Mute music' : 'Play music'}
       title={isPlaying ? 'Mute music' : 'Play music'}
     >

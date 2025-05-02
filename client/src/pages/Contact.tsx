@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 
 import contactImg from '@/assets/contact.png';
+import Faq from '@/components/Faq';
 
 interface FormData {
   name: string;
@@ -119,23 +120,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100">
-      {/* Heading Section */}
-      {/* <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="container mx-auto px-4 pb-8 pt-16 text-center md:pb-12 md:pt-20"
-      >
-        <h1 className="mb-3 text-4xl font-bold text-gray-900 md:text-5xl lg:text-6xl">
-          Get in <span className="text-secondary1">Touch</span>
-        </h1>
-        <p className="mx-auto max-w-2xl text-lg text-gray-600">
-          We'd love to hear from you! Send us a message and we'll respond as
-          soon as possible.
-        </p>
-      </motion.div> */}
-
+    <div className="relative min-h-screen">
       <div className="lg:flex">
         {/* Image Section - Full-bleed on left side */}
         <motion.div
@@ -163,7 +148,7 @@ const Contact = () => {
           <div className="mx-auto max-w-lg">
             <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-xl backdrop-blur-sm md:p-10">
               <h2 className="mb-8 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                <h1 className="text-center text-3xl font-bold text-secondary1">
+                <h1 className="text-center text-3xl font-semibold text-secondary1">
                   Get in Touch
                 </h1>
                 <h2 className="mt-2 text-balance text-center text-sm">
@@ -459,6 +444,9 @@ const Contact = () => {
             </div>
           </div>
         </motion.div>
+      </div>
+      <div className="">
+        <Faq />
       </div>
     </div>
   );
