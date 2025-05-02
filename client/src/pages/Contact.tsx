@@ -143,7 +143,7 @@ const Contact = () => {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-          className="w-full px-4 py-10 lg:w-1/2 lg:py-16"
+          className="w-full px-2 py-10 lg:w-1/2 lg:py-16"
         >
           <div className="mx-auto max-w-lg">
             <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-xl backdrop-blur-sm md:p-10">

@@ -1,5 +1,5 @@
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
-import { Button } from '@/components/ui/button.tsx';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import imgUrl0 from '@/assets/heroSection0.png';
@@ -20,14 +20,14 @@ const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-20 py-4 md:mb-0 md:h-[calc(100vh-100px)]">
+    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 py-4 md:mb-0 md:h-[calc(100vh-100px)] md:px-20">
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
       <div className="relative z-10 flex h-full w-full items-center justify-center lg:justify-start">
-        <div className="container px-4">
+        <div className="container px-2">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
               images={mobileImages}
@@ -95,6 +95,7 @@ export default function Hero() {
               </Link>
             </motion.div>
 
+            {/* Desktop notification */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -105,6 +106,21 @@ export default function Hero() {
                 <span className="mr-2 h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
                 New Admission Open for 2025-26 Season
               </span>
+            </motion.div>
+
+            {/* Mobile notification */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="mt-6 flex w-full justify-center md:hidden"
+            >
+              <div className="rounded-full bg-white/10 px-2 py-2 backdrop-blur-sm">
+                <span className="flex items-center text-xs font-medium text-secondary1">
+                  <span className="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"></span>
+                  New Admission Open for 2025-26
+                </span>
+              </div>
             </motion.div>
           </div>
         </div>

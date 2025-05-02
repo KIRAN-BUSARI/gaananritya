@@ -7,7 +7,7 @@ function BlogPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen px-4 md:px-20">
+    <div className="flex min-h-screen px-2 md:px-20">
       <div>
         <Blogs />
       </div>

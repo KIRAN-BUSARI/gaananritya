@@ -1292,7 +1292,7 @@ function Gallery() {
 
   return (
     <section
-      className="h-auto px-4 py-16 md:px-20 md:py-24 lg:px-20"
+      className="h-auto px-2 py-16 md:px-20 md:py-24 lg:px-20"
       id="gallery"
     >
       <div className="mb-8 md:mb-12">
@@ -1312,7 +1312,7 @@ function Gallery() {
           <button
             key={tab.title}
             onClick={() => handleFilterChange(tab.title)}
-            className={`rounded-md border px-3 py-1.5 text-sm font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 md:px-4 md:py-1 md:text-base ${
+            className={`rounded-md border px-3 py-1.5 text-sm font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 md:px-2 md:py-1 md:text-base ${
               filter === tab.title
                 ? 'border-secondary bg-secondary text-primary'
                 : 'border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-100'

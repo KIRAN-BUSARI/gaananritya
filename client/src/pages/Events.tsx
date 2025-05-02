@@ -119,7 +119,7 @@ const Events = () => {
             onClick={() => {
               setFilter('All Events');
             }}
-            className="mt-2 rounded-md bg-secondary px-4 py-2 text-sm font-medium text-primary hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary/50"
+            className="mt-2 rounded-md bg-secondary px-2 py-2 text-sm font-medium text-primary hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary/50"
           >
             View all events
           </button>
@@ -181,7 +181,7 @@ const Events = () => {
           disablePictureInPicture
         />
       </div>
-      <div className="flex w-full flex-col bg-white px-4 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
+      <div className="flex w-full flex-col bg-white px-2 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
         <div>
           <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl lg:text-[32px]">
             Events that Celebrate Tradition & Talent
@@ -209,7 +209,7 @@ const Events = () => {
                 <button
                   key={tab.title}
                   onClick={() => handleFilterChange(tab.title)}
-                  className={`whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 sm:text-sm md:px-5 md:py-2.5 lg:px-4 lg:py-2 lg:text-base ${
+                  className={`whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 sm:text-sm md:px-5 md:py-2.5 lg:px-2 lg:py-2 lg:text-base ${
                     filter === tab.title
                       ? 'border-secondary bg-secondary text-primary'
                       : 'border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-100'

@@ -41,7 +41,7 @@ const pillarsData: PillarData[] = [
 
 const Pillars = () => {
   return (
-    <div className="mx-auto flex flex-col px-4 py-20 sm:px-6 md:px-10 lg:px-20 lg:py-20">
+    <div className="mx-auto flex flex-col px-2 py-20 sm:px-6 md:px-10 lg:px-20 lg:py-20">
       <div className="mx-auto text-center md:mx-0 md:text-left">
         <h1 className="text-left text-3xl font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
           Pillars & Strength of Gaana Nritya Academy

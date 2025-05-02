@@ -297,7 +297,7 @@ function Blogs() {
   return (
     <section
       id="blogs"
-      className="my-12 min-h-[calc(100vh-100px)] px-4 md:my-24 md:px-6"
+      className="my-12 min-h-[calc(100vh-100px)] px-2 md:my-24 md:px-6"
     >
       <div className="mb-6 flex items-center justify-between">
         <div className="flex flex-col">

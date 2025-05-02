@@ -101,7 +101,7 @@ export default function Navbar() {
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <nav className="px-4 py-4 md:px-12 lg:px-20">
+        <nav className="px-2 py-4 md:px-12 lg:px-20">
           <div className="flex items-center justify-between">
             {/* Logo Section - Improved for mobile */}
             <Link to="/" className="flex max-w-[70%] items-center">
@@ -151,7 +151,7 @@ export default function Navbar() {
                 <li>
                   <Button
                     onClick={handleLogout}
-                    className="rounded-md bg-secondary px-4 py-1.5 text-white transition-colors duration-200 hover:bg-secondary/90"
+                    className="rounded-md bg-secondary px-2 py-1.5 text-white transition-colors duration-200 hover:bg-secondary/90"
                   >
                     Logout
                   </Button>
@@ -201,7 +201,7 @@ export default function Navbar() {
                   <li key={item.id}>
                     <Link
                       to={item.link}
-                      className={`block rounded-md px-4 py-3 text-lg ${
+                      className={`block rounded-md px-2 py-3 text-lg ${
                         isActive
                           ? 'bg-gray-50 font-semibold text-navlinkcolor'
                           : 'text-primary1 hover:bg-gray-50'

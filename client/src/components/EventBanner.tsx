@@ -1,7 +1,7 @@
 const EventBanner = () => {
   return (
     <div className="z-10 flex h-auto w-full place-content-center bg-secondary py-8 text-white md:py-[50px]">
-      <div className="flex flex-col justify-center space-y-4 px-4 md:px-8">
+      <div className="flex flex-col justify-center space-y-4 px-2 md:px-8">
         <h1 className="text-balance text-xl leading-[30px] sm:text-center md:text-4xl md:leading-[50px]">
           Looking for Events & Performances?
         </h1>
