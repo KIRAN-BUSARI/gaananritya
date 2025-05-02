@@ -85,11 +85,10 @@ export default function Hero() {
               <Link to="/achievements" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="group w-full overflow-hidden rounded-lg border-2 border-secondary bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-secondary hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
+                  className="group w-full overflow-hidden rounded-lg border-2 border-white bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-secondary hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
                 >
                   <span className="relative text-secondary1 md:text-secondary">
                     Our Achievements
-                    <span className="absolute bottom-0 left-0 h-[2px] w-0 bg-secondary transition-all duration-300 group-hover:w-full"></span>
                   </span>
                 </Button>
               </Link>
