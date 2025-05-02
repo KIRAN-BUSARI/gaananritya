@@ -1,13 +1,19 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
+import AudioPlayer from '@/components/MusicControl/AudioPlayer';
 
-export default function Layout() {
+const Layout = () => {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <main className="min-h-[calc(100vh-100px)]">
+        <Outlet />
+      </main>
       <Footer />
+      <AudioPlayer />
     </>
   );
-}
+};
+
+export default Layout;

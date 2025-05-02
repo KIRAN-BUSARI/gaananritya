@@ -119,19 +119,21 @@ export default function Navbar() {
             </Link>
 
             {/* Hamburger Menu Button */}
-            <button
-              className="relative z-50 rounded-full p-2 transition-colors duration-200 hover:bg-gray-100 md:hidden"
-              onClick={handleClick}
-              aria-expanded={isOpen}
-              aria-controls="mobile-menu"
-              aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            >
-              {isOpen ? (
-                <CgClose className="text-2xl" />
-              ) : (
-                <CgMenuRight className="text-2xl" />
-              )}
-            </button>
+            <div className="flex items-center md:hidden">
+              <button
+                className="relative z-50 rounded-full p-2 transition-colors duration-200 hover:bg-gray-100"
+                onClick={handleClick}
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              >
+                {isOpen ? (
+                  <CgClose className="text-2xl" />
+                ) : (
+                  <CgMenuRight className="text-2xl" />
+                )}
+              </button>
+            </div>
 
             {/* Desktop Menu */}
             <ul className="hidden items-center gap-6 md:flex">
@@ -179,13 +181,15 @@ export default function Navbar() {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button inside mobile menu */}
-        <Button
-          className="absolute right-4 top-4 rounded-full p-2 hover:bg-gray-100"
-          onClick={() => setIsOpen(false)}
-          aria-label="Close menu"
-        >
-          <CgClose className="text-2xl" />
-        </Button>
+        <div className="absolute right-4 top-4">
+          <Button
+            className="rounded-full p-2 hover:bg-gray-100"
+            onClick={() => setIsOpen(false)}
+            aria-label="Close menu"
+          >
+            <CgClose className="text-2xl" />
+          </Button>
+        </div>
 
         {/* Menu content */}
         <div className="flex h-full flex-col px-6 pb-6 pt-16">

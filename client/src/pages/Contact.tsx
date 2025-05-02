@@ -121,7 +121,7 @@ const Contact = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100">
       {/* Heading Section */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -134,7 +134,7 @@ const Contact = () => {
           We'd love to hear from you! Send us a message and we'll respond as
           soon as possible.
         </p>
-      </motion.div>
+      </motion.div> */}
 
       <div className="lg:flex">
         {/* Image Section - Full-bleed on left side */}
@@ -162,8 +162,14 @@ const Contact = () => {
         >
           <div className="mx-auto max-w-lg">
             <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-xl backdrop-blur-sm md:p-10">
-              <h2 className="mb-8 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold text-transparent">
-                Send us a Message
+              <h2 className="mb-8 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                <h1 className="text-center text-3xl font-bold text-secondary1">
+                  Get in Touch
+                </h1>
+                <h2 className="mt-2 text-balance text-center text-sm">
+                  We'd love to hear from you! Send us a message and we'll
+                  respond as soon as possible.
+                </h2>
               </h2>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
