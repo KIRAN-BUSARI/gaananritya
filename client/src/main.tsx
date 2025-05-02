@@ -7,6 +7,13 @@ import { Analytics } from '@vercel/analytics/react';
 import { RecoilRoot } from 'recoil';
 import { Toaster } from './components/ui/sonner.tsx';
 
+document.addEventListener('DOMContentLoaded', () => {
+  const audioElement = document.getElementById('audio') as HTMLAudioElement;
+  if (audioElement) {
+    audioElement.volume = 0.02;
+  }
+});
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>

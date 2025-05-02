@@ -130,7 +130,7 @@ const Classes = () => {
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
       <div className="-z-10 -m-9 max-h-64 w-full object-contain md:-m-28 md:max-h-[700px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1746128361/WhatsApp_Video_2025-05-02_at_12.49.16_AM_abmx0q.mp4"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1746177088/Untitled_design_1_r7tmcu.mp4"
           className="aspect-video w-full object-cover"
           autoPlay
           loop

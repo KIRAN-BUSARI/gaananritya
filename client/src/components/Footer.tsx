@@ -90,9 +90,9 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="w-full bg-secondary px-4 py-8 text-white md:py-10"
+      className="w-full bg-secondary px-4 py-8 text-white md:px-20 md:py-10"
     >
-      <div className="mx-auto flex max-w-screen-xl flex-col gap-8 md:flex-row md:justify-between">
+      <div className="mx-auto flex flex-col gap-8 md:flex-row md:justify-between">
         {/* Logo and Address Section */}
         <div className="flex flex-col items-center text-center md:flex-row md:items-start md:gap-5 md:text-left">
           <div className="shrink-0">
