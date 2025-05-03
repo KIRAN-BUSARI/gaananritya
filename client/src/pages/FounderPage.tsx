@@ -21,7 +21,10 @@ const FounderPage = () => {
   const imgs = [carousal1, carousal2, carousal3];
 
   return (
-    <div className="relative mx-auto my-8 h-auto w-full px-2 sm:px-6 md:mt-12 md:px-8 lg:mt-20 lg:px-12 xl:px-20">
+    <div
+      className="relative mx-auto my-8 h-auto w-full px-2 sm:px-6 md:mt-12 md:px-8 lg:mt-20 lg:px-12 xl:px-20"
+      id="founder"
+    >
       {/* Header Section */}
       <div className="flex flex-col">
         <h1 className="text-3xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
