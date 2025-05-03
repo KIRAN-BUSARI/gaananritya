@@ -6,6 +6,7 @@ import SigninPage from '@/pages/SigninPage';
 import Classes from '@/pages/Classes';
 import Events from '@/pages/Events';
 import Gallery from '@/pages/Gallery';
+import Blogs from '@/pages/Blogs';
 import BlogPage from '@/pages/BlogPage';
 import Contact from './pages/Contact';
 
@@ -17,7 +18,8 @@ function App() {
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/media" element={<Gallery />} />
         <Route path="/classes" element={<Classes />} />
-        <Route path="/blogs" element={<BlogPage />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blog/:id" element={<BlogPage />} />
         <Route path="/events" element={<Events />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<PageNotFound />} />

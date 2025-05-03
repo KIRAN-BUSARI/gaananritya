@@ -5,15 +5,21 @@ import {
   RefreshCw,
   Share2,
   X,
-  Maximize2,
-  Tag,
   Plus,
   Trash2,
   Upload,
+  Eye,
+  Search,
+  Filter,
+  ChevronDown,
+  BookOpen,
+  User,
+  Info,
+  Check,
 } from 'lucide-react';
-import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -30,8 +36,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import axiosInstance from '@/helper/axiosInstance';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 interface Blog {
   _id: string;
@@ -50,16 +72,28 @@ interface BlogFormData {
   author: string;
   date: string;
   image: File | null;
+  tags: string[];
 }
 
 function Blogs() {
+  const navigate = useNavigate();
+  // State variables
   const [mainBlog, setMainBlog] = useState<Blog | null>(null);
   const [sideBlogsData, setSideBlogsData] = useState<Blog[]>([]);
+  const [allTags, setAllTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedTag, setSelectedTag] = useState<string>('');
+  const [activeView, setActiveView] = useState('grid');
+
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   // Admin state
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -68,54 +102,190 @@ function Blogs() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [blogToDelete, setBlogToDelete] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [newTag, setNewTag] = useState<string>('');
   const [blogFormData, setBlogFormData] = useState<BlogFormData>({
     title: '',
     content: '',
     author: '',
     date: new Date().toISOString().split('T')[0],
     image: null,
+    tags: ['Classical Dance', 'Bharatanatyam'],
   });
 
   const contentRef = useRef<HTMLDivElement>(null);
+  const bottomObserverRef = useRef<HTMLDivElement>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const fetchBlogs = async () => {
+  // Convert to useCallback to avoid circular dependency
+  const fetchTags = useCallback(() => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axiosInstance.get('/blog/all');
-      const fetchedBlogs = response.data.data;
+      const uniqueTags = new Set<string>();
 
-      const enhancedBlogs = fetchedBlogs.map((blog: Blog) => ({
-        ...blog,
-        authorImage:
-          blog.authorImage ||
-          `https://api.dicebear.com/7.x/initials/svg?seed=${blog.author.replace(/\s+/g, '')}`,
-        tags: blog.tags || ['Classical Dance', 'Bharatanatyam'],
-      }));
+      // Add some default tags
+      uniqueTags.add('Classical Dance');
+      uniqueTags.add('Bharatanatyam');
+      uniqueTags.add('Kuchipudi');
+      uniqueTags.add('Workshops');
+      uniqueTags.add('Events');
 
-      if (enhancedBlogs && enhancedBlogs.length > 0) {
-        setMainBlog(enhancedBlogs[0]);
-        setSideBlogsData(enhancedBlogs.slice(1));
-      } else {
-        setError('No blogs found');
+      // Add tags from loaded blogs
+      if (mainBlog?.tags) {
+        mainBlog.tags.forEach((tag) => uniqueTags.add(tag));
       }
+
+      sideBlogsData.forEach((blog) => {
+        if (blog.tags) {
+          blog.tags.forEach((tag) => uniqueTags.add(tag));
+        }
+      });
+
+      setAllTags(Array.from(uniqueTags));
     } catch (err) {
-      console.error('Error fetching blogs:', err);
-      setError('Failed to load blogs. Please try again.');
-    } finally {
-      setLoading(false);
-      setRetrying(false);
+      console.error('Error fetching tags:', err);
     }
-  };
+  }, [mainBlog, sideBlogsData]);
+
+  const fetchBlogs = useCallback(
+    async (
+      pageNum = 1,
+      replace = true,
+      tag = selectedTag,
+      query = searchQuery,
+    ) => {
+      try {
+        if (pageNum === 1) {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+
+        setError(null);
+
+        // Build query parameters
+        const params = new URLSearchParams();
+        params.append('page', pageNum.toString());
+        params.append('limit', '10');
+
+        if (tag) {
+          params.append('tag', tag);
+        }
+
+        if (query) {
+          params.append('search', query);
+        }
+
+        const response = await axiosInstance.get(
+          `/blog/all?${params.toString()}`,
+        );
+        const fetchedBlogs = response.data.data;
+        const total = response.data.total || 0;
+
+        const enhancedBlogs = fetchedBlogs.map((blog: Blog) => ({
+          ...blog,
+          authorImage:
+            blog.authorImage ||
+            `https://api.dicebear.com/7.x/initials/svg?seed=${blog.author.replace(/\s+/g, '')}`,
+          tags: blog.tags || ['Classical Dance', 'Bharatanatyam'],
+        }));
+
+        if (enhancedBlogs && enhancedBlogs.length > 0) {
+          if (replace) {
+            setMainBlog(enhancedBlogs[0]);
+            setSideBlogsData(enhancedBlogs.slice(1));
+          } else {
+            setSideBlogsData((prev) => [...prev, ...enhancedBlogs]);
+          }
+
+          // Check if we have more blogs to load
+          setHasMore(
+            fetchedBlogs.length + (pageNum > 1 ? (page - 1) * 10 : 0) < total,
+          );
+        } else if (pageNum === 1) {
+          setError('No blogs found');
+          setMainBlog(null);
+          setSideBlogsData([]);
+        } else {
+          setHasMore(false);
+        }
+
+        // Update the tags list based on loaded blogs
+        fetchTags();
+      } catch (err) {
+        console.error('Error fetching blogs:', err);
+        setError('Failed to load blogs. Please try again.');
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+        setRetrying(false);
+      }
+    },
+    // Remove fetchTags from dependencies to break the circular dependency
+    [selectedTag, searchQuery, page],
+  );
+
+  // Define loadMoreBlogs as useCallback to prevent recreation on every render
+  const loadMoreBlogs = useCallback(() => {
+    if (hasMore && !loadingMore) {
+      setPage((prev) => prev + 1);
+      fetchBlogs(page + 1, false, selectedTag, searchQuery);
+    }
+  }, [hasMore, loadingMore, page, fetchBlogs, selectedTag, searchQuery]);
 
   useEffect(() => {
     fetchBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const isAdminUser = localStorage.getItem('isAdmin') === 'true';
     setIsAdmin(isAdminUser);
   }, []);
+
+  // Load more blogs when scrolling to bottom
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMoreBlogs();
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    const currentObserverRef = bottomObserverRef.current;
+
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMoreBlogs]);
+
+  // Handle search query changes with debounce
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Only trigger this if we actually have a search query or tag filter
+    // This prevents unnecessary requests on initial render
+    if (searchQuery || selectedTag) {
+      searchTimeoutRef.current = setTimeout(() => {
+        setPage(1);
+        fetchBlogs(1, true, selectedTag, searchQuery);
+      }, 500);
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery, selectedTag, fetchBlogs]);
 
   const handleRetry = () => {
     setRetrying(true);
@@ -127,7 +297,7 @@ function Blogs() {
 
     document
       .getElementById('main-blog-content')
-      ?.scrollIntoView({ behavior: 'smooth' });
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     const newMainBlog = clickedBlog;
     const newSideBlogs = sideBlogsData.map((blog) =>
@@ -157,8 +327,13 @@ function Blogs() {
     } else {
       navigator.clipboard
         .writeText(window.location.href)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch((err) => console.error('Could not copy text: ', err));
+        .then(() => {
+          toast.success('Link copied to clipboard!');
+        })
+        .catch((err) => {
+          console.error('Could not copy text: ', err);
+          toast.error('Failed to copy link. Please try again.');
+        });
     }
   };
 
@@ -178,8 +353,45 @@ function Blogs() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBlogFormData((prev) => ({ ...prev, image: e.target.files![0] }));
+      const file = e.target.files[0];
+      // Check if file size is less than 5MB
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image must be smaller than 5MB');
+        return;
+      }
+      setBlogFormData((prev) => ({ ...prev, image: file }));
     }
+  };
+
+  const addTag = () => {
+    if (newTag.trim() && !blogFormData.tags.includes(newTag.trim())) {
+      setBlogFormData((prev) => ({
+        ...prev,
+        tags: [...prev.tags, newTag.trim()],
+      }));
+      setNewTag('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setBlogFormData((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
+    }));
+  };
+
+  const handleFilterByTag = (tag: string) => {
+    if (selectedTag === tag) {
+      // If clicking the already selected tag, clear the filter
+      setSelectedTag('');
+    } else {
+      setSelectedTag(tag);
+    }
+  };
+
+  const clearFilters = () => {
+    setSelectedTag('');
+    setSearchQuery('');
   };
 
   const handleAddBlog = async (e: React.FormEvent) => {
@@ -221,6 +433,11 @@ function Blogs() {
       formData.append('author', blogFormData.author);
       formData.append('date', blogFormData.date);
 
+      // Add tags
+      blogFormData.tags.forEach((tag) => {
+        formData.append('tags[]', tag);
+      });
+
       if (blogFormData.image) {
         formData.append('image', blogFormData.image);
       }
@@ -235,8 +452,6 @@ function Blogs() {
         },
       });
 
-      console.log('Blog creation response:', res.data);
-
       // Reset form data
       setBlogFormData({
         title: '',
@@ -244,17 +459,20 @@ function Blogs() {
         author: '',
         date: new Date().toISOString().split('T')[0],
         image: null,
+        tags: ['Classical Dance', 'Bharatanatyam'],
       });
       setIsAddBlogDialogOpen(false);
 
-      // Refresh blogs
       await fetchBlogs();
 
       toast.success(res.data.message || 'Blog post created successfully!');
-    } catch (err: any) {
-      console.error('Error creating blog:', err);
+    } catch (error) {
+      console.error('Error creating blog:', error);
 
-      // More detailed error reporting
+      const err = error as {
+        response?: { data?: { message?: string }; statusText?: string };
+        message?: string;
+      };
       const errorMessage =
         err.response?.data?.message ||
         err.response?.statusText ||
@@ -267,7 +485,6 @@ function Blogs() {
     }
   };
 
-  // Handle blog deletion
   const confirmDeleteBlog = (blogId: string) => {
     setBlogToDelete(blogId);
     setIsDeleteDialogOpen(true);
@@ -278,15 +495,39 @@ function Blogs() {
 
     try {
       setIsSubmitting(true);
-      await axiosInstance.delete(`/blog/delete/${blogToDelete}`);
 
-      // Refresh blogs
+      // Check for token
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        setIsSubmitting(false);
+        setIsDeleteDialogOpen(false);
+        return;
+      }
+
+      await axiosInstance.delete(`/blog/delete/${blogToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       await fetchBlogs();
 
       toast.success('Blog deleted successfully!');
-    } catch (err) {
-      console.error('Error deleting blog:', err);
-      toast.error('Failed to delete blog. Please try again.');
+    } catch (error) {
+      console.error('Error deleting blog:', error);
+
+      const err = error as {
+        response?: { data?: { message?: string }; statusText?: string };
+        message?: string;
+      };
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        err.message ||
+        'Failed to delete blog. Please try again.';
+
+      toast.error(`Error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
       setIsDeleteDialogOpen(false);
@@ -294,294 +535,656 @@ function Blogs() {
     }
   };
 
+  const navigateToBlogDetail = (id: string) => {
+    navigate(`/blog/${id}`);
+  };
+
+  const truncateContent = (content: string, length: number) => {
+    if (content.length <= length) return content;
+    return content.substring(0, length) + '...';
+  };
+
   return (
-    <section
-      id="blogs"
-      className="my-12 min-h-[calc(100vh-100px)] px-2 md:my-24 md:px-6"
-    >
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-bold md:text-4xl md:font-semibold">
-            Blogs
-          </h1>
-          <p className="mt-1 text-sm text-secondary1">
-            Insights, stories, and updates from Gaana Nritya Academy
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {isAdmin && (
-            <Button
-              variant="outline"
-              onClick={() => setIsAddBlogDialogOpen(true)}
-              className="flex items-center gap-1"
-            >
-              <Plus className="h-4 w-4" /> Add Blog
-            </Button>
-          )}
-          <Link to="/" aria-label="Back to home">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-              <span className="sr-only">Back to home</span>
-            </Button>
-          </Link>
+    <div className="container min-h-screen px-20">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-r from-[#1d6d8d] to-[#1d6d8d]/50 py-16">
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="container relative z-10 mx-auto px-4">
+          <div className="mx-auto max-w-5xl text-center">
+            <h1 className="animate-fade-in mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+              Dance & Music Blog
+            </h1>
+            <p className="mx-auto mb-8 max-w-2xl text-lg text-white/90 md:text-xl">
+              Insights, stories and updates from the world of classical dance
+              and music
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/" className="inline-flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  className="border-white bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Home
+                </Button>
+              </Link>
+              {isAdmin && (
+                <Button
+                  onClick={() => setIsAddBlogDialogOpen(true)}
+                  className="bg-white text-secondary1 hover:bg-white/90"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create New Post
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
-      {loading ? (
-        <BlogSkeleton />
-      ) : error || !mainBlog ? (
-        <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4">
-          <p className="text-center text-lg text-secondary1">
-            {error || 'No blogs available'}
-          </p>
-          <Button
-            onClick={handleRetry}
-            disabled={retrying}
-            className="flex items-center gap-2"
-          >
-            {retrying ? 'Retrying...' : 'Try Again'}
-            {retrying && <RefreshCw className="h-4 w-4 animate-spin" />}
-          </Button>
-        </div>
-      ) : (
-        <div
-          id="main-blog-content"
-          className="mt-5 grid-cols-12 gap-8 space-y-10 lg:grid lg:space-y-0"
-        >
-          <div className="col-span-8 flex flex-col space-y-7">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-3 overflow-hidden rounded-lg shadow-md"
-            >
-              <div className="relative aspect-video w-full overflow-hidden">
-                <img
-                  src={mainBlog.image}
-                  alt={mainBlog.title}
-                  className="h-full w-full cursor-zoom-in object-cover transition-transform duration-300 hover:scale-105"
-                  onClick={() => handleImageClick(mainBlog.image)}
-                  loading="lazy"
-                />
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="absolute right-2 top-2 bg-white/80 hover:bg-white"
-                  onClick={() => handleImageClick(mainBlog.image)}
-                  aria-label="View full image"
-                >
-                  <Maximize2 className="h-4 w-4" />
-                  <span className="sr-only">View full image</span>
-                </Button>
-                {mainBlog.tags && mainBlog.tags.length > 0 && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {mainBlog.tags?.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="outline"
-                          className="bg-white/80 text-xs font-normal text-primary"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-sm text-secondary1">
-                    <Calendar className="h-4 w-4" />
-                    <time dateTime={new Date(mainBlog.date).toISOString()}>
-                      {new Date(mainBlog.date).toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
-                    </time>
-                    <span className="mx-2 hidden sm:inline">•</span>
-                    <Clock className="ml-0 h-4 w-4 sm:ml-0" />
-                    <span>{getReadingTime(mainBlog.content)} min read</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {isAdmin && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => confirmDeleteBlog(mainBlog._id)}
-                        className="flex items-center gap-1 text-red-500 hover:bg-red-50 hover:text-red-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only sm:not-sr-only">Delete</span>
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleShareClick}
-                      className="flex items-center gap-2"
-                    >
-                      <Share2 className="h-4 w-4" />
-                      <span className="sr-only sm:not-sr-only">Share</span>
-                    </Button>
-                  </div>
-                </div>
-
-                <h2 className="mb-4 text-2xl font-bold leading-tight md:text-3xl md:font-semibold">
-                  {mainBlog.title}
-                </h2>
-
-                <div className="mb-6 flex items-center gap-3">
-                  <Avatar className="h-10 w-10 border">
-                    <AvatarImage
-                      src={mainBlog.authorImage}
-                      alt={mainBlog.author}
-                    />
-                    <AvatarFallback>{mainBlog.author.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{mainBlog.author}</p>
-                    <p className="text-xs text-secondary1">Author</p>
-                  </div>
-                </div>
-
-                <div
-                  ref={contentRef}
-                  className="prose max-w-none space-y-6 pb-4 text-base leading-relaxed"
-                >
-                  {/* Split the content by paragraphs for better formatting */}
-                  {mainBlog.content.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="whitespace-pre-wrap">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-
-                {mainBlog.tags && mainBlog.tags.length > 0 && (
-                  <div className="mt-8 flex flex-wrap items-center gap-2">
-                    <Tag className="h-4 w-4 text-secondary1" />
-                    {mainBlog.tags.map((tag) => (
-                      <Badge
+      <div className="container mx-auto px-4 py-12">
+        {/* Search and Filtering Controls */}
+        <div className="mb-8 rounded-xl bg-white p-4 shadow-md">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="relative col-span-2">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+              <Input
+                placeholder="Search articles by title, author or content..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="flex-1">
+                    <Filter className="mr-2 h-4 w-4" />
+                    {selectedTag ? selectedTag : 'Filter by Tag'}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Categories</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <ScrollArea className="h-56">
+                    {allTags.map((tag) => (
+                      <DropdownMenuItem
                         key={tag}
-                        variant="secondary"
-                        className="rounded-full text-xs"
+                        onClick={() => handleFilterByTag(tag)}
+                        className={
+                          selectedTag === tag
+                            ? 'bg-secondary/10 text-secondary1'
+                            : ''
+                        }
                       >
                         {tag}
-                      </Badge>
+                        {selectedTag === tag && (
+                          <Check className="ml-auto h-4 w-4" />
+                        )}
+                      </DropdownMenuItem>
                     ))}
-                  </div>
-                )}
+                  </ScrollArea>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={clearFilters}
+                    className="justify-center text-center"
+                  >
+                    Clear filters
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div className="flex items-center rounded-md border border-input bg-transparent p-1">
+                <Button
+                  size="sm"
+                  variant={activeView === 'grid' ? 'default' : 'ghost'}
+                  className={`h-8 ${activeView === 'grid' ? 'bg-secondary text-white' : ''}`}
+                  onClick={() => setActiveView('grid')}
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                    ></path>
+                  </svg>
+                </Button>
+                <Button
+                  size="sm"
+                  variant={activeView === 'list' ? 'default' : 'ghost'}
+                  className={`h-8 ${activeView === 'list' ? 'bg-secondary text-white' : ''}`}
+                  onClick={() => setActiveView('list')}
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    ></path>
+                  </svg>
+                </Button>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          <div className="col-span-4 flex flex-col">
-            <h3 className="mb-4 text-xl font-semibold">More Articles</h3>
-            {sideBlogsData.length > 0 ? (
-              <div className="h-[600px] overflow-auto rounded-lg border pr-2 shadow-sm">
-                <ScrollArea className="h-full">
-                  <div className="p-4">
-                    {sideBlogsData.map((blog, index) => (
-                      <motion.div
-                        key={blog._id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="mb-8 flex flex-col justify-center space-y-3"
-                      >
-                        <div className="group relative aspect-video overflow-hidden rounded-lg">
-                          <img
-                            src={blog.image}
-                            alt={`Blog thumbnail for ${blog.title}`}
-                            onClick={() => handleClick(blog)}
-                            className="h-full w-full cursor-pointer object-cover transition-transform duration-300 hover:scale-105"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleClick(blog);
-                            }}
-                            role="button"
-                            aria-label={`View blog: ${blog.title}`}
-                            loading="lazy"
-                          />
-                          {blog.tags && blog.tags.length > 0 && (
-                            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                              <Badge
-                                variant="outline"
-                                className="bg-white/80 text-xs font-normal text-primary"
-                              >
-                                {blog.tags[0]}
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-6 w-6">
-                              <AvatarImage
-                                src={blog.authorImage}
-                                alt={blog.author}
-                              />
-                              <AvatarFallback>
-                                {blog.author.charAt(0)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <p className="text-xs text-secondary1">
-                              By {blog.author}
-                            </p>
-                          </div>
+          {selectedTag && (
+            <div className="mt-3 flex items-center">
+              <span className="text-sm text-gray-500">Active filter:</span>
+              <Badge
+                variant="outline"
+                className="ml-2 flex items-center gap-1 bg-secondary/10"
+              >
+                <span className="text-secondary1">{selectedTag}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-1 h-4 w-4 rounded-full p-0 hover:bg-secondary/20 hover:text-secondary1"
+                  onClick={() => setSelectedTag('')}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </Badge>
+            </div>
+          )}
+        </div>
 
+        {/* Content Area */}
+        {loading ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <BlogCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : error || (!mainBlog && sideBlogsData.length === 0) ? (
+          <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 rounded-xl border bg-white p-12 shadow-md">
+            <div className="text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <h3 className="mt-4 text-xl font-bold text-gray-800">
+                {error || 'No blogs available'}
+              </h3>
+              <p className="mt-2 text-gray-500">
+                {error
+                  ? 'Unable to load blogs at this time.'
+                  : 'Check back later for new content.'}
+              </p>
+            </div>
+            <Button
+              onClick={handleRetry}
+              disabled={retrying}
+              className="bg-secondary text-white hover:bg-secondary/90"
+            >
+              {retrying ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Retrying...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Try Again
+                </>
+              )}
+            </Button>
+          </div>
+        ) : (
+          <>
+            {/* Featured Blog */}
+            {mainBlog && (
+              <div id="main-blog-content" className="mb-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="overflow-hidden rounded-2xl bg-white shadow-lg"
+                >
+                  <div className="grid md:grid-cols-5">
+                    <div className="relative md:col-span-2">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/50 to-pink-800/30"></div>
+                      <img
+                        src={mainBlog.image}
+                        alt={mainBlog.title}
+                        className="h-full w-full object-cover object-center transition-all duration-500 hover:scale-105"
+                        onClick={() => handleImageClick(mainBlog.image)}
+                        style={{ height: '100%', minHeight: '300px' }}
+                        loading="lazy"
+                      />
+                      <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+                        {mainBlog.tags?.slice(0, 3).map((tag) => (
+                          <Badge
+                            key={tag}
+                            className="bg-white/80 text-secondary1 backdrop-blur-sm hover:bg-white"
+                            onClick={() => handleFilterByTag(tag)}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                        {(mainBlog.tags?.length || 0) > 3 && (
+                          <Badge className="bg-white/80 text-secondary1 backdrop-blur-sm">
+                            +{(mainBlog.tags?.length || 0) - 3}
+                          </Badge>
+                        )}
+                      </div>
+
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="flex items-center gap-3 rounded-lg bg-white/90 p-2 backdrop-blur-sm">
+                          <Avatar className="h-10 w-10 border-2 border-purple-200 shadow-sm">
+                            <AvatarImage
+                              src={mainBlog.authorImage}
+                              alt={mainBlog.author}
+                            />
+                            <AvatarFallback className="bg-gradient-to-r from-purple-600 to-pink-500 text-white">
+                              {mainBlog.author.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">
+                              {mainBlog.author}
+                            </p>
+                            <div className="flex items-center gap-1 text-xs text-gray-600">
+                              <Calendar className="h-3 w-3" />
+                              <time
+                                dateTime={new Date(mainBlog.date).toISOString()}
+                              >
+                                {new Date(mainBlog.date).toLocaleDateString(
+                                  'en-US',
+                                  {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                  },
+                                )}
+                              </time>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 md:col-span-3 md:p-8">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <BookOpen className="h-4 w-4" />
+                          <span>
+                            {getReadingTime(mainBlog.content)} min read
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
                           {isAdmin && (
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                confirmDeleteBlog(blog._id);
-                              }}
-                              className="flex h-7 w-7 items-center justify-center p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                              onClick={() => confirmDeleteBlog(mainBlog._id)}
+                              className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
                             >
-                              <Trash2 className="h-3 w-3" />
+                              <Trash2 className="h-4 w-4" />
                               <span className="sr-only">Delete</span>
                             </Button>
                           )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleShareClick}
+                            className="h-8 w-8 rounded-full p-0 text-gray-600 hover:bg-purple-50 hover:text-purple-600"
+                          >
+                            <Share2 className="h-4 w-4" />
+                            <span className="sr-only">Share</span>
+                          </Button>
                         </div>
-                      </motion.div>
-                    ))}
+                      </div>
+
+                      <h2 className="mt-4 text-3xl font-semibold leading-normal tracking-tight text-gray-900 md:text-4xl">
+                        {mainBlog.title}
+                      </h2>
+
+                      <div
+                        ref={contentRef}
+                        className="prose prose-slate mt-6 max-w-none"
+                      >
+                        {mainBlog.content
+                          .split('\n\n')
+                          .slice(0, 3)
+                          .map((paragraph, index) => (
+                            <p key={index} className="mb-4 text-gray-700">
+                              {truncateContent(paragraph, 300)}
+                            </p>
+                          ))}
+                        {mainBlog.content.split('\n\n').length > 3 && (
+                          <div className="mt-2 text-gray-600">
+                            <span className="text-sm">Continue reading...</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                          <Button
+                            onClick={() => navigateToBlogDetail(mainBlog._id)}
+                            className="bg-secondary text-white hover:bg-secondary/90"
+                          >
+                            Read Full Article
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <ScrollBar orientation="vertical" />
-                </ScrollArea>
-              </div>
-            ) : (
-              <div className="flex h-[600px] items-center justify-center rounded-lg border shadow-sm">
-                <p className="text-center text-secondary1">
-                  No additional articles available
-                </p>
+                </motion.div>
               </div>
             )}
-          </div>
-        </div>
-      )}
 
-      {/* Image Lightbox Dialog */}
+            {/* Blog List */}
+            {sideBlogsData.length > 0 && (
+              <div className="mb-12">
+                <div className="mb-8 flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Latest Articles
+                  </h2>
+                  {selectedTag && (
+                    <Badge
+                      variant="outline"
+                      className="bg-purple-50 text-purple-700"
+                    >
+                      Showing: {selectedTag}
+                    </Badge>
+                  )}
+                </div>
+
+                {activeView === 'grid' ? (
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <AnimatePresence>
+                      {sideBlogsData.map((blog, index) => (
+                        <motion.div
+                          key={blog._id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
+                            <div className="relative">
+                              <AspectRatio ratio={16 / 9}>
+                                <img
+                                  src={blog.image}
+                                  alt={blog.title}
+                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  loading="lazy"
+                                />
+                              </AspectRatio>
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                              {blog.tags && blog.tags.length > 0 && (
+                                <div className="absolute left-3 top-3 flex flex-wrap gap-1">
+                                  <Badge
+                                    className="bg-white/80 text-xs font-medium text-purple-700 backdrop-blur-sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleFilterByTag(blog.tags![0]);
+                                    }}
+                                  >
+                                    {blog.tags[0]}
+                                  </Badge>
+                                </div>
+                              )}
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => handleClick(blog)}
+                                className="absolute bottom-3 right-3 h-8 w-8 rounded-full bg-white/90 p-0 opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
+                              >
+                                <Eye className="h-4 w-4 text-purple-700" />
+                              </Button>
+                            </div>
+                            <CardHeader className="py-4">
+                              <CardTitle
+                                className="line-clamp-2 cursor-pointer text-lg group-hover:text-purple-700"
+                                onClick={() => handleClick(blog)}
+                              >
+                                {blog.title}
+                              </CardTitle>
+                              <CardDescription className="flex items-center gap-2 pt-2 text-xs">
+                                <time
+                                  dateTime={new Date(blog.date).toISOString()}
+                                  className="flex items-center gap-1"
+                                >
+                                  <Calendar className="h-3 w-3" />
+                                  {new Date(blog.date).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                      day: 'numeric',
+                                      month: 'short',
+                                      year: 'numeric',
+                                    },
+                                  )}
+                                </time>
+                                <span>•</span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {getReadingTime(blog.content)} min read
+                                </span>
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pb-3 pt-0">
+                              <p className="line-clamp-3 text-sm text-gray-600">
+                                {truncateContent(blog.content, 150)}
+                              </p>
+                            </CardContent>
+                            <CardFooter className="flex items-center justify-between pt-2">
+                              <div className="flex items-center gap-2">
+                                <Avatar className="h-6 w-6">
+                                  <AvatarImage
+                                    src={blog.authorImage}
+                                    alt={blog.author}
+                                  />
+                                  <AvatarFallback className="bg-purple-100 text-xs text-purple-700">
+                                    {blog.author.charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="text-xs text-gray-700">
+                                  {blog.author}
+                                </span>
+                              </div>
+                              {isAdmin && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    confirmDeleteBlog(blog._id);
+                                  }}
+                                  className="h-7 w-7 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                  <span className="sr-only">Delete</span>
+                                </Button>
+                              )}
+                            </CardFooter>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <AnimatePresence>
+                      {sideBlogsData.map((blog, index) => (
+                        <motion.div
+                          key={blog._id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <Card className="group overflow-hidden transition-all hover:shadow-md">
+                            <div className="grid md:grid-cols-4">
+                              <div className="relative md:col-span-1">
+                                <img
+                                  src={blog.image}
+                                  alt={blog.title}
+                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  loading="lazy"
+                                  style={{ minHeight: '200px' }}
+                                />
+                                <div className="absolute left-3 top-3">
+                                  {blog.tags && blog.tags.length > 0 && (
+                                    <Badge
+                                      className="bg-white/80 text-xs text-purple-700 backdrop-blur-sm"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFilterByTag(blog.tags![0]);
+                                      }}
+                                    >
+                                      {blog.tags[0]}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="p-4 md:col-span-3 md:p-6">
+                                <div className="flex items-center gap-2 text-xs text-gray-500">
+                                  <time
+                                    dateTime={new Date(blog.date).toISOString()}
+                                    className="flex items-center gap-1"
+                                  >
+                                    <Calendar className="h-3 w-3" />
+                                    {new Date(blog.date).toLocaleDateString(
+                                      'en-US',
+                                      {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        year: 'numeric',
+                                      },
+                                    )}
+                                  </time>
+                                  <span>•</span>
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {getReadingTime(blog.content)} min read
+                                  </span>
+                                  <span>•</span>
+                                  <span className="flex items-center gap-1">
+                                    <User className="h-3 w-3" />
+                                    {blog.author}
+                                  </span>
+                                </div>
+
+                                <h3
+                                  className="mt-2 cursor-pointer text-xl font-bold text-gray-900 group-hover:text-purple-700"
+                                  onClick={() => handleClick(blog)}
+                                >
+                                  {blog.title}
+                                </h3>
+
+                                <p className="mt-2 line-clamp-2 text-sm text-gray-600">
+                                  {truncateContent(blog.content, 180)}
+                                </p>
+
+                                <div className="mt-4 flex items-center justify-between">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleClick(blog)}
+                                    className="text-purple-600 hover:bg-purple-50 hover:text-purple-700"
+                                  >
+                                    Read article
+                                  </Button>
+
+                                  <div className="flex items-center gap-2">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={handleShareClick}
+                                      className="h-8 w-8 rounded-full p-0 text-gray-600 hover:bg-purple-50 hover:text-purple-600"
+                                    >
+                                      <Share2 className="h-4 w-4" />
+                                      <span className="sr-only">Share</span>
+                                    </Button>
+                                    {isAdmin && (
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() =>
+                                          confirmDeleteBlog(blog._id)
+                                        }
+                                        className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                        <span className="sr-only">Delete</span>
+                                      </Button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {/* Load More / Loading Indicator */}
+                <div ref={bottomObserverRef} className="mt-8 py-4 text-center">
+                  {loadingMore && (
+                    <div className="flex items-center justify-center gap-2">
+                      <RefreshCw className="h-5 w-5 animate-spin text-purple-600" />
+                      <span className="text-sm text-gray-600">
+                        Loading more articles...
+                      </span>
+                    </div>
+                  )}
+
+                  {!hasMore && sideBlogsData.length > 0 && (
+                    <p className="text-sm text-gray-500">
+                      You've reached the end of the list
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Image Lightbox */}
       <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
-        <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none">
-          <div className="relative flex items-center justify-center">
+        <DialogContent className="max-w-5xl border-none bg-transparent p-0 shadow-none">
+          <div className="relative overflow-hidden rounded-lg bg-black">
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-2 top-2 bg-black/20 text-white hover:bg-black/40"
               onClick={() => setIsImageOpen(false)}
+              className="absolute right-4 top-4 z-10 h-10 w-10 rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/60"
               aria-label="Close image view"
             >
               <X className="h-5 w-5" />
-              <span className="sr-only">Close</span>
             </Button>
             <img
               src={selectedImage}
               alt="Enlarged view"
-              className="max-h-[80vh] rounded-lg object-contain"
+              className="mx-auto max-h-[85vh] w-auto object-contain"
             />
           </div>
         </DialogContent>
@@ -589,67 +1192,130 @@ function Blogs() {
 
       {/* Admin: Add Blog Dialog */}
       <Dialog open={isAddBlogDialogOpen} onOpenChange={setIsAddBlogDialogOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[650px]">
           <DialogHeader>
-            <DialogTitle>Add New Blog Post</DialogTitle>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              Add New Blog Post
+            </DialogTitle>
             <DialogDescription>
               Create a new blog post for Gaana Nritya Academy
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAddBlog} className="space-y-4">
+          <form onSubmit={handleAddBlog} className="mt-2 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title" className="font-medium">
+                Title
+              </Label>
               <Input
                 id="title"
                 name="title"
                 placeholder="Enter blog title"
                 value={blogFormData.title}
                 onChange={handleFormChange}
+                className="h-11"
                 required
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="author">Author</Label>
+                <Label htmlFor="author" className="font-medium">
+                  Author
+                </Label>
                 <Input
                   id="author"
                   name="author"
                   placeholder="Author name"
                   value={blogFormData.author}
                   onChange={handleFormChange}
+                  className="h-11"
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="date">Date</Label>
+                <Label htmlFor="date" className="font-medium">
+                  Publication Date
+                </Label>
                 <Input
                   id="date"
                   name="date"
                   type="date"
                   value={blogFormData.date}
                   onChange={handleFormChange}
+                  className="h-11"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="content">Blog Content</Label>
+              <Label htmlFor="content" className="font-medium">
+                Blog Content
+              </Label>
               <Textarea
                 id="content"
                 name="content"
                 placeholder="Write your blog content here..."
-                rows={8}
+                rows={10}
                 value={blogFormData.content}
                 onChange={handleFormChange}
                 required
                 className="resize-y"
               />
+              <p className="text-xs text-gray-500">
+                Use two line breaks to create new paragraphs
+              </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image">Cover Image</Label>
+              <Label className="font-medium">Tags</Label>
+              <div className="flex w-full flex-wrap gap-2 rounded-md border p-3">
+                {blogFormData.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    className="bg-purple-100 px-2 py-1 text-purple-700"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-purple-200 text-purple-700 hover:bg-purple-300"
+                      aria-label={`Remove ${tag} tag`}
+                    >
+                      <X className="h-2 w-2" />
+                    </button>
+                  </Badge>
+                ))}
+                <div className="flex min-w-[180px]">
+                  <Input
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    placeholder="Add tag..."
+                    className="border-0 p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTag();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={addTag}
+                    className="h-auto py-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="image" className="font-medium">
+                Cover Image
+              </Label>
               <div className="flex items-center gap-2">
                 <Input
                   id="image"
@@ -657,7 +1323,7 @@ function Blogs() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="flex-1"
+                  className="h-11"
                   required
                 />
                 {blogFormData.image && (
@@ -669,23 +1335,27 @@ function Blogs() {
                       setBlogFormData((prev) => ({ ...prev, image: null }))
                     }
                     aria-label="Clear selected image"
+                    className="flex-shrink-0"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 )}
               </div>
               {blogFormData.image && (
-                <div className="mt-2 flex items-center gap-2 rounded-md border p-2">
-                  <Upload className="h-4 w-4 text-muted-foreground" />
-                  <span className="truncate text-sm text-muted-foreground">
+                <div className="mt-2 flex items-center gap-2 rounded-md border bg-gray-50 p-2">
+                  <Upload className="h-4 w-4 text-gray-500" />
+                  <span className="truncate text-sm text-gray-600">
                     {blogFormData.image.name} (
                     {Math.round(blogFormData.image.size / 1024)} KB)
                   </span>
                 </div>
               )}
+              <p className="text-xs text-gray-500">
+                Recommended size: 1200x630px. Maximum file size: 5MB.
+              </p>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="pt-4">
               <Button
                 type="button"
                 variant="outline"
@@ -694,7 +1364,11 @@ function Blogs() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:from-purple-700 hover:to-pink-600"
+              >
                 {isSubmitting ? (
                   <>
                     <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
@@ -713,13 +1387,28 @@ function Blogs() {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle className="text-xl text-red-600">
+              Confirm Deletion
+            </DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this blog post? This action cannot
               be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex items-center justify-end space-x-2">
+          <div className="mt-2 rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <Info className="h-5 w-5 text-red-400" aria-hidden="true" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">
+                  This will permanently delete the blog post and all associated
+                  content.
+                </p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="mt-6 flex items-center justify-end space-x-2">
             <Button
               type="button"
               variant="outline"
@@ -732,6 +1421,7 @@ function Blogs() {
               variant="destructive"
               onClick={handleDeleteBlog}
               disabled={isSubmitting}
+              className="bg-red-600 hover:bg-red-700"
             >
               {isSubmitting ? (
                 <>
@@ -745,61 +1435,53 @@ function Blogs() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </section>
+    </div>
   );
 }
 
 export default Blogs;
 
-function BlogSkeleton() {
+// AspectRatio component
+function AspectRatio({
+  ratio = 16 / 9,
+  children,
+  className = '',
+}: {
+  ratio?: number;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="mt-5 grid-cols-12 gap-6 space-y-10 lg:grid lg:space-y-0">
-      <div className="col-span-8 flex flex-col space-y-6">
-        <div className="overflow-hidden rounded-lg shadow-md">
-          <Skeleton className="aspect-video w-full rounded-b-none" />
-          <div className="space-y-4 p-4">
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-8 w-8 rounded-full" />
-            </div>
-            <Skeleton className="h-8 w-3/4" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-10 w-10 rounded-full" />
-              <div className="space-y-1">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-20" />
-              </div>
-            </div>
-            <div className="space-y-3">
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div
+      className={`relative w-full ${className}`}
+      style={{ paddingBottom: `${(1 / ratio) * 100}%` }}
+    >
+      <div className="absolute inset-0">{children}</div>
+    </div>
+  );
+}
 
-      <div className="col-span-4 space-y-6">
-        <Skeleton className="h-8 w-40" />
-        <div className="space-y-6 rounded-lg border p-4 shadow-sm">
-          <div className="space-y-3">
-            <Skeleton className="aspect-video w-full rounded-lg" />
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-6 w-3/4" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-4 w-24" />
-            </div>
+// Blog Card Skeleton component
+function BlogCardSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-lg border bg-white shadow">
+      <div className="aspect-[16/9]">
+        <Skeleton className="h-full w-full" />
+      </div>
+      <div className="p-4">
+        <Skeleton className="mb-2 h-4 w-1/3" />
+        <Skeleton className="mb-4 h-6 w-4/5" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <Skeleton className="h-4 w-20" />
           </div>
-          <div className="space-y-3">
-            <Skeleton className="aspect-video w-full rounded-lg" />
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-6 w-3/4" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          </div>
+          <Skeleton className="h-8 w-8 rounded-full" />
         </div>
       </div>
     </div>
