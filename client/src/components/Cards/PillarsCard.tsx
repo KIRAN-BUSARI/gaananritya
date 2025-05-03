@@ -1,30 +1,32 @@
 const PillarsCard = ({
   image,
   name,
+  designation,
   description,
+  color,
+  index,
 }: {
   image: string;
   name: string;
+  designation: string;
   description: string;
+  color: string;
+  index: number;
 }) => {
+  const isEven = index % 2 === 0;
+
   return (
-    <div className="flex flex-col space-y-6 transition-transform duration-300 hover:scale-105">
-      <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-2xl">
-        <img
-          src={image}
-          height={400}
-          width={400}
-          className="h-auto w-full object-cover"
-          alt={name}
-        />
+    <div
+      style={{ backgroundColor: color }}
+      className={`flex ${isEven ? 'flex-row' : 'flex-row-reverse'} gap-20 rounded-2xl p-12 transition-transform duration-300 hover:scale-105`}
+    >
+      <div className="max-h-[317px] max-w-[320px] flex-shrink-0 overflow-hidden">
+        <img src={image} alt={name} width={300} height={300} />
       </div>
-      <div className="text-center sm:text-left">
-        <h1 className="text-xl font-medium leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-xl">
-          {name}
-        </h1>
-        <p className="mt-1 text-balance text-base leading-[170%] tracking-[-1%] sm:text-lg lg:text-base">
-          {description}
-        </p>
+      <div className="flex flex-col justify-center space-y-2">
+        <h2 className="text-xl font-semibold">{name}</h2>
+        <p className="text-base font-medium text-secondary1">{designation}</p>
+        <p className="text-base font-medium">{description}</p>
       </div>
     </div>
   );

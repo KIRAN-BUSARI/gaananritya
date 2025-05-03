@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CgClose, CgMenuRight } from 'react-icons/cg';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Button } from './ui/button';
+import { scrollToElement, useScrollToHash } from '@/lib/utils';
 
 const useScrollDirection = () => {
   const [visible, setVisible] = useState(true);
@@ -55,6 +56,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useScrollToHash();
+
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(storedIsLoggedIn);
@@ -75,16 +78,31 @@ export default function Navbar() {
     setIsOpen(false);
   }, [location.pathname]);
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-  }, [location.pathname]);
-
   const handleClick = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleScrollToSection = (link: string) => {
+    const hashIndex = link.indexOf('#');
+
+    if (hashIndex === -1) {
+      navigate(link);
+      return;
+    }
+
+    const path = link.substring(0, hashIndex);
+    const hash = link.substring(hashIndex + 1);
+
+    if (
+      location.pathname === path ||
+      (path === '' && location.pathname === '/') ||
+      (location.pathname.endsWith('/') &&
+        path === location.pathname.slice(0, -1))
+    ) {
+      scrollToElement(hash);
+    } else {
+      navigate(link);
+    }
   };
 
   const handleLogout = () => {
@@ -152,6 +170,10 @@ export default function Navbar() {
                   <Link
                     to={item.link}
                     className={`${linkClasses(item.link)} text-lg`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleScrollToSection(item.link);
+                    }}
                   >
                     {item.title}
                   </Link>
@@ -216,7 +238,11 @@ export default function Navbar() {
                           ? 'bg-gray-50 font-semibold text-navlinkcolor'
                           : 'text-primary1 hover:bg-gray-50'
                       }`}
-                      onClick={() => setIsOpen(false)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleScrollToSection(item.link);
+                        setIsOpen(false);
+                      }}
                     >
                       {item.title}
                     </Link>

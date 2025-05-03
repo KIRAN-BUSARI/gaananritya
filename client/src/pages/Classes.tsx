@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 
 import AddressCard from '@/components/Cards/AddressCard';
 import { Link } from 'react-router-dom';
+import { useScrollToHash } from '@/lib/utils';
 
 const addressList = [
   {
@@ -126,6 +127,9 @@ const addressList = [
 ];
 
 const Classes = () => {
+  // Use custom hook to handle scroll behavior
+  useScrollToHash();
+
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
       <div className="-z-10 -m-9 max-h-64 w-full object-contain md:-m-28 md:max-h-[700px]">
@@ -163,8 +167,11 @@ const Classes = () => {
             presence.
           </p>
         </div>
-        <div className="mt-8">
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+        <div className="my-20">
+          <div
+            className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20"
+            id="bharathanatyam"
+          >
             <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
               <img
                 src={bharathanatyam}
@@ -196,99 +203,104 @@ const Classes = () => {
             </div>
           </div>
 
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
-            <div className="order-2 content-center py-2 md:order-1 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Carnatic Music
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Tune into the rhythm of tradition.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Our Carnatic music classes offer a soulful journey into South
-                Indian classical vocals. With a strong focus on sruti, laya, and
-                raga development, students are trained to understand and
-                appreciate the depth of classical compositions. From basic
-                swaras to varnams and krithis, each learner gets personalized
-                attention and structured growth.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 text-primary md:mt-9"
-              >
-                <Link to="/contact">Join Now</Link>
-              </Button>
-            </div>
-            <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
-              <img
-                src={carnatic}
-                alt="Carnatic Music"
-                className="h-auto w-full rounded-lg"
-              />
-            </div>
-          </div>
-
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
-            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
-              <img
-                src={kathak}
-                alt="Kathak"
-                className="h-auto w-full rounded-lg"
-              />
-            </div>
-            <div className="order-2 content-center py-2 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Kathak
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Where rhythm meets expression.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Step into the world of Kathak dance and experience the elegance
-                of North Indian storytelling through footwork, spins, and
-                gestures. Our Kathak classes blend tradition and creativity,
-                helping students master both technical precision and emotive
-                performance. Open to all levels, the program builds a strong
-                foundation rooted in classical knowledge and performance
-                artistry.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 text-primary md:mt-9"
-              >
-                <Link to="/contact">Join Now</Link>
-              </Button>
+          <div className="my-20" id="carnatic">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+              <div className="order-2 content-center py-2 md:order-1 md:py-4">
+                <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                  Carnatic Music
+                </h1>
+                <p className="my-2 text-lg font-medium sm:text-xl">
+                  Tune into the rhythm of tradition.
+                </p>
+                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                  Our Carnatic music classes offer a soulful journey into South
+                  Indian classical vocals. With a strong focus on sruti, laya,
+                  and raga development, students are trained to understand and
+                  appreciate the depth of classical compositions. From basic
+                  swaras to varnams and krithis, each learner gets personalized
+                  attention and structured growth.
+                </p>
+                <Button
+                  variant={'secondary'}
+                  className="mt-6 text-primary md:mt-9"
+                >
+                  <Link to="/contact">Join Now</Link>
+                </Button>
+              </div>
+              <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+                <img
+                  src={carnatic}
+                  alt="Carnatic Music"
+                  className="h-auto w-full rounded-lg"
+                />
+              </div>
             </div>
           </div>
-          <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
-            <div className="order-2 content-center py-2 md:order-1 md:py-4">
-              <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                Workshops
-              </h1>
-              <p className="my-2 text-lg font-medium sm:text-xl">
-                Tune into the rhythm of tradition.
-              </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                Our Carnatic music classes offer a soulful journey into South
-                Indian classical vocals. With a strong focus on sruti, laya, and
-                raga development, students are trained to understand and
-                appreciate the depth of classical compositions. From basic
-                swaras to varnams and krithis, each learner gets personalized
-                attention and structured growth.
-              </p>
-              <Button
-                variant={'secondary'}
-                className="mt-6 text-primary md:mt-9"
-              >
-                <Link to="/contact">Join Now</Link>
-              </Button>
+          <div className="my-20" id="kathak">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+              <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+                <img
+                  src={kathak}
+                  alt="Kathak"
+                  className="h-auto w-full rounded-lg"
+                />
+              </div>
+              <div className="order-2 content-center py-2 md:py-4">
+                <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                  Kathak
+                </h1>
+                <p className="my-2 text-lg font-medium sm:text-xl">
+                  Where rhythm meets expression.
+                </p>
+                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                  Step into the world of Kathak dance and experience the
+                  elegance of North Indian storytelling through footwork, spins,
+                  and gestures. Our Kathak classes blend tradition and
+                  creativity, helping students master both technical precision
+                  and emotive performance. Open to all levels, the program
+                  builds a strong foundation rooted in classical knowledge and
+                  performance artistry.
+                </p>
+                <Button
+                  variant={'secondary'}
+                  className="mt-6 text-primary md:mt-9"
+                >
+                  <Link to="/contact">Join Now</Link>
+                </Button>
+              </div>
             </div>
-            <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
-              <img
-                src={workshop}
-                alt="Carnatic Music"
-                className="h-auto w-full rounded-lg"
-              />
+          </div>
+          <div className="my-20" id="workshops">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+              <div className="order-2 content-center py-2 md:order-1 md:py-4">
+                <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
+                  Workshops
+                </h1>
+                <p className="my-2 text-lg font-medium sm:text-xl">
+                  Tune into the rhythm of tradition.
+                </p>
+                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                  Our Carnatic music classes offer a soulful journey into South
+                  Indian classical vocals. With a strong focus on sruti, laya,
+                  and raga development, students are trained to understand and
+                  appreciate the depth of classical compositions. From basic
+                  swaras to varnams and krithis, each learner gets personalized
+                  attention and structured growth.
+                </p>
+                <Button
+                  variant={'secondary'}
+                  className="mt-6 text-primary md:mt-9"
+                >
+                  <Link to="/contact">Join Now</Link>
+                </Button>
+              </div>
+              <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+                <img
+                  src={workshop}
+                  alt="Carnatic Music"
+                  className="h-auto w-full rounded-lg"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -305,11 +317,9 @@ const Classes = () => {
           <div className="grid grid-cols-1 gap-x-20 gap-y-6 sm:grid-cols-2 md:grid-cols-3">
             {addressList.map((address, index) => (
               <div key={address.id} className="flex flex-col">
-                {/* Address Card */}
                 <div className="relative flex justify-center">
                   <AddressCard address={address} />
 
-                  {/* Vertical separators for tablet (2-column) */}
                   {index % 2 !== 1 && index !== addressList.length - 1 && (
                     <div className="absolute -right-10 top-0 hidden h-full sm:block md:hidden">
                       <Separator
@@ -319,7 +329,6 @@ const Classes = () => {
                     </div>
                   )}
 
-                  {/* Vertical separators for desktop (3-column) */}
                   {index % 3 !== 2 && index !== addressList.length - 1 && (
                     <div className="absolute -right-10 top-0 hidden h-full md:block">
                       <Separator
@@ -330,7 +339,6 @@ const Classes = () => {
                   )}
                 </div>
 
-                {/* Horizontal separator for mobile only - show after every card except the last one */}
                 {index !== addressList.length - 1 && (
                   <div className="mt-6 block sm:hidden">
                     <Separator className="h-[2px] w-full bg-secondary" />

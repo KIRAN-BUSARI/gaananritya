@@ -672,9 +672,7 @@ function Gallery() {
       );
     }
 
-    // Show images grid only when not on Videos filter
     if (filter.toLowerCase() !== 'videos') {
-      // Check if there are no images for the selected category
       if (filteredImages.length === 0) {
         return (
           <>
@@ -1309,7 +1307,8 @@ function Gallery() {
 
       <div className="mb-8 flex flex-wrap items-center gap-2 md:mb-12 md:gap-4">
         {tabs.map((tab) => (
-          <button
+          <Button
+            id={tab.title}
             key={tab.title}
             onClick={() => handleFilterChange(tab.title)}
             className={`rounded-md border px-3 py-1.5 text-sm font-medium capitalize transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 md:px-2 md:py-1 md:text-base ${
@@ -1319,11 +1318,23 @@ function Gallery() {
             }`}
           >
             {tab.title}
-          </button>
+          </Button>
         ))}
       </div>
-
-      {renderContent()}
+      <div
+        id={
+          filter.toLowerCase() === 'videos'
+            ? 'videos'
+            : filter.toLowerCase() === 'press'
+              ? 'press'
+              : filter.toLowerCase() === 'gallery'
+                ? 'gallery'
+                : `media-${filter.toLowerCase()}`
+        }
+        className="scroll-mt-24 pt-4"
+      >
+        {renderContent()}
+      </div>
 
       {!isLoading && filteredImages.length > 0 && (
         <div className="mt-8 text-center text-sm text-gray-500">

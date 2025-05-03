@@ -19,7 +19,6 @@ const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 export default function Hero() {
-  // Function to scroll to the achievements section
   const handleScrollToAchievements = () => {
     const achievementsSection = document.getElementById('achievements');
     if (achievementsSection) {
