@@ -10,7 +10,7 @@ const PillarsCard = ({
   name: string;
   designation: string;
   description: string;
-  color: string;
+  color?: string;
   index: number;
 }) => {
   const isEven = index % 2 === 0;
