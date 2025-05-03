@@ -26,7 +26,7 @@ const pillarsData: PillarData[] = [
   {
     image: img2,
     name: 'Vidushi Bindiya Prathik',
-    designation: 'Faculty - Bharathantyam, GNA’s Mangaluru Branches',
+    designation: 'Faculty - Bharathantyam',
     description:
       'A seasoned Carnatic vocalist and composer, Shri Krishnacharya began his musical journey under his father Ramacharya and later trained with maestros like B. Somasunder Rao and Kanchana Subbaratnam. He holds a Vidwat qualification and has performed widely, including on Mangalore AIR. As the lead vocalist for over 25 Bharatanatyam troupes, he has also composed music for several dance productions. In 2003, he founded Keertana Sangeet Shale in Bantwal, where he and his wife now mentor 250+ students both offline and online.',
     color: '#F3FBFF',
@@ -86,7 +86,6 @@ const Pillars = () => {
             designation={pillar.designation}
             description={pillar.description}
             color={pillar.color}
-            index={index}
           />
         ))}
       </div>
