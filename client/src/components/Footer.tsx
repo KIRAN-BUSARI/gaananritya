@@ -115,12 +115,9 @@ const Footer = () => {
         }, 100);
       }
     } else {
-      // Need to navigate to a different page first
       navigate(link);
 
-      // For media page sections, add specific handling
       if (hash && normalizedPath === '/media') {
-        // Add a delay to let the page load first
         setTimeout(() => {
           const sectionElement = document.getElementById(hash);
           if (sectionElement) {
@@ -129,7 +126,7 @@ const Footer = () => {
               block: 'start',
             });
           }
-        }, 700); // Longer delay to ensure page is fully loaded
+        }, 700);
       }
     }
   };
@@ -202,33 +199,6 @@ const Footer = () => {
             ))}
           </nav>
 
-          {/* Mobile Navigation */}
-          <nav className="grid grid-cols-2 gap-6 px-4 md:hidden">
-            {footerSections.map((section) => (
-              <div key={section.title} className="mb-4">
-                <h4 className="mb-2 text-base font-semibold text-[#FFD45C]">
-                  {section.title}
-                </h4>
-                <ul className="list-none space-y-2">
-                  {section.links.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-xs transition-colors hover:text-[#FFD45C]"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleScrollToSection(link.href);
-                        }}
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
-
           {/* Social Links Section */}
           <div className="mt-6 flex space-x-5">
             {socialLinks.map((link) => {
@@ -250,13 +220,12 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Footer Bottom Section */}
-      <div className="mt-8 border-t border-gray-700 pt-4 text-center text-xs text-gray-400 md:mt-10">
+      <div className="mt-8 border-t border-gray-700 pt-4 text-center text-xs text-gray-400 md:mt-10 md:flex md:flex-row md:justify-between">
         <div>
           © {new Date().getFullYear()} Gaana Nritya Academy. All rights
           reserved.
         </div>
-        <div className="mt-1">
+        <div className="mt-1 md:mt-0">
           Designed & Developed by{' '}
           <a
             href="https://pixelcrew.in"
