@@ -129,7 +129,7 @@ const Contact = () => {
           transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
           className="w-full lg:sticky lg:top-0 lg:w-6/12"
         >
-          <div className="h-[300px] overflow-hidden md:h-[800px] lg:h-full">
+          <div className="hidden h-[300px] overflow-hidden md:block md:h-[800px] lg:h-full">
             <img
               src={contactImg}
               alt="Contact Us"
