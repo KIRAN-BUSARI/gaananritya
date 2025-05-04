@@ -204,7 +204,7 @@ const Classes = () => {
           </div>
 
           <div className="my-20" id="carnatic">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:px-4 md:py-14 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Carnatic Music
@@ -271,7 +271,7 @@ const Classes = () => {
             </div>
           </div>
           <div className="my-20" id="workshops">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:px-4 md:py-14 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Workshops
