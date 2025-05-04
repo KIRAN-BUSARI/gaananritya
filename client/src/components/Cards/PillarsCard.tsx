@@ -29,13 +29,13 @@ const PillarsCard = ({
         </div>
       </div>
       <div className={`w-full content-center space-y-1`}>
-        <h2 className="text-center text-base font-semibold sm:text-lg md:text-xl lg:text-base">
+        <h2 className="text-center text-base font-semibold sm:text-lg md:text-left md:text-xl lg:text-base">
           {name}
         </h2>
-        <p className="text-center text-xs italic sm:text-sm md:text-sm">
+        <p className="text-center text-xs italic sm:text-sm md:text-left md:text-sm">
           {designation}
         </p>
-        <p className="line-clamp-4 text-balance text-center text-xs md:text-sm">
+        <p className="line-clamp-4 text-balance text-center text-xs md:text-left md:text-sm">
           {description}
         </p>
       </div>
