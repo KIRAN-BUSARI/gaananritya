@@ -27,7 +27,7 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 py-4 md:mb-0 md:h-[calc(100vh-100px)] md:px-20">
+    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 md:mb-0 md:h-[calc(100vh-100px)] md:px-20">
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
