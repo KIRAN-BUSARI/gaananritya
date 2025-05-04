@@ -115,7 +115,7 @@ export default function FaqPage() {
 
       <Tabs
         defaultValue="Dance"
-        className="flex w-full content-center md:max-w-6xl"
+        className="mx-auto flex w-full content-center md:max-w-6xl"
       >
         <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-8">
           <TabsList className="flex h-auto flex-row flex-wrap justify-center rounded-md bg-transparent p-0 md:w-48 md:flex-col md:justify-start">
