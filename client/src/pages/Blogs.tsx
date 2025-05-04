@@ -220,7 +220,7 @@ function Blogs() {
       }
     },
     // Remove fetchTags from dependencies to break the circular dependency
-    [selectedTag, searchQuery, page],
+    [selectedTag, searchQuery, fetchTags, page],
   );
 
   // Define loadMoreBlogs as useCallback to prevent recreation on every render
@@ -551,10 +551,10 @@ function Blogs() {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="container relative z-10 mx-auto px-4">
           <div className="mx-auto max-w-5xl text-center">
-            <h1 className="animate-fade-in mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="animate-fade-in mb-4 text-3xl font-semibold tracking-tight text-white lg:text-5xl">
               Dance & Music Blog
             </h1>
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-white/90 md:text-xl">
+            <p className="mx-auto mb-8 max-w-2xl text-sm text-white/90 md:text-base">
               Insights, stories and updates from the world of classical dance
               and music
             </p>
@@ -562,18 +562,20 @@ function Blogs() {
               <Link to="/" className="inline-flex items-center gap-2">
                 <Button
                   variant="outline"
+                  size={'sm'}
                   className="border-white bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
                 >
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <ArrowLeft className="mr-2 size-4" />
                   Back to Home
                 </Button>
               </Link>
               {isAdmin && (
                 <Button
+                  size={'sm'}
                   onClick={() => setIsAddBlogDialogOpen(true)}
                   className="bg-white text-secondary1 hover:bg-white/90"
                 >
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Plus className="mr-2 size-4" />
                   Create New Post
                 </Button>
               )}

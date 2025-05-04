@@ -401,7 +401,7 @@ const Contact = () => {
                   variant="secondary"
                   size="lg"
                   type="submit"
-                  className="w-full font-medium"
+                  className="w-full font-medium text-white"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
