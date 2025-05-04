@@ -308,7 +308,7 @@ function BlogPage() {
   return (
     <div className="min-h-screen">
       <div
-        className="relative h-[40vh] w-full md:h-[50vh] lg:h-[60vh]"
+        className="relative h-[40vh] w-full md:h-[50vh] lg:h-[40vh]"
         style={{
           backgroundImage: `url(${blog.image})`,
           backgroundSize: 'cover',
@@ -318,18 +318,6 @@ function BlogPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40"></div>
         <div className="container relative z-10 mx-auto flex h-full items-end px-4 pb-8 md:pb-12 lg:pb-16">
           <div className="max-w-4xl">
-            {blog.tags && blog.tags.length > 0 && (
-              <div className="mb-4 flex flex-wrap gap-2">
-                {blog.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    className="bg-white/80 py-1 text-sm text-secondary1 backdrop-blur-sm"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
             <h1 className="text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
               {blog.title}
             </h1>
