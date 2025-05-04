@@ -167,7 +167,7 @@ const Classes = () => {
             presence.
           </p>
         </div>
-        <div className="mt-10 md:my-20">
+        <div className="mt-10 md:my-5 md:mt-0">
           <div
             className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20"
             id="bharathanatyam"
