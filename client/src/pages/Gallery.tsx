@@ -822,7 +822,7 @@ function Gallery() {
       return (
         <>
           <motion.div
-            className={`grid grid-cols-1 gap-4 ${
+            className={`grid grid-cols-2 gap-4 ${
               filter.toLowerCase() === 'wallpaper'
                 ? 'sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                 : 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
@@ -1082,7 +1082,7 @@ function Gallery() {
             </div>
           ) : (
             <motion.div
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+              className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
