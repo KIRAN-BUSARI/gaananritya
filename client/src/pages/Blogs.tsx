@@ -16,9 +16,10 @@ import {
   User,
   Info,
   Check,
+  Pencil,
 } from 'lucide-react';
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -73,10 +74,13 @@ interface BlogFormData {
   date: string;
   image: File | null;
   tags: string[];
+  imageUrl?: string; // Added for edit mode to display existing image
 }
 
 function Blogs() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   // State variables
   const [mainBlog, setMainBlog] = useState<Blog | null>(null);
   const [sideBlogsData, setSideBlogsData] = useState<Blog[]>([]);
@@ -90,17 +94,18 @@ function Blogs() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [activeView, setActiveView] = useState('grid');
 
-  // Pagination
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Admin state
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] =
     useState<boolean>(false);
+  const [isEditBlogDialogOpen, setIsEditBlogDialogOpen] =
+    useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [blogToDelete, setBlogToDelete] = useState<string>('');
+  const [blogToEdit, setBlogToEdit] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [newTag, setNewTag] = useState<string>('');
   const [blogFormData, setBlogFormData] = useState<BlogFormData>({
@@ -111,6 +116,9 @@ function Blogs() {
     image: null,
     tags: ['Classical Dance', 'Bharatanatyam'],
   });
+
+  // Used to distinguish between add and edit modes
+  const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
 
   const contentRef = useRef<HTMLDivElement>(null);
   const bottomObserverRef = useRef<HTMLDivElement>(null);
@@ -219,11 +227,9 @@ function Blogs() {
         setRetrying(false);
       }
     },
-    // Remove fetchTags from dependencies to break the circular dependency
     [selectedTag, searchQuery, fetchTags, page],
   );
 
-  // Define loadMoreBlogs as useCallback to prevent recreation on every render
   const loadMoreBlogs = useCallback(() => {
     if (hasMore && !loadingMore) {
       setPage((prev) => prev + 1);
@@ -239,9 +245,39 @@ function Blogs() {
   useEffect(() => {
     const isAdminUser = localStorage.getItem('isAdmin') === 'true';
     setIsAdmin(isAdminUser);
-  }, []);
 
-  // Load more blogs when scrolling to bottom
+    // Check if we're coming from a blog detail page with an edit request
+    if (location.state?.editBlogId) {
+      // Wait for blogs to load before triggering edit
+      const checkAndOpenEdit = () => {
+        const blogId = location.state.editBlogId;
+        // Clear the state to prevent reopening on further navigation
+        navigate(location.pathname, { replace: true });
+
+        if (
+          blogId === mainBlog?._id ||
+          sideBlogsData.some((blog) => blog._id === blogId)
+        ) {
+          openEditBlogDialog(blogId);
+        } else {
+          // If blog isn't in the current page, fetch it specifically
+          fetchBlogForEdit(blogId);
+        }
+      };
+
+      if (!loading) {
+        checkAndOpenEdit();
+      }
+    }
+  }, [
+    location.state,
+    mainBlog,
+    sideBlogsData,
+    loading,
+    navigate,
+    location.pathname,
+  ]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -265,14 +301,11 @@ function Blogs() {
     };
   }, [hasMore, loadingMore, loadMoreBlogs]);
 
-  // Handle search query changes with debounce
   useEffect(() => {
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
-    // Only trigger this if we actually have a search query or tag filter
-    // This prevents unnecessary requests on initial render
     if (searchQuery || selectedTag) {
       searchTimeoutRef.current = setTimeout(() => {
         setPage(1);
@@ -354,7 +387,6 @@ function Blogs() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      // Check if file size is less than 5MB
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image must be smaller than 5MB');
         return;
@@ -382,7 +414,6 @@ function Blogs() {
 
   const handleFilterByTag = (tag: string) => {
     if (selectedTag === tag) {
-      // If clicking the already selected tag, clear the filter
       setSelectedTag('');
     } else {
       setSelectedTag(tag);
@@ -394,6 +425,59 @@ function Blogs() {
     setSearchQuery('');
   };
 
+  const openAddBlogDialog = () => {
+    setFormMode('add');
+    setBlogFormData({
+      title: '',
+      content: '',
+      author: '',
+      date: new Date().toISOString().split('T')[0],
+      image: null,
+      tags: ['Classical Dance', 'Bharatanatyam'],
+    });
+    setIsAddBlogDialogOpen(true);
+  };
+
+  const openEditBlogDialog = (blogId: string) => {
+    setFormMode('edit');
+    setBlogToEdit(blogId);
+
+    const blogData =
+      blogId === mainBlog?._id
+        ? mainBlog
+        : sideBlogsData.find((blog) => blog._id === blogId);
+
+    if (blogData) {
+      setBlogFormData({
+        title: blogData.title,
+        content: blogData.content,
+        author: blogData.author,
+        date: new Date(blogData.date).toISOString().split('T')[0],
+        image: null,
+        imageUrl: blogData.image,
+        tags: blogData.tags || ['Classical Dance', 'Bharatanatyam'],
+      });
+      setIsEditBlogDialogOpen(true);
+    } else {
+      toast.error('Blog not found for editing');
+    }
+  };
+
+  const fetchBlogForEdit = async (blogId: string) => {
+    try {
+      const response = await axiosInstance.get(`/blog/${blogId}`);
+      if (response.data && response.data.data) {
+        const blogData = response.data.data;
+        openEditBlogDialog(blogData._id);
+      } else {
+        toast.error("Couldn't find the blog to edit");
+      }
+    } catch (error) {
+      console.error('Error fetching blog for edit:', error);
+      toast.error('Failed to load the blog for editing');
+    }
+  };
+
   const handleAddBlog = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -402,24 +486,25 @@ function Blogs() {
       !blogFormData.content ||
       !blogFormData.author ||
       !blogFormData.date ||
-      !blogFormData.image
+      (!blogFormData.image && formMode === 'add')
     ) {
-      toast.error('Please fill in all required fields and upload an image.');
+      toast.error(
+        'Please fill in all required fields' +
+          (formMode === 'add' ? ' and upload an image.' : '.'),
+      );
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      // Check if admin is logged in
       const isAdminUser = localStorage.getItem('isAdmin') === 'true';
       if (!isAdminUser) {
-        toast.error('You must be logged in as an admin to create blogs.');
+        toast.error('You must be logged in as an admin to manage blogs.');
         setIsSubmitting(false);
         return;
       }
 
-      // Get auth token
       const token = localStorage.getItem('accessToken');
       if (!token) {
         toast.error('Authentication token not found. Please log in again.');
@@ -433,7 +518,6 @@ function Blogs() {
       formData.append('author', blogFormData.author);
       formData.append('date', blogFormData.date);
 
-      // Add tags
       blogFormData.tags.forEach((tag) => {
         formData.append('tags[]', tag);
       });
@@ -442,17 +526,25 @@ function Blogs() {
         formData.append('image', blogFormData.image);
       }
 
-      toast.info('Uploading blog post...');
+      let res;
+      if (formMode === 'add') {
+        toast.info('Uploading blog post...');
+        res = await axiosInstance.post('/blog/create', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        toast.info('Updating blog post...');
+        res = await axiosInstance.put(`/blog/update/${blogToEdit}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
 
-      // Explicitly set the headers for this specific request
-      const res = await axiosInstance.post('/blog/create', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Reset form data
       setBlogFormData({
         title: '',
         content: '',
@@ -461,13 +553,25 @@ function Blogs() {
         image: null,
         tags: ['Classical Dance', 'Bharatanatyam'],
       });
-      setIsAddBlogDialogOpen(false);
+
+      if (formMode === 'add') {
+        setIsAddBlogDialogOpen(false);
+      } else {
+        setIsEditBlogDialogOpen(false);
+        setBlogToEdit('');
+      }
 
       await fetchBlogs();
 
-      toast.success(res.data.message || 'Blog post created successfully!');
+      toast.success(
+        res.data.message ||
+          `Blog post ${formMode === 'add' ? 'created' : 'updated'} successfully!`,
+      );
     } catch (error) {
-      console.error('Error creating blog:', error);
+      console.error(
+        `Error ${formMode === 'add' ? 'creating' : 'updating'} blog:`,
+        error,
+      );
 
       const err = error as {
         response?: { data?: { message?: string }; statusText?: string };
@@ -477,7 +581,7 @@ function Blogs() {
         err.response?.data?.message ||
         err.response?.statusText ||
         err.message ||
-        'Failed to create blog. Please try again.';
+        `Failed to ${formMode === 'add' ? 'create' : 'update'} blog. Please try again.`;
 
       toast.error(`Error: ${errorMessage}`);
     } finally {
@@ -496,7 +600,6 @@ function Blogs() {
     try {
       setIsSubmitting(true);
 
-      // Check for token
       const token = localStorage.getItem('accessToken');
       if (!token) {
         toast.error('Authentication token not found. Please log in again.');
@@ -546,47 +649,8 @@ function Blogs() {
 
   return (
     <div className="container min-h-screen px-4 md:px-20">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-[#1d6d8d] to-[#1d6d8d]/50 py-16">
-        <div className="absolute inset-0 bg-black/40"></div>
-        <div className="container relative z-10 mx-auto px-4">
-          <div className="mx-auto max-w-5xl text-center">
-            <h1 className="animate-fade-in mb-4 text-3xl font-semibold tracking-tight text-white lg:text-5xl">
-              Dance & Music Blog
-            </h1>
-            <p className="mx-auto mb-8 max-w-2xl text-sm text-white/90 md:text-base">
-              Insights, stories and updates from the world of classical dance
-              and music
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/" className="inline-flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size={'sm'}
-                  className="border-white bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
-                >
-                  <ArrowLeft className="mr-2 size-4" />
-                  Back to Home
-                </Button>
-              </Link>
-              {isAdmin && (
-                <Button
-                  size={'sm'}
-                  onClick={() => setIsAddBlogDialogOpen(true)}
-                  className="bg-white text-secondary1 hover:bg-white/90"
-                >
-                  <Plus className="mr-2 size-4" />
-                  Create New Post
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto">
-        {/* Search and Filtering Controls */}
-        <div className="mb-8 rounded-xl bg-white p-4 shadow-md">
+      <div className="mx-auto w-full">
+        <div className="mb-4 rounded-xl bg-white px-2 py-4 shadow-md">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="relative col-span-2">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
@@ -636,52 +700,30 @@ function Blogs() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              <div className="flex items-center rounded-md border border-input bg-transparent p-1">
-                <Button
-                  size="sm"
-                  variant={activeView === 'grid' ? 'default' : 'ghost'}
-                  className={`h-8 ${activeView === 'grid' ? 'bg-secondary text-white' : ''}`}
-                  onClick={() => setActiveView('grid')}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                    ></path>
-                  </svg>
-                </Button>
-                <Button
-                  size="sm"
-                  variant={activeView === 'list' ? 'default' : 'ghost'}
-                  className={`h-8 ${activeView === 'list' ? 'bg-secondary text-white' : ''}`}
-                  onClick={() => setActiveView('list')}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    ></path>
-                  </svg>
-                </Button>
-              </div>
             </div>
+          </div>
+          <div className="mt-4 flex w-full items-center justify-between gap-4">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <Button
+                variant={'outline'}
+                size={'sm'}
+                className="bg-white/20 text-secondary1 backdrop-blur-sm hover:bg-white/30"
+              >
+                <ArrowLeft className="mr-2 size-4" />
+                Back to Home
+              </Button>
+            </Link>
+            {isAdmin && (
+              <Button
+                size={'sm'}
+                variant={'outline'}
+                onClick={openAddBlogDialog}
+                className="bg-white text-secondary1 hover:bg-white/90"
+              >
+                <Plus className="mr-2 size-4" />
+                Create New Post
+              </Button>
+            )}
           </div>
 
           {selectedTag && (
@@ -705,7 +747,6 @@ function Blogs() {
           )}
         </div>
 
-        {/* Content Area */}
         {loading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -758,7 +799,6 @@ function Blogs() {
           </div>
         ) : (
           <>
-            {/* Featured Blog */}
             {mainBlog && (
               <div id="main-blog-content" className="mb-12">
                 <motion.div
@@ -838,17 +878,28 @@ function Blogs() {
                             {getReadingTime(mainBlog.content)} min read
                           </span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-4">
                           {isAdmin && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => confirmDeleteBlog(mainBlog._id)}
-                              className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">Delete</span>
-                            </Button>
+                            <>
+                              <Button
+                                variant={'ghost'}
+                                size={'sm'}
+                                onClick={() => openEditBlogDialog(mainBlog._id)}
+                                className="text-sm text-secondary1"
+                              >
+                                Edit
+                                <Pencil className="ml-2 size-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => confirmDeleteBlog(mainBlog._id)}
+                                className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                <span className="sr-only">Delete</span>
+                              </Button>
+                            </>
                           )}
                           <Button
                             variant="ghost"
@@ -901,7 +952,6 @@ function Blogs() {
               </div>
             )}
 
-            {/* Blog List */}
             {sideBlogsData.length > 0 && (
               <div className="mb-12">
                 <div className="mb-8 flex items-center justify-between">
@@ -942,7 +992,7 @@ function Blogs() {
                               {blog.tags && blog.tags.length > 0 && (
                                 <div className="absolute left-3 top-3 flex flex-wrap gap-1">
                                   <Badge
-                                    className="bg-white/80 text-xs font-medium text-purple-700 backdrop-blur-sm"
+                                    className="bg-white/80 text-xs font-medium text-secondary1 backdrop-blur-sm"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleFilterByTag(blog.tags![0]);
@@ -995,35 +1045,59 @@ function Blogs() {
                                 {truncateContent(blog.content, 150)}
                               </p>
                             </CardContent>
-                            <CardFooter className="flex items-center justify-between pt-2">
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6">
-                                  <AvatarImage
-                                    src={blog.authorImage}
-                                    alt={blog.author}
-                                  />
-                                  <AvatarFallback className="bg-purple-100 text-xs text-purple-700">
-                                    {blog.author.charAt(0)}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <span className="text-xs text-gray-700">
-                                  {blog.author}
-                                </span>
+                            <CardFooter className="flex-col items-center justify-between pt-2">
+                              <div className="flex">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-6 w-6">
+                                    <AvatarImage
+                                      src={blog.authorImage}
+                                      alt={blog.author}
+                                    />
+                                    <AvatarFallback className="bg-purple-100 text-xs text-purple-700">
+                                      {blog.author.charAt(0)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <span className="text-xs text-gray-700">
+                                    {blog.author}
+                                  </span>
+                                </div>
+                                {isAdmin && (
+                                  <div className="flex gap-1">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        openEditBlogDialog(blog._id);
+                                      }}
+                                      className="h-7 w-7 rounded-full p-0 text-secondary1 hover:bg-secondary/10"
+                                    >
+                                      <Pencil className="h-3 w-3" />
+                                      <span className="sr-only">Edit</span>
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        confirmDeleteBlog(blog._id);
+                                      }}
+                                      className="h-7 w-7 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                      <span className="sr-only">Delete</span>
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
-                              {isAdmin && (
+                              <div className="gap-4 self-start">
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    confirmDeleteBlog(blog._id);
-                                  }}
-                                  className="h-7 w-7 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                  onClick={() => navigateToBlogDetail(blog._id)}
+                                  className="bg-secondary text-white hover:bg-secondary/90"
                                 >
-                                  <Trash2 className="h-3 w-3" />
-                                  <span className="sr-only">Delete</span>
+                                  Read Full Article
                                 </Button>
-                              )}
+                              </div>
                             </CardFooter>
                           </Card>
                         </motion.div>
@@ -1124,17 +1198,32 @@ function Blogs() {
                                       <span className="sr-only">Share</span>
                                     </Button>
                                     {isAdmin && (
-                                      <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() =>
-                                          confirmDeleteBlog(blog._id)
-                                        }
-                                        className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
-                                      >
-                                        <Trash2 className="h-4 w-4" />
-                                        <span className="sr-only">Delete</span>
-                                      </Button>
+                                      <>
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          onClick={() =>
+                                            openEditBlogDialog(blog._id)
+                                          }
+                                          className="h-8 w-8 rounded-full p-0 text-secondary1 hover:bg-secondary/10"
+                                        >
+                                          <Pencil className="h-4 w-4" />
+                                          <span className="sr-only">Edit</span>
+                                        </Button>
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          onClick={() =>
+                                            confirmDeleteBlog(blog._id)
+                                          }
+                                          className="h-8 w-8 rounded-full p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                        >
+                                          <Trash2 className="h-4 w-4" />
+                                          <span className="sr-only">
+                                            Delete
+                                          </span>
+                                        </Button>
+                                      </>
                                     )}
                                   </div>
                                 </div>
@@ -1147,7 +1236,6 @@ function Blogs() {
                   </div>
                 )}
 
-                {/* Load More / Loading Indicator */}
                 <div ref={bottomObserverRef} className="mt-8 py-4 text-center">
                   {loadingMore && (
                     <div className="flex items-center justify-center gap-2">
@@ -1170,7 +1258,6 @@ function Blogs() {
         )}
       </div>
 
-      {/* Image Lightbox */}
       <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
         <DialogContent className="max-w-5xl border-none bg-transparent p-0 shadow-none">
           <div className="relative overflow-hidden rounded-lg bg-black">
@@ -1192,7 +1279,6 @@ function Blogs() {
         </DialogContent>
       </Dialog>
 
-      {/* Admin: Add Blog Dialog */}
       <Dialog open={isAddBlogDialogOpen} onOpenChange={setIsAddBlogDialogOpen}>
         <DialogContent className="sm:max-w-[650px]">
           <DialogHeader>
@@ -1385,7 +1471,214 @@ function Blogs() {
         </DialogContent>
       </Dialog>
 
-      {/* Admin: Delete Blog Confirmation Dialog */}
+      <Dialog
+        open={isEditBlogDialogOpen}
+        onOpenChange={setIsEditBlogDialogOpen}
+      >
+        <DialogContent className="sm:max-w-[650px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              Edit Blog Post
+            </DialogTitle>
+            <DialogDescription>
+              Update the blog post information
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddBlog} className="mt-2 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title" className="font-medium">
+                Title
+              </Label>
+              <Input
+                id="title"
+                name="title"
+                placeholder="Enter blog title"
+                value={blogFormData.title}
+                onChange={handleFormChange}
+                className="h-11"
+                required
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="author" className="font-medium">
+                  Author
+                </Label>
+                <Input
+                  id="author"
+                  name="author"
+                  placeholder="Author name"
+                  value={blogFormData.author}
+                  onChange={handleFormChange}
+                  className="h-11"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date" className="font-medium">
+                  Publication Date
+                </Label>
+                <Input
+                  id="date"
+                  name="date"
+                  type="date"
+                  value={blogFormData.date}
+                  onChange={handleFormChange}
+                  className="h-11"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="content" className="font-medium">
+                Blog Content
+              </Label>
+              <Textarea
+                id="content"
+                name="content"
+                placeholder="Write your blog content here..."
+                rows={10}
+                value={blogFormData.content}
+                onChange={handleFormChange}
+                required
+                className="resize-y"
+              />
+              <p className="text-xs text-gray-500">
+                Use two line breaks to create new paragraphs
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="font-medium">Tags</Label>
+              <div className="flex w-full flex-wrap gap-2 rounded-md border p-3">
+                {blogFormData.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    className="bg-purple-100 px-2 py-1 text-purple-700"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-purple-200 text-purple-700 hover:bg-purple-300"
+                      aria-label={`Remove ${tag} tag`}
+                    >
+                      <X className="h-2 w-2" />
+                    </button>
+                  </Badge>
+                ))}
+                <div className="flex min-w-[180px]">
+                  <Input
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    placeholder="Add tag..."
+                    className="border-0 p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTag();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={addTag}
+                    className="h-auto py-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="image" className="font-medium">
+                Cover Image
+              </Label>
+              {blogFormData.imageUrl && !blogFormData.image && (
+                <div className="mb-2 flex items-center space-x-4">
+                  <img
+                    src={blogFormData.imageUrl}
+                    alt="Current cover"
+                    className="h-20 w-20 rounded-md object-cover"
+                  />
+                  <p className="text-sm text-gray-500">
+                    Current cover image (upload new to replace)
+                  </p>
+                </div>
+              )}
+              <div className="flex items-center gap-2">
+                <Input
+                  id="image"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="h-11"
+                />
+                {blogFormData.image && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      setBlogFormData((prev) => ({ ...prev, image: null }))
+                    }
+                    aria-label="Clear selected image"
+                    className="flex-shrink-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              {blogFormData.image && (
+                <div className="mt-2 flex items-center gap-2 rounded-md border bg-gray-50 p-2">
+                  <Upload className="h-4 w-4 text-gray-500" />
+                  <span className="truncate text-sm text-gray-600">
+                    {blogFormData.image.name} (
+                    {Math.round(blogFormData.image.size / 1024)} KB)
+                  </span>
+                </div>
+              )}
+              <p className="text-xs text-gray-500">
+                {blogFormData.imageUrl
+                  ? 'You can keep the existing image or upload a new one.'
+                  : 'Recommended size: 1200x630px. Maximum file size: 5MB.'}
+              </p>
+            </div>
+
+            <DialogFooter className="pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEditBlogDialogOpen(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:from-purple-700 hover:to-pink-600"
+              >
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  'Update Blog'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -1443,7 +1736,6 @@ function Blogs() {
 
 export default Blogs;
 
-// AspectRatio component
 function AspectRatio({
   ratio = 16 / 9,
   children,
@@ -1463,7 +1755,6 @@ function AspectRatio({
   );
 }
 
-// Blog Card Skeleton component
 function BlogCardSkeleton() {
   return (
     <div className="overflow-hidden rounded-lg border bg-white shadow">
