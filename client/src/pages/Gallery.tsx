@@ -1287,7 +1287,7 @@ function Gallery() {
 
   return (
     <section
-      className="h-auto px-2 py-16 md:px-20 md:py-24 lg:px-20"
+      className="h-auto px-4 py-16 md:px-20 md:py-24 lg:px-20"
       id="gallery"
     >
       <div className="mb-8 md:mb-12">
