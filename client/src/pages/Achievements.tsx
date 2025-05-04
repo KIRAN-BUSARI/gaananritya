@@ -78,7 +78,7 @@ const Achievements = () => {
       </div>
 
       <div
-        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-5 xl:max-w-6xl 2xl:max-w-screen-xl"
+        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-5 xl:max-w-6xl 2xl:max-w-screen-2xl"
         id="cards"
       >
         {achievements.map((data) => (
