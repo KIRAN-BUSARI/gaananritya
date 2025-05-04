@@ -130,7 +130,10 @@ export default function FaqPage() {
               </TabsTrigger>
             ))}
           </TabsList>
-          <Separator orientation="vertical" className="hidden md:block -ml-16" />
+          <Separator
+            orientation="vertical"
+            className="-ml-16 hidden md:block"
+          />
           <div className="flex-1">
             {Object.entries(categorizedFaqs).map(([category, faqs]) => (
               <TabsContent
