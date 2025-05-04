@@ -153,7 +153,7 @@ export default function FaqPage() {
                       key={index}
                       value={`${category}-item-${index}`}
                     >
-                      <AccordionTrigger className="py-2 text-left text-lg sm:py-4 sm:text-base">
+                      <AccordionTrigger className="py-2 text-left text-lg sm:py-6 sm:text-base">
                         {faq.question}
                       </AccordionTrigger>
                       <AccordionContent className="pb-2 pt-1 text-xs sm:pb-3 sm:text-base">
