@@ -227,9 +227,6 @@ const Events = () => {
         {filter === 'All Events' && (
           <div className="mt-8 space-y-12 sm:mt-12 lg:mt-16">
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-secondary1 sm:text-2xl">
-                Upcoming Events
-              </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
@@ -255,9 +252,6 @@ const Events = () => {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] sm:text-2xl">
-                Past Events
-              </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
@@ -283,9 +277,6 @@ const Events = () => {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] text-secondary1 sm:text-2xl">
-                Festivals
-              </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
@@ -311,9 +302,6 @@ const Events = () => {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold leading-[170%] tracking-[-1%] sm:text-2xl">
-                Productions
-              </h2>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
                   Celebrating{' '}
