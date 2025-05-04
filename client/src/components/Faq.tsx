@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Separator } from './ui/separator';
 
 const categorizedFaqs = {
   Dance: [
@@ -115,21 +116,21 @@ export default function FaqPage() {
 
       <Tabs
         defaultValue="Dance"
-        className="mx-auto flex w-full content-center md:max-w-6xl"
+        className="mx-auto mt-10 flex w-full content-center md:mt-20 md:max-w-6xl"
       >
-        <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-16">
+        <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-20 2xl:gap-24">
           <TabsList className="flex h-auto flex-row flex-wrap justify-center rounded-md bg-transparent p-0 md:w-48 md:flex-col md:justify-start">
             {Object.keys(categorizedFaqs).map((category) => (
               <TabsTrigger
                 key={category}
                 value={category}
-                className="m-1 rounded-md px-3 py-1.5 text-sm hover:bg-secondary/10 data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-secondary1 md:m-0 md:mb-2 md:w-full md:py-2"
+                className="m-1 rounded-md px-3 py-1.5 text-sm hover:bg-secondary/10 data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-secondary1 md:m-0 md:mb-2 md:w-full md:py-2 md:text-lg"
               >
                 {category}
               </TabsTrigger>
             ))}
           </TabsList>
-
+          <Separator orientation="vertical" className="hidden md:block -ml-16" />
           <div className="flex-1">
             {Object.entries(categorizedFaqs).map(([category, faqs]) => (
               <TabsContent
