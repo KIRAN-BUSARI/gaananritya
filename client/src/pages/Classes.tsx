@@ -144,7 +144,7 @@ const Classes = () => {
           disablePictureInPicture
         />
       </div>
-      <div className="flex w-full flex-col bg-white px-2 py-8 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
+      <div className="mb-10 flex w-full flex-col bg-white px-4 pt-10 md:mb-20 md:px-20">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl md:text-[32px]">
             Classes That Move with Grace & Melody
