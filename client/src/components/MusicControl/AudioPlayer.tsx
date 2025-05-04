@@ -36,7 +36,7 @@ const AudioPlayer = () => {
       audio.pause();
     } else {
       audio.muted = false;
-      audio.volume = 0.02;
+      audio.volume = 0.01;
       audio.play().catch((error) => {
         console.error('Audio playback failed:', error);
       });
