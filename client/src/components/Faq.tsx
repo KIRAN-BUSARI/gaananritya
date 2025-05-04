@@ -100,27 +100,30 @@ const categorizedFaqs = {
 export default function FaqPage() {
   return (
     <section
-      className="w-full px-4 py-8 text-secondary1 sm:px-6 sm:py-10 md:min-h-[calc(100vh-100px)] md:py-16"
+      className="w-full px-4 py-8 sm:px-6 sm:py-10 md:my-20 md:min-h-[calc(100vh-100px)] md:py-10"
       aria-labelledby="faq-heading"
     >
       <h1
         id="faq-heading"
-        className="mb-2 text-center text-3xl font-bold sm:text-4xl md:text-5xl"
+        className="mb-2 text-center text-3xl font-semibold text-secondary1 md:text-[32px]"
       >
         Frequently asked questions
       </h1>
-      <p className="mb-6 text-center text-sm text-gray-400 sm:mb-8 sm:text-base">
+      <p className="mb-6 text-center text-sm sm:mb-8 sm:text-base">
         Ask everything you need to know about our services
       </p>
 
-      <Tabs defaultValue="Dance" className="w-full">
-        <div className="flex flex-col gap-4 md:flex-row md:gap-8">
+      <Tabs
+        defaultValue="Dance"
+        className="flex w-full content-center md:max-w-6xl"
+      >
+        <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-8">
           <TabsList className="flex h-auto flex-row flex-wrap justify-center rounded-md bg-transparent p-0 md:w-48 md:flex-col md:justify-start">
             {Object.keys(categorizedFaqs).map((category) => (
               <TabsTrigger
                 key={category}
                 value={category}
-                className="m-1 rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-gray-400 md:m-0 md:mb-2 md:w-full md:py-2"
+                className="m-1 rounded-md px-3 py-1.5 text-sm hover:bg-secondary/10 data-[state=active]:bg-secondary data-[state=active]:text-white data-[state=inactive]:text-secondary1 md:m-0 md:mb-2 md:w-full md:py-2"
               >
                 {category}
               </TabsTrigger>
@@ -145,7 +148,6 @@ export default function FaqPage() {
                     <AccordionItem
                       key={index}
                       value={`${category}-item-${index}`}
-                      className="border-b border-gray-800"
                     >
                       <AccordionTrigger className="py-2 text-left text-sm font-medium sm:py-3 sm:text-base">
                         {faq.question}
