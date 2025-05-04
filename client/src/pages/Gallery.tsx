@@ -821,9 +821,6 @@ function Gallery() {
 
       return (
         <>
-          {/* Section Heading */}
-          <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
-
           <motion.div
             className={`grid grid-cols-1 gap-4 ${
               filter.toLowerCase() === 'wallpaper'
