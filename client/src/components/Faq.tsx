@@ -141,12 +141,6 @@ export default function FaqPage() {
                 value={category}
                 className="mt-4 border-0 md:mt-0"
               >
-                <h2
-                  id={`${category.toLowerCase()}-faq-section`}
-                  className="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl"
-                >
-                  {category} Questions
-                </h2>
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, index) => (
                     <AccordionItem
