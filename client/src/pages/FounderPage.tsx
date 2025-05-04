@@ -30,15 +30,16 @@ const FounderPage = () => {
         <h1 className="text-3xl font-semibold leading-[130%] tracking-[-1.5%] text-[#2b2b2e] sm:text-3xl md:text-[28px] lg:text-[32px]">
           Founder & Artistic Director: Guru. Vidyashree Radhakrishna
         </h1>
-        <h2 className="mt-6 text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e]">
+        <h2 className="mt-6 text-balance text-left text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e]">
           <span className="font-semibold">Vidyashree Radhakrishna</span> founded
           <span className="font-semibold text-secondary1">
             {' '}
             Gaana Nritya Academy
           </span>{' '}
-          in 1994 to preserve Indian classical music and dance, <br /> inspiring
-          youth in rural and urban Karnataka. A leading academy, it nurtures
-          Bharatanatyam and music talent.
+          in 1994 to preserve Indian classical music and dance,{' '}
+          <br className="hidden md:block" /> inspiring youth in rural and urban
+          Karnataka. A leading academy, it nurtures Bharatanatyam and music
+          talent.
         </h2>
       </div>
       <div className="mt-12 flex flex-col lg:flex-row lg:gap-8 xl:gap-12">
