@@ -713,17 +713,81 @@ function Blogs() {
                 Back to Home
               </Button>
             </Link>
-            {isAdmin && (
-              <Button
-                size={'sm'}
-                variant={'outline'}
-                onClick={openAddBlogDialog}
-                className="bg-white text-secondary1 hover:bg-white/90"
-              >
-                <Plus className="mr-2 size-4" />
-                Create New Post
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              <div className="flex rounded-md border bg-white p-1 shadow-sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`${
+                    activeView === 'grid'
+                      ? 'bg-secondary/10 text-secondary1'
+                      : ''
+                  }`}
+                  onClick={() => setActiveView('grid')}
+                  title="Grid View"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                  </svg>
+                  <span className="sr-only">Grid view</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`${
+                    activeView === 'list'
+                      ? 'bg-secondary/10 text-secondary1'
+                      : ''
+                  }`}
+                  onClick={() => setActiveView('list')}
+                  title="List View"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
+                  <span className="sr-only">List view</span>
+                </Button>
+              </div>
+              {isAdmin && (
+                <Button
+                  size={'sm'}
+                  variant={'outline'}
+                  onClick={openAddBlogDialog}
+                  className="bg-white text-secondary1 hover:bg-white/90"
+                >
+                  <Plus className="mr-2 size-4" />
+                  Create New Post
+                </Button>
+              )}
+            </div>
           </div>
 
           {selectedTag && (
