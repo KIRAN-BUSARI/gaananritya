@@ -117,7 +117,7 @@ export default function FaqPage() {
         defaultValue="Dance"
         className="mx-auto flex w-full content-center md:max-w-6xl"
       >
-        <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-8">
+        <div className="mx-auto flex w-full flex-col content-center gap-4 md:flex-row md:gap-16">
           <TabsList className="flex h-auto flex-row flex-wrap justify-center rounded-md bg-transparent p-0 md:w-48 md:flex-col md:justify-start">
             {Object.keys(categorizedFaqs).map((category) => (
               <TabsTrigger
@@ -149,7 +149,7 @@ export default function FaqPage() {
                       key={index}
                       value={`${category}-item-${index}`}
                     >
-                      <AccordionTrigger className="py-2 text-left text-sm font-medium sm:py-3 sm:text-base">
+                      <AccordionTrigger className="py-2 text-left text-sm font-medium sm:py-4 sm:text-base">
                         {faq.question}
                       </AccordionTrigger>
                       <AccordionContent className="pb-2 pt-1 text-xs sm:pb-3 sm:text-sm">
