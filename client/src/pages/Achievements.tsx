@@ -46,6 +46,13 @@ const achievements: AchievementData[] = [
     color: '#FFEFEE',
     textColor: '#FF6F61',
   },
+  {
+    id: '5',
+    title: 'Workshops',
+    number: '34+',
+    color: '#EEFAFF',
+    textColor: '#1D6D8D',
+  },
 ];
 
 const achievementsImages: string[] = [Img1, Img2, Img3, Img4];
@@ -71,7 +78,7 @@ const Achievements = () => {
       </div>
 
       <div
-        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-4 xl:max-w-6xl 2xl:max-w-screen-xl"
+        className="relative mt-8 grid grid-cols-1 gap-6 place-self-center sm:grid-cols-2 md:place-self-auto lg:grid-cols-5 xl:max-w-6xl 2xl:max-w-screen-xl"
         id="cards"
       >
         {achievements.map((data) => (
