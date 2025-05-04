@@ -169,10 +169,10 @@ const Classes = () => {
         </div>
         <div className="mt-10 md:my-5 md:mt-0">
           <div
-            className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20"
+            className="my-6 grid grid-cols-1 gap-6 rounded-2xl md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20"
             id="bharathanatyam"
           >
-            <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+            <div className="order-1 mx-auto w-full">
               <img
                 src={bharathanatyam}
                 alt="Bharatanatyam"
@@ -204,7 +204,7 @@ const Classes = () => {
           </div>
 
           <div className="my-20" id="carnatic">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Carnatic Music
@@ -227,7 +227,7 @@ const Classes = () => {
                   <Link to="/contact">Join Now</Link>
                 </Button>
               </div>
-              <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+              <div className="order-1 mx-auto w-full md:order-2">
                 <img
                   src={carnatic}
                   alt="Carnatic Music"
@@ -237,8 +237,8 @@ const Classes = () => {
             </div>
           </div>
           <div className="my-20" id="kathak">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
-              <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
+              <div className="order-1 mx-auto w-full">
                 <img
                   src={kathak}
                   alt="Kathak"
@@ -271,7 +271,7 @@ const Classes = () => {
             </div>
           </div>
           <div className="my-20" id="workshops">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:py-14 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Workshops
@@ -294,7 +294,7 @@ const Classes = () => {
                   <Link to="/contact">Join Now</Link>
                 </Button>
               </div>
-              <div className="order-1 mx-auto w-full max-w-[400px] md:order-2 md:max-w-none">
+              <div className="order-1 mx-auto w-full md:order-2">
                 <img
                   src={workshop}
                   alt="Carnatic Music"
