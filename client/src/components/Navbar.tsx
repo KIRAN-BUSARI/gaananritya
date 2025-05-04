@@ -182,8 +182,9 @@ export default function Navbar() {
               {isLoggedIn && (
                 <li>
                   <Button
+                    size={'sm'}
                     onClick={handleLogout}
-                    className="rounded-md bg-secondary px-2 py-1.5 text-white transition-colors duration-200 hover:bg-secondary/90"
+                    className="rounded-md bg-secondary text-white transition-colors duration-200 hover:bg-secondary/90"
                   >
                     Logout
                   </Button>
@@ -255,8 +256,9 @@ export default function Navbar() {
           {isLoggedIn && (
             <div className="mt-auto border-t border-gray-100 pt-4">
               <Button
+                size={'sm'}
                 onClick={handleLogout}
-                className="w-full rounded-md bg-secondary py-3 font-medium text-white transition-colors hover:bg-secondary/90"
+                className="w-full rounded-md bg-secondary font-medium text-white transition-colors hover:bg-secondary/90"
               >
                 Logout
               </Button>
