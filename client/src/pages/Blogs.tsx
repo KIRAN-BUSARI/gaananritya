@@ -545,7 +545,7 @@ function Blogs() {
   };
 
   return (
-    <div className="container min-h-screen px-20">
+    <div className="container min-h-screen px-4 md:px-20">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-[#1d6d8d] to-[#1d6d8d]/50 py-16">
         <div className="absolute inset-0 bg-black/40"></div>
@@ -582,7 +582,7 @@ function Blogs() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="mx-auto">
         {/* Search and Filtering Controls */}
         <div className="mb-8 rounded-xl bg-white p-4 shadow-md">
           <div className="grid gap-4 md:grid-cols-3">
@@ -860,7 +860,7 @@ function Blogs() {
                         </div>
                       </div>
 
-                      <h2 className="mt-4 text-3xl font-semibold leading-normal tracking-tight text-gray-900 md:text-4xl">
+                      <h2 className="mt-4 text-2xl font-semibold leading-normal tracking-tight text-gray-900 md:text-3xl">
                         {mainBlog.title}
                       </h2>
 
