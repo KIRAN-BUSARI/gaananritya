@@ -1046,7 +1046,7 @@ function Blogs() {
                               </p>
                             </CardContent>
                             <CardFooter className="flex-col items-center justify-between pt-2">
-                              <div className="flex">
+                              <div className="flex w-full items-center justify-between">
                                 <div className="flex items-center gap-2">
                                   <Avatar className="h-6 w-6">
                                     <AvatarImage
@@ -1062,7 +1062,7 @@ function Blogs() {
                                   </span>
                                 </div>
                                 {isAdmin && (
-                                  <div className="flex gap-1">
+                                  <div className="flex justify-between">
                                     <Button
                                       variant="ghost"
                                       size="sm"
@@ -1090,7 +1090,7 @@ function Blogs() {
                                   </div>
                                 )}
                               </div>
-                              <div className="gap-4 self-start">
+                              <div className="mt-2 gap-4 self-start">
                                 <Button
                                   onClick={() => navigateToBlogDetail(blog._id)}
                                   className="bg-secondary text-white hover:bg-secondary/90"

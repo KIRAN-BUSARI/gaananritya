@@ -9,6 +9,7 @@ import {
   Trash2,
   RefreshCw,
   Info,
+  Pencil,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -243,6 +244,11 @@ function BlogPage() {
     }
   };
 
+  const handleEditBlog = () => {
+    if (!blog) return;
+    navigate('/blogs', { state: { editBlogId: blog._id } });
+  };
+
   const formatDate = (dateString: string) => {
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
@@ -282,7 +288,7 @@ function BlogPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M12 8v4m0 4h.01M21 12a9 9 9 9 11-18 0 9 9 0 0118 0z"
               />
             </svg>
           </div>
@@ -306,7 +312,7 @@ function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="container min-h-screen px-4 md:px-20">
       <div
         className="relative h-[40vh] w-full md:h-[50vh] lg:h-[40vh]"
         style={{
@@ -318,7 +324,7 @@ function BlogPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40"></div>
         <div className="container relative z-10 mx-auto flex h-full items-end px-4 pb-8 md:pb-12 lg:pb-16">
           <div className="max-w-4xl">
-            <h1 className="text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-semibold leading-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
               {blog.title}
             </h1>
           </div>
@@ -375,14 +381,24 @@ function BlogPage() {
                 </Button>
 
                 {isAdmin && (
-                  <Button
-                    variant="outline"
-                    onClick={confirmDeleteBlog}
-                    className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700"
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Article
-                  </Button>
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={handleEditBlog}
+                      className="w-full justify-start text-secondary1 hover:bg-secondary/10"
+                    >
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edit Article
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={confirmDeleteBlog}
+                      className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Article
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
