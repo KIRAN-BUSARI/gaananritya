@@ -167,7 +167,7 @@ const Classes = () => {
             presence.
           </p>
         </div>
-        <div className="my-20">
+        <div className="mt-10 md:my-20">
           <div
             className="my-6 grid grid-cols-1 gap-6 rounded-2xl p-4 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20"
             id="bharathanatyam"
@@ -304,7 +304,7 @@ const Classes = () => {
             </div>
           </div>
         </div>
-        <div className="mt-10 flex w-full flex-col">
+        <div className="flex w-full flex-col">
           <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
             Branches: Our Reach Across Karnataka
           </h1>
