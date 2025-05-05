@@ -54,7 +54,7 @@ const SignInCard = () => {
 
   return (
     <div className="relative flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="flex w-1/4 flex-col rounded-md bg-[#f5f5f5] p-10 shadow-md">
+      <div className="flex w-3/4 flex-col rounded-md bg-[#f5f5f5] p-10 shadow-md md:w-1/4">
         <LabelInputContainer>
           <Label htmlFor="email">Email</Label>
           <Input
