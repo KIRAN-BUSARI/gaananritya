@@ -33,7 +33,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 flex h-full w-full items-center lg:justify-start">
+      <div className="relative flex h-full w-full items-center lg:justify-start">
         <div className="px-2">
           <div className="mt-4 flex md:hidden">
             <HeroSectionBgCarousel
