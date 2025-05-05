@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 
-import img1 from '@/assets/classes/img1.png';
-import img2 from '@/assets/classes/img2.png';
-import img3 from '@/assets/classes/img3.png';
+import img1 from '@/assets/events/img1.png';
+import img2 from '@/assets/events/img2.png';
+import img3 from '@/assets/events/img3.png';
+import img4 from '@/assets/events/img4.png';
+
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import EventCard from '@/components/Cards/EventCard';
 
@@ -47,7 +49,7 @@ const eventsData = [
   },
   {
     id: 4,
-    image: img1,
+    image: img4,
     category: 'Past Events',
     title: 'Kathak Workshop',
     date: '10-01-2025',
