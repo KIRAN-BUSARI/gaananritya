@@ -21,7 +21,7 @@ const EventCard: FC<EventCardProps> = ({
 }) => {
   return (
     <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
-      <div className="relative h-40 w-full overflow-hidden sm:h-48 md:h-[350px] 2xl:h-[450px]">
+      <div className="relative w-full overflow-hidden sm:h-48 md:h-[350px] 2xl:h-[450px]">
         <img
           src={typeof image === 'string' ? image : image[0]}
           alt={title}
