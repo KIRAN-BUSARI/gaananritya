@@ -127,15 +127,14 @@ const addressList = [
 ];
 
 const Classes = () => {
-  // Use custom hook to handle scroll behavior
   useScrollToHash();
 
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 -m-9 max-h-64 w-full object-contain md:-m-28 md:max-h-[700px]">
+      <div className="max-h-44 w-full md:max-h-[400px] 2xl:max-h-[500px]">
         <video
-          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1746177088/Untitled_design_1_r7tmcu.mp4"
-          className="aspect-video w-full object-cover"
+          src="https://res.cloudinary.com/djbkmezt7/video/upload/v1746457248/Untitled_design_2_zbpgah.mp4"
+          className="aspect-video w-full object-cover md:-mt-28"
           autoPlay
           loop
           muted
@@ -146,10 +145,10 @@ const Classes = () => {
       </div>
       <div className="mb-10 flex w-full flex-col bg-white px-4 pt-10 md:mb-20 md:px-20">
         <div>
-          <h1 className="text-2xl font-semibold sm:text-3xl md:text-[32px]">
+          <h1 className="text-xl font-semibold sm:text-3xl md:text-[32px]">
             Classes That Move with Grace & Melody
           </h1>
-          <p className="mt-2 text-lg font-medium sm:text-xl md:text-2xl">
+          <p className="mt-2 text-base font-medium sm:text-lg md:text-xl lg:text-2xl">
             Learn Bharatanatyam, Kathak & Carnatic Music — the traditional way,
             with a modern touch.
           </p>

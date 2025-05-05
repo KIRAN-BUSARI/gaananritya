@@ -169,10 +169,10 @@ const Events = () => {
 
   return (
     <div className="relative flex h-auto w-full flex-col items-center justify-center">
-      <div className="-z-10 -m-9 max-h-60 w-full md:-m-28 md:max-h-[700px] 2xl:max-h-[800px]">
+      <div className="-z-10 max-h-40 w-full md:max-h-[400px] 2xl:max-h-[500px]">
         <video
           src="https://res.cloudinary.com/djbkmezt7/video/upload/v1745476384/WEBSITE_1_etlc3p.mp4"
-          className="aspect-video w-full object-cover"
+          className="-mt-10 aspect-video w-full object-cover md:-mt-60"
           autoPlay
           loop
           muted
@@ -226,56 +226,6 @@ const Events = () => {
 
         {filter === 'All Events' && (
           <div className="mt-8 space-y-12 sm:mt-12 lg:mt-16">
-            <div>
-              <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
-                <li>
-                  Celebrating{' '}
-                  <span className="font-semibold text-secondary1">
-                    Aaronhan-2025{' '}
-                  </span>{' '}
-                  at Sullia Branch, Mangalore - Invitation
-                </li>
-                <li>
-                  <span className="font-semibold text-secondary1">
-                    Poorvi Radhakrishna&apos;s Rangapravesh
-                  </span>{' '}
-                  on 12th May 2025, Mangalore.
-                </li>
-                <li>
-                  Annual Day Celebration{' '}
-                  <span className="font-semibold text-secondary1">
-                    Hejje-Gejje,
-                  </span>{' '}
-                  25th June, Gaana Nritya Academy, Branch Bangalore.
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
-                <li>
-                  Celebrating{' '}
-                  <span className="font-semibold text-secondary1">
-                    Aaronhan-2025{' '}
-                  </span>{' '}
-                  at Sullia Branch, Mangalore - Invitation
-                </li>
-                <li>
-                  <span className="font-semibold text-secondary1">
-                    Poorvi Radhakrishna&apos;s Rangapravesh
-                  </span>{' '}
-                  on 12th May 2025, Mangalore.
-                </li>
-                <li>
-                  Annual Day Celebration{' '}
-                  <span className="font-semibold text-secondary1">
-                    Hejje-Gejje,
-                  </span>{' '}
-                  25th June, Gaana Nritya Academy, Branch Bangalore.
-                </li>
-              </ul>
-            </div>
-
             <div>
               <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
                 <li>
