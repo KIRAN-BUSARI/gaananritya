@@ -1,11 +1,5 @@
 import Logo from './Logo';
-import {
-  Twitter,
-  Instagram,
-  Facebook,
-  Linkedin,
-  LucideProps,
-} from 'lucide-react/';
+import { Instagram, Facebook, LucideProps } from 'lucide-react/';
 import { ComponentType } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { scrollToElement } from '../lib/utils';
