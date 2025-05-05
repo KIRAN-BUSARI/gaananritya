@@ -24,27 +24,15 @@ interface FooterLinkSection {
 
 const socialLinks: SocialLink[] = [
   {
-    id: 'twitter',
-    icon: Twitter,
-    link: '#',
-    label: 'Twitter',
-  },
-  {
-    id: 'linkedin',
-    icon: Linkedin,
-    link: '#',
-    label: 'LinkedIn',
-  },
-  {
     id: 'instagram',
     icon: Instagram,
-    link: '#',
+    link: 'https://www.instagram.com/gaananrityaacademy_official/',
     label: 'Instagram',
   },
   {
     id: 'facebook',
     icon: Facebook,
-    link: '#',
+    link: 'https://www.facebook.com/GaananrityaAcademyMangalore/',
     label: 'Facebook',
   },
 ];
@@ -189,6 +177,7 @@ const Footer = () => {
                           e.preventDefault();
                           handleScrollToSection(link.href);
                         }}
+                        target="_blank"
                       >
                         {link.name}
                       </Link>
