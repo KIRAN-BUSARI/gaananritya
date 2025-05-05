@@ -149,7 +149,7 @@ function GalleryCard({
       <img
         src={img}
         alt={altText}
-        className={`h-full w-full bg-center ${isWallpaper ? 'bg-gray-900 object-contain' : 'object-cover'} transition-transform duration-500 group-hover:scale-105`}
+        className={`h-full w-full bg-center ${isWallpaper ? 'bg-gray-900 object-cover' : 'object-cover'} transition-transform duration-500 group-hover:scale-105`}
         loading="lazy"
       />
 
