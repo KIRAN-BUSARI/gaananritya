@@ -45,12 +45,35 @@ const AudioPlayer = () => {
     setIsPlaying(!isPlaying);
   };
 
+  // Add keyboard shortcut for toggling audio
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Check if 'M' or 'm' key is pressed
+      if (event.key === 'm' || event.key === 'M') {
+        // Don't trigger shortcut if user is typing in an input field or textarea
+        if (
+          document.activeElement instanceof HTMLInputElement ||
+          document.activeElement instanceof HTMLTextAreaElement
+        ) {
+          return;
+        }
+        togglePlay();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [audio, isPlaying]); // Dependencies include audio and isPlaying
+
   return (
     <button
       onClick={togglePlay}
       className="fixed bottom-20 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-secondary1 shadow-lg transition-all duration-200 hover:scale-105"
       aria-label={isPlaying ? 'Mute music' : 'Play music'}
-      title={isPlaying ? 'Mute music' : 'Play music'}
+      title={isPlaying ? 'Mute music (M)' : 'Play music (M)'}
     >
       {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
     </button>
