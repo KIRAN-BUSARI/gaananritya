@@ -1,6 +1,6 @@
 const Banner = () => {
   return (
-    <div className="relative w-full bg-[#1D6D8D] py-6 text-left md:text-center">
+    <div className="relative w-full bg-[#1D6D8D] py-6 text-left md:text-center px-4 md:px-0">
       <div className="flex justify-center">
         <p className="text-[18px] font-normal leading-[170%] text-primary">
           Welcome to the <span className="font-semibold">Aarohana 2025</span>{' '}
