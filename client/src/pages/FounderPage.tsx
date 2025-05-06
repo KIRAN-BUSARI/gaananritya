@@ -22,7 +22,7 @@ const FounderPage = () => {
 
   return (
     <div
-      className="relative mx-auto my-8 h-auto w-full px-2 sm:px-6 md:mt-12 md:px-8 lg:mt-20 lg:px-12 xl:px-20"
+      className="relative mx-auto my-8 h-auto w-full px-4 sm:px-6 md:mt-12 md:px-8 lg:mt-20 lg:px-12 xl:px-20"
       id="founder"
     >
       {/* Header Section */}
