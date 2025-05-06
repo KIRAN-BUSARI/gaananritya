@@ -148,7 +148,7 @@ const Classes = () => {
           <h1 className="text-xl font-semibold sm:text-3xl md:text-[32px]">
             Classes That Move with Grace & Melody
           </h1>
-          <p className="mt-2 text-base font-medium sm:text-lg md:text-xl lg:text-2xl">
+          <p className="mt-2 text-base font-medium sm:text-lg md:text-xl 2xl:text-2xl">
             Learn Bharatanatyam, Kathak & Carnatic Music — the traditional way,
             with a modern touch.
           </p>

@@ -68,7 +68,7 @@ const Achievements = () => {
         <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
           Milestones & Achievements That Shaped Our Journey
         </h1>
-        <p className="mt-4 text-lg leading-[170%] tracking-[-1%] sm:text-base lg:text-lg">
+        <p className="mt-2 text-lg leading-[170%] tracking-[-1%] sm:text-base lg:text-lg">
           A journey marked by{' '}
           <span className="font-semibold">
             national honors, artistic innovations,
