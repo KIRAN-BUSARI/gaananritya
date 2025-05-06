@@ -567,4 +567,18 @@ const Events = () => {
                   Celebrating <span className="font-semibold text-secondary1">Aaronhan-2025</span> at Sullia Branch, Mangalore - Invitation
                 </li>
                 <li>
-                  <span className="font-semibold tex
+                  <span className="font-semibold text-secondary1">Poorvi Radhakrishna&apos;s Rangapravesh</span> on 12th May 2025, Mangalore.
+                </li>
+                <li>
+                  Annual Day Celebration <span className="font-semibold text-secondary1">Hejje-Gejje</span>, 25th June, Gaana Nritya Academy, Branch Bangalore.
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Events;
