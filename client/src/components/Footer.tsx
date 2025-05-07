@@ -160,26 +160,25 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Social Links Section */}
-        <div className="mt-6 flex flex-row items-center justify-center space-x-5 md:flex-col md:space-x-0 md:space-y-5">
-          {socialLinks.map((link) => {
-            const IconComponent = link.icon;
-            return (
-              <a
-                key={link.id}
-                href={link.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="text-[#FFD45C] transition-all hover:scale-110 hover:opacity-80"
-              >
-                {IconComponent && <IconComponent size={24} />}
-              </a>
-            );
-          })}
-        </div>
-
-        <div className="flex flex-col items-center gap-6 md:items-end">
+        <div className="flex items-center justify-center gap-6 md:items-end">
+          {/* Social Links Section */}
+          <div className="mt-6 flex flex-row items-center justify-center space-x-5 md:flex-col md:space-x-0 md:space-y-5">
+            {socialLinks.map((link) => {
+              const IconComponent = link.icon;
+              return (
+                <a
+                  key={link.id}
+                  href={link.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="text-[#FFD45C] transition-all hover:scale-110 hover:opacity-80"
+                >
+                  {IconComponent && <IconComponent size={24} />}
+                </a>
+              );
+            })}
+          </div>
           <nav className="hidden md:grid md:grid-cols-4 md:gap-x-12">
             {footerSections.map((section) => (
               <div key={section.title}>

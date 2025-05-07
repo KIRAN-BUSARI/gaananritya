@@ -1,11 +1,12 @@
 const Banner = () => {
   return (
-    <div className="relative w-full bg-[#1D6D8D] py-6 text-left md:text-center px-4 md:px-0">
+    <div className="relative w-full bg-[#1D6D8D] px-4 py-6 text-left md:px-0 md:text-center">
       <div className="flex justify-center">
         <p className="text-[18px] font-normal leading-[170%] text-primary">
-          Welcome to the <span className="font-semibold">Aarohana 2025</span>{' '}
-          Annual Show! Join us on October 26th to celebrate our students'
-          incredible talent and hard work.
+          Join us for Poorvi’s Rangapravesha! Witness her graceful solo dance
+          debut on May 12th at Town Hall, Mangalore{'  '}
+          <br className="hidden md:block" /> an evening celebrating tradition,
+          rhythm, and artistic dedication.
         </p>
       </div>
     </div>
