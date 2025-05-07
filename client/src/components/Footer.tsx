@@ -1,12 +1,12 @@
 import Logo from './Logo';
-import { Instagram, Facebook, LucideProps } from 'lucide-react/';
+import { Instagram, Facebook, LucideProps, YoutubeIcon } from 'lucide-react/';
 import { ComponentType } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { scrollToElement } from '../lib/utils';
 
 interface SocialLink {
   id: string;
-  icon: ComponentType<LucideProps>;
+  icon: ComponentType<LucideProps> | string;
   link: string;
   label: string;
 }
@@ -28,6 +28,12 @@ const socialLinks: SocialLink[] = [
     icon: Facebook,
     link: 'https://www.facebook.com/GaananrityaAcademyMangalore/',
     label: 'Facebook',
+  },
+  {
+    id: 'youtube',
+    icon: YoutubeIcon,
+    link: 'https://www.youtube.com/@gaananrityaacademy',
+    label: 'YouTube',
   },
 ];
 
