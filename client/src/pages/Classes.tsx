@@ -185,7 +185,7 @@ const Classes = () => {
               <p className="my-2 text-lg font-medium sm:text-xl">
                 Grace in every step. Stories in every move.
               </p>
-              <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+              <p className="mt-4 text-balance text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
                 Discover the soul of South Indian classical dance with our
                 Bharatanatyam classes designed for all age groups. From basic
                 adavus to intricate abhinaya and stage performances, students
@@ -203,7 +203,7 @@ const Classes = () => {
           </div>
 
           <div className="my-20" id="carnatic">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:px-4 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-12 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Carnatic Music
@@ -211,7 +211,7 @@ const Classes = () => {
                 <p className="my-2 text-lg font-medium sm:text-xl">
                   Tune into the rhythm of tradition.
                 </p>
-                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                <p className="mt-4 text-balance text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
                   Our Carnatic music classes offer a soulful journey into South
                   Indian classical vocals. With a strong focus on sruti, laya,
                   and raga development, students are trained to understand and
@@ -251,7 +251,7 @@ const Classes = () => {
                 <p className="my-2 text-lg font-medium sm:text-xl">
                   Where rhythm meets expression.
                 </p>
-                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                <p className="mt-4 text-balance text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
                   Step into the world of Kathak dance and experience the
                   elegance of North Indian storytelling through footwork, spins,
                   and gestures. Our Kathak classes blend tradition and
@@ -270,7 +270,7 @@ const Classes = () => {
             </div>
           </div>
           <div className="my-20" id="workshops">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:px-4 md:py-14 lg:gap-20">
+            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-12 lg:gap-20">
               <div className="order-2 content-center py-2 md:order-1 md:py-4">
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Workshops
@@ -278,7 +278,7 @@ const Classes = () => {
                 <p className="my-2 text-lg font-medium sm:text-xl">
                   Tune into the rhythm of tradition.
                 </p>
-                <p className="mt-4 text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
+                <p className="mt-4 text-balance text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
                   Our Carnatic music classes offer a soulful journey into South
                   Indian classical vocals. With a strong focus on sruti, laya,
                   and raga development, students are trained to understand and
