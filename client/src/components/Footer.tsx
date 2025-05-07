@@ -160,9 +160,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-6 md:items-end">
+        <div className="flex justify-center gap-6 md:items-end">
           {/* Social Links Section */}
-          <div className="mt-6 flex flex-row items-center justify-center space-x-5 md:flex-col md:space-x-0 md:space-y-5">
+          <div className="mr-5 flex h-full flex-row items-center justify-center space-x-5 md:flex-col md:space-x-0 md:space-y-5">
             {socialLinks.map((link) => {
               const IconComponent = link.icon;
               return (
