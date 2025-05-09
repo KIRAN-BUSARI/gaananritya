@@ -21,7 +21,7 @@ const pillarsData: PillarData[] = [
     name: 'Radhakrishna Bhat',
     designation: 'Secretary – Gaana Nritya Academy',
     description:
-      "A dedicated cultural enthusiast and passionate arts administrator, Radhakrishna Bhat has been an integral part of Gaana Nritya Academy's growth journey. With over a decade of experience in organizational management, he ensures the smooth execution of events, performances, and academic coordination. His commitment to promoting Indian classical arts, especially in rural and underrepresented communities, reflects in every initiative led by the academy. Known for his discipline and warmth, he bridges the gap between tradition and innovation in his role as Secretary.",
+      "A dedicated cultural enthusiast and passionate arts administrator, Radhakrishna Bhat has been an integral part of Gaana Nritya Academy's growth journey.",
     color: '#FFF6F5',
   },
   {
@@ -29,7 +29,7 @@ const pillarsData: PillarData[] = [
     name: 'Vidushi Bindiya Prathik',
     designation: 'Faculty - Bharathantyam',
     description:
-      'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes. Founder of Keertana Sangeet Shale (2003), he mentors 250+ students in Bantwal both offline and online.',
+      'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes.',
     color: '#F3FBFF',
   },
   {
@@ -45,7 +45,7 @@ const pillarsData: PillarData[] = [
     name: 'Vidushi Ankitha Rai Pranam',
     designation: 'Faculty - Carnatic Music',
     description:
-      'Vidushi Ankitha Rai Pranam has been learning Bharatanatyam under Guru Vidyashree Radhakrishna for 21 years, completing her Vidwat and Rangapravesha in 2017.',
+      'Vidushi Ankitha Rai Pranam has been learning Bharatanatyam under Guru Vidyashree Radhakrishna for 21 years, completing her Vidwat in 2017.',
     color: '#FFF6F5',
   },
   {
