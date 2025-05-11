@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 interface EventCardProps {
-  image: string;
+  image?: string;
   title: string;
   location: string;
   date: string;
@@ -10,31 +10,22 @@ interface EventCardProps {
   showCategoryLabel?: boolean;
 }
 
-const EventCard: FC<EventCardProps> = ({
-  image,
-  title,
-  location,
-  date,
-  timings,
-  category,
-  showCategoryLabel = false,
-}) => {
+const EventCard: FC<EventCardProps> = ({ title, location, date, timings }) => {
   return (
     <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
-      <div className="relative w-full overflow-hidden sm:h-48 md:h-[350px] 2xl:h-[450px]">
+      {/* <div className="relative w-full overflow-hidden sm:h-48 md:h-[350px] 2xl:h-[450px]">
         <img
-          src={typeof image === 'string' ? image : image[0]}
+          src={typeof image === 'string' ? image : image?.[0] ?? '/default-image.jpg'}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        {/* Black overlay with gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent opacity-30 transition-opacity duration-300 group-hover:opacity-0"></div>
         {showCategoryLabel && category && (
           <div className="absolute right-4 top-4 transform rounded-lg border border-white/20 bg-gradient-to-r from-secondary to-secondary/80 px-2 py-1 text-xs font-medium text-primary shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
             {category}
           </div>
         )}
-      </div>
+      </div> */}
       <div className="p-4">
         <h3 className="text-lg font-semibold text-secondary1">{title}</h3>
         <div className="mt-2 space-y-2">

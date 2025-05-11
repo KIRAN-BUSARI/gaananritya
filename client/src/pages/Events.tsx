@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import img1 from '@/assets/events/img1.png';
-import img2 from '@/assets/events/img2.png';
+// import img1 from '@/assets/events/img1.png';
+// import img2 from '@/assets/events/img2.png';
 // import img3 from '@/assets/events/img3.png';
-import img4 from '@/assets/events/img4.png';
+// import img4 from '@/assets/events/img4.png';
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import EventCard from '@/components/Cards/EventCard';
 
@@ -19,23 +19,73 @@ import {
   PartyPopperIcon,
   HistoryIcon,
   ArrowDown,
+  StarIcon,
 } from 'lucide-react';
 
 interface Tab {
   title: string;
 }
 
+// List of significant performances
+const significantPerformances = [
+  'Guruvandana under the tutelage of Guru Shri Muralidhar Rao, Mysuru',
+  'Subrahmanya Temple – Kirushashtiuthsava',
+  'Shree Bhramaramba Temple - Kateeluthsava',
+  'Kannada Sangha Matunga, Mumbai',
+  'Sadhanasangama-Yugala, Bengaluru',
+  "Alva's Nudisiri, Moodabidire, Dakshina Kannada",
+  'Samanvaya, Bharatanatyam and Odissi Jugalbandi with Smt. Madhulita Mohapatra',
+  'Nrityakala Parishad, Mysuru',
+  'Mysuru Dasara',
+  'Dance Festivals - Karwar and Kaiga',
+  'Karavali Uthsava, Mangaluru',
+  'Lakshadeepothsava, Shri Manjunatheshwara Temple, Dharmasthala',
+  'Naadaneerajanam, Tirupathi',
+  'Golden Temple, Vellore',
+  'Nrityantar Festival, Bengaluru',
+  'Buntayana, Kuwait',
+  'Dance Festival, Kollur Mookambika Temple',
+  'Kadambotsava, Banavasi',
+  'Dance Festival, Guruvayur Temple',
+  'Paryaya Uthsava, Shri Krishna Temple, Udupi',
+  'Hampi Utsava',
+  'Puligere Utsava',
+  'Kannada Sangha, New Delhi',
+  'Natyanjali Tirunagai and Thirunallar of Tamilnadu',
+  'Karthik Fine Arts, Chennai',
+  'Twice at Nehru centre, London, UK',
+  'SARANG Festival at South Korea, sponsored by ICCR, Ministry of Culture',
+  'Ashtabhavika presentation by the disciples of Guru Rama Vaidyanathan, Bengaluru and Mumbai.',
+];
+
+// List of productions
+const productionsList = [
+  'Solo and group performances [classical, semi classical and folk]',
+  'Solo thematic performances',
+  'DANCE BALLET',
+  'Satyameva Jayate',
+  'Jwalamukhi Ambe',
+  'Srinivasa Kalyana',
+  'Virata Parva',
+  'Nartana Parivartana',
+  'Rutu Sringara',
+  'Dashaavataara',
+  'Kannada Sahitya Nritya Vaibhava',
+  'Navarasa Ramaayana',
+];
+
 const tabs: Tab[] = [
   { title: 'Upcoming Events' },
   { title: 'Productions' },
   { title: 'Festivals' },
   { title: 'Past Events' },
+  { title: 'Significant Performances' },
 ];
 
 const eventsData = [
   {
     id: 1,
-    image: img1,
+    // image: img1,
     category: 'Upcoming Events',
     title: 'Annual Dance Festival 2025 - Arohana Part 1',
     date: '24-08-2025',
@@ -44,7 +94,7 @@ const eventsData = [
   },
   {
     id: 2,
-    image: img4,
+    // image: img4,
     category: 'Upcoming Events',
     title: 'Annual Dance Festival 2025 - Arohana Part 2',
     date: '07-09-2025',
@@ -53,7 +103,7 @@ const eventsData = [
   },
   {
     id: 3,
-    image: img2,
+    // image: img2,
     category: 'Upcoming Events',
     title: 'Bharathanatya Rangapravesha - Anantha Krishna',
     date: '26-10-2025',
@@ -84,6 +134,86 @@ const Events = () => {
     });
   }, [filter]);
 
+  // Render the significant performances list
+  const renderSignificantPerformances = () => {
+    return (
+      <motion.div
+        className="mt-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="mb-6">
+          <h2 className="mb-4 text-lg font-semibold sm:text-xl md:text-2xl">
+            Significant Performances
+          </h2>
+          <p className="text-sm leading-relaxed sm:text-base">
+            Gaana Nritya Academy has performed at prestigious venues and events
+            across India and internationally. Here are some of our notable
+            performances:
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+          {significantPerformances.map((performance, index) => (
+            <motion.div
+              key={index}
+              className="flex items-start rounded-md bg-gradient-to-r from-secondary/5 to-transparent px-3 py-3 transition-all hover:from-secondary/10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <div className="mr-3 mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-secondary"></div>
+              <p className="text-sm leading-relaxed sm:text-base">
+                {performance}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    );
+  };
+
+  // Render the productions list
+  const renderProductions = () => {
+    return (
+      <motion.div
+        className="mt-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="mb-6">
+          <h2 className="mb-4 text-lg font-semibold sm:text-xl md:text-2xl">
+            Productions
+          </h2>
+          <p className="text-sm leading-relaxed sm:text-base">
+            Gaana Nritya Academy presents a diverse range of classical and
+            contemporary dance productions, from solo performances to elaborate
+            dance ballets that bring mythological and cultural stories to life.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+          {productionsList.map((production, index) => (
+            <motion.div
+              key={index}
+              className="flex items-start rounded-md bg-gradient-to-r from-secondary/5 to-transparent px-3 py-3 transition-all hover:from-secondary/10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <div className="mr-3 mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-secondary"></div>
+              <p className="text-sm leading-relaxed sm:text-base">
+                {production}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    );
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -94,6 +224,16 @@ const Events = () => {
           </div>
         </div>
       );
+    }
+
+    // Show significant performances list when that filter is active
+    if (filter === 'Significant Performances') {
+      return renderSignificantPerformances();
+    }
+
+    // Show productions list when that filter is active
+    if (filter === 'Productions') {
+      return renderProductions();
     }
 
     if (filteredEvents.length === 0) {
@@ -157,7 +297,7 @@ const Events = () => {
             }}
           >
             <EventCard
-              image={event.image}
+              // image={event.image}
               title={event.title}
               location={event.location}
               date={event.date}
@@ -177,6 +317,7 @@ const Events = () => {
     Productions: <FilmIcon className="mr-2 h-4 w-4" />,
     Festivals: <PartyPopperIcon className="mr-2 h-4 w-4" />,
     'Past Events': <HistoryIcon className="mr-2 h-4 w-4" />,
+    'Significant Performances': <StarIcon className="mr-2 h-4 w-4" />,
   };
 
   return (
