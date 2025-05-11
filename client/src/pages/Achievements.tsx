@@ -98,7 +98,7 @@ const Achievements = () => {
       </div>
 
       <img
-        className="absolute right-0 top-[470px] block h-auto w-[280px] md:hidden"
+        className="absolute bottom-0 right-0 top-[730px] block h-auto w-[240px] md:hidden"
         src={handSign}
         alt="handsign"
       />
