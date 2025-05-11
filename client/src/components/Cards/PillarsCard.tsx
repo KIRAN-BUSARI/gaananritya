@@ -14,7 +14,7 @@ const PillarsCard = ({
   return (
     <div
       style={{ backgroundColor: color }}
-      className={`mx-auto flex w-3/4 flex-col gap-4 overflow-hidden rounded-lg border border-gray-50 p-6 shadow-lg transition-transform duration-300 hover:scale-[1.02] sm:flex-row sm:gap-5 sm:p-6 md:w-full md:gap-6 md:p-8 lg:gap-8`}
+      className={`mx-auto flex w-3/4 flex-col gap-4 overflow-hidden rounded-lg border border-gray-50 p-4 shadow-lg transition-transform duration-300 hover:scale-[1.02] sm:flex-row sm:gap-5 sm:p-6 md:w-full md:gap-6 md:p-8 lg:gap-8`}
     >
       <div className={`flex flex-col items-center sm:w-1/3 md:w-7/12`}>
         <div
