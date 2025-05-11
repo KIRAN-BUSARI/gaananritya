@@ -77,8 +77,8 @@ const productionsList = [
 const tabs: Tab[] = [
   { title: 'Upcoming Events' },
   { title: 'Productions' },
-  { title: 'Festivals' },
-  { title: 'Past Events' },
+  // { title: 'Festivals' },
+  // { title: 'Past Events' },
   { title: 'Significant Performances' },
 ];
 
@@ -405,7 +405,7 @@ const Events = () => {
                 <span className="font-semibold text-secondary1">
                   Aaronhan-2025
                 </span>{' '}
-                at Sullia Branch, Mangalore - Invitation
+                at Sullia Branch, Mangalore
               </li>
               <li>
                 <span className="font-semibold text-secondary1">
