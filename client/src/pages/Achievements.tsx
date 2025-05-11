@@ -1,13 +1,13 @@
 import AchievementCard from '@/components/Cards/AchivementCard';
 
-import handSign from '@/assets/handSign.png';
-
 import Img1 from '@/assets/achievementsImg1.png';
 import Img2 from '@/assets/achievementsImg2.png';
 import Img3 from '@/assets/achievementsImg3.png';
 import Img4 from '@/assets/achievementsImg4.png';
 import AchievementGalleryCard from '@/components/Cards/AchievementGalleryCard';
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
+
+import handSign from '@/assets/handSign.png';
 
 interface AchievementData {
   id: string;
@@ -63,6 +63,11 @@ const Achievements = () => {
       id="achievements"
       className="relative px-6 py-10 sm:px-10 lg:px-20 lg:py-20"
     >
+      <img
+        className="absolute right-0 hidden h-auto w-[230px] sm:hidden sm:w-[260px] md:-top-44 md:block md:w-[350px] 2xl:-top-56 2xl:w-[450px]"
+        src={handSign}
+        alt="handsign"
+      />
       {/* Header Section */}
       <div>
         <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%] sm:text-2xl lg:text-[32px]">
@@ -93,7 +98,7 @@ const Achievements = () => {
       </div>
 
       <img
-        className="absolute right-0 top-[550px] block h-auto w-[230px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[250px] lg:top-[150px] 2xl:top-[60px] 2xl:w-[390px]"
+        className="absolute right-0 top-[470px] block h-auto w-[280px] md:hidden"
         src={handSign}
         alt="handsign"
       />
