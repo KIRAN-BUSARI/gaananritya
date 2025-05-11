@@ -21,35 +21,35 @@ const achievements: AchievementData[] = [
   {
     id: '1',
     title: 'Students Trained',
-    number: '1500+',
+    number: '5000+',
     color: '#EEFAFF',
     textColor: '#1D6D8D',
   },
   {
     id: '2',
     title: 'Rangapravesha',
-    number: '45+',
+    number: '13+',
     color: '#FFEFEE',
     textColor: '#FF6F61',
   },
   {
     id: '3',
     title: 'Performance',
-    number: '738+',
+    number: '1500+',
     color: '#EEFAFF',
     textColor: '#1D6D8D',
   },
   {
     id: '4',
     title: 'Countries',
-    number: '13+',
+    number: '5+',
     color: '#FFEFEE',
     textColor: '#FF6F61',
   },
   {
     id: '5',
     title: 'Workshops',
-    number: '34+',
+    number: '50+',
     color: '#EEFAFF',
     textColor: '#1D6D8D',
   },
@@ -93,7 +93,7 @@ const Achievements = () => {
       </div>
 
       <img
-        className="absolute right-0 top-[550px] block h-auto w-[230px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[250px] lg:top-[150px] 2xl:w-[290px]"
+        className="absolute right-0 top-[550px] block h-auto w-[230px] sm:top-[120px] sm:hidden sm:w-[260px] md:top-[280px] md:block md:w-[250px] lg:top-[150px] 2xl:top-[60px] 2xl:w-[390px]"
         src={handSign}
         alt="handsign"
       />
@@ -116,7 +116,7 @@ const Achievements = () => {
             <li>
               Recognized as{' '}
               <span className="font-semibold">
-                &apos;A&apos; graded artist of Bengaluru Doordarshan.
+                graded artist of Bengaluru Doordarshan.
               </span>
             </li>
             <li>
@@ -167,7 +167,8 @@ const Achievements = () => {
               Promotes young talent by organizing monthly and annual dance
               festivals including{' '}
               <span className="font-semibold">
-                Nritya Varsha, Nrityadhara, Nritya Nirantara, and Aarohana.
+                Prerana, Vistharana, Nrityadhara, Nritya Nirantara, and
+                Aarohana.
               </span>
             </li>
           </ul>

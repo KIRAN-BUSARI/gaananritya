@@ -676,7 +676,6 @@ function Gallery() {
       if (filteredImages.length === 0) {
         return (
           <>
-            <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
             <div className="flex h-40 flex-col items-center justify-center py-8 text-center">
               <p className="text-gray-600">
                 No images available in this category.
@@ -1074,10 +1073,8 @@ function Gallery() {
       // Videos section
       return (
         <>
-          <h2 className="mb-6 text-xl font-semibold md:text-2xl">{filter}</h2>
-
           {videos.length === 0 ? (
-            <div className="flex h-48 w-full items-center justify-center rounded-lg bg-gray-100">
+            <div className="flex h-48 w-full items-center justify-center rounded-lg">
               <p className="text-gray-500">No videos available</p>
             </div>
           ) : (

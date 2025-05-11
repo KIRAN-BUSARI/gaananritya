@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import img1 from '@/assets/events/img1.png';
 import img2 from '@/assets/events/img2.png';
-import img3 from '@/assets/events/img3.png';
+// import img3 from '@/assets/events/img3.png';
 import img4 from '@/assets/events/img4.png';
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import EventCard from '@/components/Cards/EventCard';
@@ -37,37 +37,28 @@ const eventsData = [
     id: 1,
     image: img1,
     category: 'Upcoming Events',
-    title: 'Annual Dance Festival 2025',
-    date: '12-05-2025',
+    title: 'Annual Dance Festival 2025 - Arohana Part 1',
+    date: '24-08-2025',
     location: 'Mangalore',
-    timings: '4:00 PM',
+    timings: '5:00 PM',
   },
   {
     id: 2,
-    image: img2,
-    category: 'Festivals',
-    title: 'Navaratri Special',
-    date: '15-10-2025',
-    location: 'Bangalore',
-    timings: '6:00 PM',
+    image: img4,
+    category: 'Upcoming Events',
+    title: 'Annual Dance Festival 2025 - Arohana Part 2',
+    date: '07-09-2025',
+    location: 'Mangalore',
+    timings: '5:00 PM',
   },
   {
     id: 3,
-    image: img3,
-    category: 'Productions',
-    title: 'Bharatanatyam Arangetram',
-    date: '22-06-2025',
-    location: 'Mysore',
-    timings: '5:30 PM',
-  },
-  {
-    id: 4,
-    image: img4,
-    category: 'Past Events',
-    title: 'Kathak Workshop',
-    date: '10-01-2025',
-    location: 'Bangalore',
-    timings: '10:00 AM',
+    image: img2,
+    category: 'Upcoming Events',
+    title: 'Bharathanatya Rangapravesha - Anantha Krishna',
+    date: '26-10-2025',
+    location: 'Mangalore',
+    timings: '4:00 PM',
   },
 ];
 

@@ -2,7 +2,7 @@ import img1 from '@/assets/pillars/faculty1.png';
 import img2 from '@/assets/pillars/faculty2.png';
 import img3 from '@/assets/pillars/faculty3.png';
 import img5 from '@/assets/pillars/faculty5.png';
-import img6 from '@/assets/pillars/faculty6.png';
+// import img6 from '@/assets/pillars/faculty6.png';
 import img7 from '@/assets/pillars/faculty7.png';
 import img8 from '@/assets/pillars/faculty8.png';
 
@@ -29,7 +29,7 @@ const pillarsData: PillarData[] = [
     name: 'Vidushi Bindiya Prathik',
     designation: 'Faculty - Bharathantyam',
     description:
-      'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes.',
+      'Vidushi Smt. Bindiya Prathik has been learning under Guru Vidyashree Radhakrishna and currently  managing GNA’s branch in Gurunagar, Padavinangady.',
     color: '#F3FBFF',
   },
   {
@@ -48,14 +48,14 @@ const pillarsData: PillarData[] = [
       'Vidushi Ankitha Rai Pranam has been learning Bharatanatyam under Guru Vidyashree Radhakrishna for 21 years, completing her Vidwat in 2017.',
     color: '#FFF6F5',
   },
-  {
-    image: img6,
-    name: 'Vidushi Rajatha Krishacharya',
-    designation: 'Faculty - Carnatic Music',
-    description:
-      'A seasoned Carnatic vocalist and composer, Shri Krishnacharya began his musical journey under his father Ramacharya and later trained with maestros.',
-    color: '#FFF6F5',
-  },
+  // {
+  //   image: img6,
+  //   name: 'Vidushi Rajatha Krishacharya',
+  //   designation: 'Faculty - Carnatic Music',
+  //   description:
+  //     'A seasoned Carnatic vocalist and composer, Shri Krishnacharya began his musical journey under his father Ramacharya and later trained with maestros.',
+  //   color: '#FFF6F5',
+  // },
   {
     image: img7,
     name: 'Vidushi Manjushree Raghav',
@@ -79,7 +79,7 @@ const Pillars = () => {
     <div className="mx-auto flex flex-col px-4 py-12 sm:px-6 md:px-10 lg:px-20 lg:py-20">
       <div className="mx-auto w-full text-left">
         <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%]">
-          Pillars & Strength of Gaana Nritya Academy
+          Faculty of Gaana Nritya Academy
         </h1>
         <p className="mt-3 max-w-4xl text-lg font-medium leading-[170%] tracking-[-1%] sm:text-base md:mt-2">
           Meet the dedicated artists and senior students who uphold Gaana Nritya

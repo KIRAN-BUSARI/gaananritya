@@ -48,7 +48,7 @@ const Whatsapp: React.FC = () => {
           <a
             rel="noreferrer"
             className="flex w-full items-center justify-center bg-[#25D366] px-6 py-2 text-lg font-normal text-white md:text-xl lg:h-[48px]"
-            href="https://wa.me/+919900485461?text=Hello%20Gaana%20Nritya%2C%20I%20want%20to%20enquire%20about%20your%20classes,%20workshops%20and%20performances."
+            href="https://wa.me/+919449244843?text=Hello%20Gaana%20Nritya%2C%20I%20want%20to%20enquire%20about%20your%20classes,%20workshops%20and%20performances."
             target="_blank"
           >
             <button className="h-10 text-base">Click Here For Enquiry</button>

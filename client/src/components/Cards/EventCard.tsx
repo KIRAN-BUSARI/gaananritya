@@ -27,6 +27,8 @@ const EventCard: FC<EventCardProps> = ({
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
+        {/* Black overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent opacity-30 transition-opacity duration-300 group-hover:opacity-0"></div>
         {showCategoryLabel && category && (
           <div className="absolute right-4 top-4 transform rounded-lg border border-white/20 bg-gradient-to-r from-secondary to-secondary/80 px-2 py-1 text-xs font-medium text-primary shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
             {category}
@@ -34,7 +36,7 @@ const EventCard: FC<EventCardProps> = ({
         )}
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-semibold text-secondary1">{title}</h3>
         <div className="mt-2 space-y-2">
           <div className="flex items-center text-sm text-gray-600">
             <svg
