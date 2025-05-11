@@ -35,7 +35,6 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { title: 'All' },
   { title: 'Gallery' },
   { title: 'Press' },
   { title: 'Wallpaper' },
@@ -107,7 +106,7 @@ const ALLOWED_FILE_TYPES = [
 function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [videos, setVideos] = useState<VideoItem[]>([]);
-  const [filter, setFilter] = useState<string>('All');
+  const [filter, setFilter] = useState<string>('Gallery');
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -878,7 +877,6 @@ function Gallery() {
                           />
                         </svg>
                         <span className="text-sm font-semibold">
-                          {filter.toLowerCase() === 'all' && 'Add Image'}
                           {filter.toLowerCase() === 'gallery' &&
                             'Add Gallery Image'}
                           {filter.toLowerCase() === 'press' &&
