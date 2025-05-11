@@ -81,7 +81,7 @@ const Pillars = () => {
         <h1 className="text-[32px] font-semibold leading-[130%] tracking-[-1.5%]">
           Faculty of Gaana Nritya Academy
         </h1>
-        <p className="mt-3 max-w-4xl text-lg font-medium leading-[170%] tracking-[-1%] sm:text-base md:mt-2">
+        <p className="mt-2 text-balance text-left text-lg leading-[170%] tracking-[-1%] text-[#2b2b2e]">
           Meet the dedicated artists and senior students who uphold Gaana Nritya
           Academy's legacy, nurturing talent and leading our branches.
         </p>

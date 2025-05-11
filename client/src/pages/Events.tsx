@@ -113,7 +113,7 @@ const eventsData = [
 ];
 
 const Events = () => {
-  const [filter, setFilter] = useState<string>('All Events');
+  const [filter, setFilter] = useState<string>('Upcoming Events');
   const [isLoading, setIsLoading] = useState(true);
 
   const handleFilterChange = useCallback((category: string) => {
@@ -130,7 +130,7 @@ const Events = () => {
 
   const filteredEvents = useMemo(() => {
     return eventsData.filter((event) => {
-      return filter === 'All Events' || event.category === filter;
+      return event.category === filter;
     });
   }, [filter]);
 
@@ -263,11 +263,11 @@ const Events = () => {
           </div>
           <button
             onClick={() => {
-              setFilter('All Events');
+              setFilter('Upcoming Events');
             }}
             className="mt-2 rounded-md bg-secondary px-2 py-2 text-sm font-medium text-primary hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary/50"
           >
-            View all events
+            View upcoming events
           </button>
         </div>
       );
@@ -303,7 +303,7 @@ const Events = () => {
               date={event.date}
               timings={event.timings}
               category={event.category}
-              showCategoryLabel={filter === 'All Events'}
+              showCategoryLabel={false}
             />
           </motion.div>
         ))}
@@ -312,7 +312,6 @@ const Events = () => {
   };
 
   const iconMap: Record<string, JSX.Element> = {
-    'All Events': <ArrowDown className="mr-2 h-4 w-4" />,
     'Upcoming Events': <CalendarIcon className="mr-2 h-4 w-4" />,
     Productions: <FilmIcon className="mr-2 h-4 w-4" />,
     Festivals: <PartyPopperIcon className="mr-2 h-4 w-4" />,
@@ -360,7 +359,7 @@ const Events = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-full">
-              {[{ title: 'All Events' }, ...tabs].map((tab) => (
+              {tabs.map((tab) => (
                 <DropdownMenuItem
                   key={tab.title}
                   onClick={() => handleFilterChange(tab.title)}
@@ -376,7 +375,7 @@ const Events = () => {
 
         {/* Desktop Tabs */}
         <div className="mt-6 hidden flex-wrap items-center gap-2 sm:flex lg:gap-4">
-          {[{ title: 'All Events' }, ...tabs].map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.title}
               onClick={() => handleFilterChange(tab.title)}
@@ -394,7 +393,7 @@ const Events = () => {
         <div className="mt-8">{renderContent()}</div>
 
         {/* Upcoming Events Section */}
-        {filter === 'All Events' && (
+        {filter === 'Upcoming Events' && (
           <div className="mt-8 sm:mt-12 lg:mt-16">
             <h2 className="mb-4 text-lg font-semibold sm:text-xl md:text-2xl">
               Upcoming Highlights
