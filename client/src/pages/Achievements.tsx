@@ -109,7 +109,7 @@ const Achievements = () => {
       </div>
       <div className="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:my-12 lg:gap-8 2xl:mx-auto 2xl:my-16 2xl:gap-10">
         <div className="rounded-2xl bg-[#EEFAFF] px-2 py-8 sm:px-6 sm:py-12 2xl:px-8 2xl:py-14">
-          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7 2xl:text-xl">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7">
             <li>
               Honored with prestigious titles such as Karnataka{' '}
               <span className="font-semibold">
@@ -153,7 +153,7 @@ const Achievements = () => {
 
         {/* Right Section */}
         <div className="rounded-2xl bg-[#FFEFEE] px-2 py-8 sm:px-6 sm:py-12 2xl:px-8 2xl:py-14">
-          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7 2xl:text-xl">
+          <ul className="list-outside list-disc space-y-4 pl-6 text-lg leading-[170%] sm:space-y-6 sm:pl-8 2xl:space-y-7">
             <li>
               Directed and produced a Bharatanatyam fundamentals DVD titled{' '}
               <span className="font-semibold">&apos;Nrithyaksharam&apos;</span>,
