@@ -15,7 +15,7 @@ const Whatsapp: React.FC = () => {
   };
 
   return (
-    <div className={`app ${isChatbotVisible ? 'show-chatbot' : ''}`}>
+    <div className={`app z-50 ${isChatbotVisible ? 'show-chatbot' : ''}`}>
       <button
         className="chatbot-toggler transition-all duration-200 hover:scale-105"
         onClick={handleToggleChatbot}
