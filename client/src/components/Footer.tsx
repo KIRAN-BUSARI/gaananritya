@@ -142,10 +142,10 @@ const Footer = () => {
               </p>
               <p className="mt-2 text-sm">
                 <a
-                  href="tel:9986563999"
+                  href="tel:9449244843"
                   className="transition-colors hover:text-[#FFD45C]"
                 >
-                  9986563999
+                  9449244843{' '}
                 </a>
               </p>
               <p className="mt-1 text-sm">
@@ -153,7 +153,7 @@ const Footer = () => {
                   href="mailto:gaananritya@gmail.com"
                   className="transition-colors hover:text-[#FFD45C]"
                 >
-                  gaananritya@gmail.com
+                  vidyashreegna@gmail.com
                 </a>
               </p>
             </address>
