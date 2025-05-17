@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { RecoilRoot } from 'recoil';
 import { Toaster } from './components/ui/sonner.tsx';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // More aggressive audio autoplay approach
 const setupAudioAutoplay = () => {
@@ -84,7 +83,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <RecoilRoot>
         <Analytics />
-        <SpeedInsights />
         <App />
         <Toaster />
       </RecoilRoot>
