@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow crawling of admin areas if they exist
+Disallow: /admin/
+Disallow: /private/
+Disallow: */signin
+
+# Sitemap location
+Sitemap: https://www.gaananritya.com/sitemap.xml

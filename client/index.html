@@ -4,7 +4,96 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gaana Nritya Academy</title>
+
+    <!-- Primary Meta Tags -->
+    <title>
+      Gaana Nritya Academy - Indian Classical Music and Dance School
+    </title>
+    <meta
+      name="title"
+      content="Gaana Nritya Academy - Indian Classical Music and Dance School"
+    />
+    <meta
+      name="description"
+      content="Learn authentic Indian classical music and dance at Gaana Nritya Academy. Professional training in various dance forms and musical instruments by expert instructors."
+    />
+    <meta
+      name="keywords"
+      content="Indian classical music, Indian classical dance, music school, dance academy, Gaana Nritya Academy, music classes, dance classes, cultural education"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.gaananritya.com/" />
+    <meta
+      property="og:title"
+      content="Gaana Nritya Academy - Indian Classical Music and Dance School"
+    />
+    <meta
+      property="og:description"
+      content="Learn authentic Indian classical music and dance at Gaana Nritya Academy. Professional training in various dance forms and musical instruments by expert instructors."
+    />
+    <meta property="og:image" content="/logo.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.gaananritya.com/" />
+    <meta
+      property="twitter:title"
+      content="Gaana Nritya Academy - Indian Classical Music and Dance School"
+    />
+    <meta
+      property="twitter:description"
+      content="Learn authentic Indian classical music and dance at Gaana Nritya Academy. Professional training in various dance forms and musical instruments by expert instructors."
+    />
+    <meta property="twitter:image" content="/logo.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.gaananritya.com/" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Gaana Nritya Academy" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "PerformingArtsTheater",
+        "name": "Gaana Nritya Academy",
+        "description": "Learn authentic Indian classical music and dance at Gaana Nritya Academy. Professional training in various dance forms and musical instruments by expert instructors.",
+        "url": "https://www.gaananritya.com/",
+        "logo": "https://www.gaananritya.com/logo.png",
+        "image": "https://www.gaananritya.com/logo.png",
+        "telephone": "",
+        "email": "",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "India"
+        },
+        "sameAs": [],
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "10:00",
+          "closes": "18:00"
+        }
+      }
+    </script>
   </head>
   <body>
     <audio
@@ -16,8 +105,23 @@
       playsinline
       muted
       hidden
+      aria-label="Background Indian classical music"
     ></audio>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Preconnect to essential domains -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+
+    <!-- Preload critical assets -->
+    <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
+
+    <!-- Sitemap reference -->
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap.xml"
+    />
   </body>
 </html>
