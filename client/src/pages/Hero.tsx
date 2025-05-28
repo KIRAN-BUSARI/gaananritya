@@ -2,6 +2,9 @@ import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { useCallback } from 'react';
+
 import imgUrl0 from '@/assets/heroSection0.png';
 import imgUrl2 from '@/assets/heroSection2.png';
 import imgUrl3 from '@/assets/heroSection3.png';
@@ -13,21 +16,27 @@ import mImg3 from '@/assets/mobileCarousal3.png';
 import mImg4 from '@/assets/mobileCarousal4.png';
 import mImg5 from '@/assets/mobileCarousal5.png';
 
-import { ArrowRight } from 'lucide-react';
-
 const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
+const fadeUpAnimation = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+};
+
 export default function Hero() {
-  const handleScrollToAchievements = () => {
+  const handleScrollToAchievements = useCallback(() => {
     const achievementsSection = document.getElementById('achievements');
     if (achievementsSection) {
       achievementsSection.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
   return (
-    <div className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 md:mb-0 md:h-[calc(100vh-100px)] md:px-20">
+    <section
+      aria-label="Hero Section"
+      className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 md:mb-0 md:h-[calc(100vh-100px)] md:px-20"
+    >
       <div className="absolute inset-0 z-0 hidden md:block">
         <HeroSectionBgCarousel images={images} interval={4000} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
@@ -42,10 +51,10 @@ export default function Hero() {
               className="relative h-[450px] rounded-2xl shadow-xl"
             />
           </div>
+
           <div className="flex flex-col items-start justify-center">
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              {...fadeUpAnimation}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-6 text-balance text-left text-3xl font-semibold leading-[130%] tracking-[-1.5px] md:text-[42px] md:font-medium md:text-primary"
             >
@@ -62,8 +71,7 @@ export default function Hero() {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              {...fadeUpAnimation}
               transition={{ duration: 0.7, delay: 0.4 }}
               className="mt-4 text-balance text-left text-base font-normal leading-[25px] md:leading-[30px] md:text-primary lg:text-lg"
             >
@@ -75,8 +83,7 @@ export default function Hero() {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              {...fadeUpAnimation}
               transition={{ duration: 0.7, delay: 0.6 }}
               className="mt-8 flex w-full flex-col items-start space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0 md:mt-8"
             >
@@ -93,6 +100,7 @@ export default function Hero() {
                 variant="outline"
                 className="group w-full overflow-hidden rounded-lg border-2 border-secondary bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-white hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
                 onClick={handleScrollToAchievements}
+                aria-label="View our achievements"
               >
                 <span className="relative text-secondary1 md:text-secondary">
                   Our Achievements
@@ -100,10 +108,8 @@ export default function Hero() {
               </Button>
             </motion.div>
 
-            {/* notification */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              {...fadeUpAnimation}
               transition={{ duration: 1, delay: 0.8 }}
               className="mt-6 flex w-full justify-start md:w-auto"
             >
@@ -118,6 +124,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
