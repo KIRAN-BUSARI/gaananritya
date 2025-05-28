@@ -100,30 +100,18 @@ export default function Hero() {
               </Button>
             </motion.div>
 
-            {/* Desktop notification */}
+            {/* notification */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="mt-6 hidden w-auto rounded-full bg-white/10 px-6 py-2 backdrop-blur-sm md:flex"
+              className="mt-6 flex w-full justify-start md:w-auto"
             >
-              <span className="flex items-center text-sm font-medium text-white">
-                <span className="mr-2 h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-                New Admission Open for 2025-26 Season
-              </span>
-            </motion.div>
-
-            {/* Mobile notification */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="mt-6 flex w-full justify-start md:hidden"
-            >
-              <div className="rounded-full bg-white/10 px-2 py-2 backdrop-blur-sm">
-                <span className="flex items-center text-xs font-medium text-secondary1">
-                  <span className="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"></span>
+              <div className="rounded-full bg-white/10 px-2 py-2 backdrop-blur-sm md:px-6 md:py-2">
+                <span className="flex items-center text-xs font-medium text-secondary1 md:text-sm md:text-white">
+                  <span className="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-green-400 md:mr-2 md:h-2 md:w-2"></span>
                   New Admission Open for 2025-26
+                  <span className="hidden md:inline"> Season</span>
                 </span>
               </div>
             </motion.div>
