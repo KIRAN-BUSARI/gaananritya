@@ -887,7 +887,7 @@ function Gallery() {
                       </div>
                     </button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
+                  <DialogContent className="max-h-[90vh] max-w-7xl overflow-y-auto scroll-smooth">
                     <DialogHeader className="font-medium">
                       {filter.toLowerCase() === 'press'
                         ? 'Add Press Coverage'
@@ -928,19 +928,23 @@ function Gallery() {
 
                       {uploadState.imagePreviews &&
                         uploadState.imagePreviews.length > 0 && (
-                          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-                            {uploadState.imagePreviews.map((preview, index) => (
-                              <div
-                                key={index}
-                                className="relative aspect-square overflow-hidden rounded-md border"
-                              >
-                                <img
-                                  src={preview}
-                                  alt={`Preview ${index + 1}`}
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                            ))}
+                          <div className="max-h-screen overflow-y-scroll scroll-smooth p-4">
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                              {uploadState.imagePreviews.map(
+                                (preview, index) => (
+                                  <div
+                                    key={index}
+                                    className="relative aspect-square overflow-hidden rounded-md border"
+                                  >
+                                    <img
+                                      src={preview}
+                                      alt={`Preview ${index + 1}`}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
                           </div>
                         )}
 
