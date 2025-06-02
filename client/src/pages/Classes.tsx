@@ -21,31 +21,32 @@ const addressList = [
       'Mangalore – 575006,',
       'Karnataka, India',
     ],
-    phoneNumber: '9844481158 , 9449244843',
+    phoneNumber: '9844481158 (Whatsapp Only), 9449244843',
   },
   {
     id: 2,
-    city: 'Branch 2',
+    city: 'Sullia',
     name: 'Gaana-Nritya Academy',
     address: [
-      'Devanga Bhavana,',
-      'Ashok Nagar, Urva Store,',
-      'Mangalore – 575006,',
+      'Yuva Jana Samyukta Mandali,',
+      'Junior Collage Road Sullia,',
+      'Dakshina Kannada,',
       'Karnataka, India',
     ],
-    phoneNumber: '9591773721',
+    phoneNumber: '8951889737',
   },
   {
     id: 3,
     city: 'Branch 3',
     name: 'Gaana-Nritya Academy',
     address: [
+      'Carnatic Vocal Only',
       'Srikrishna Jnanodaya Bhajana Mandira,',
       'Kottara Chowki,',
       'Mangalore – 575006,',
       'Karnataka, India',
     ],
-    phoneNumber: '9844481158 , 9449244843',
+    phoneNumber: '9449244843',
   },
   {
     id: 4,
@@ -57,7 +58,7 @@ const addressList = [
       'Mangalore – 575006,',
       'Karnataka, India',
     ],
-    phoneNumber: '9844481158 , 9449244843',
+    phoneNumber: '9844481158 (Whatsapp Only), 9449244843',
   },
   {
     id: 5,
@@ -73,20 +74,23 @@ const addressList = [
   },
   {
     id: 6,
-    city: 'Sullia',
+    city: 'Branch 6',
     name: 'Gaana-Nritya Academy',
     address: [
-      'Yuva Jana Samyukta Mandali,',
-      'Junior Collage Road Sullia,',
-      'Dakshina Kannada,',
+      'Devanga Bhavana,',
+      'Ashok Nagar, Urva Store,',
+      'Mangalore – 575006,',
       'Karnataka, India',
     ],
-    phoneNumber: '8951889737',
+    phoneNumber: '9591773721',
   },
+];
+
+const associatedSchools = [
   {
-    id: 7,
+    id: 1,
     city: 'Karkala',
-    name: 'Gaana-Nritya Academy',
+    name: 'Sangeetaranga',
     address: [
       'Yajna,',
       'Rotory Club,',
@@ -97,7 +101,7 @@ const addressList = [
     phoneNumber: '9591773721',
   },
   {
-    id: 8,
+    id: 2,
     city: 'Bangalore',
     name: 'Gaana-Nritya Academy',
     address: [
@@ -111,9 +115,9 @@ const addressList = [
     phoneNumber: '7760034551',
   },
   {
-    id: 9,
+    id: 3,
     city: 'Surat Sub Branch',
-    name: 'Gaana-Nritya Academy',
+    name: 'Yagna School Of Dance',
     address: [
       'Akshata Nishanth,',
       'Sangitaranga Dance and Music school,',
@@ -315,6 +319,44 @@ const Classes = () => {
         <div className="mt-10">
           <div className="grid grid-cols-1 gap-x-20 gap-y-6 sm:grid-cols-2 md:grid-cols-3">
             {addressList.map((address, index) => (
+              <div key={address.id} className="flex flex-col">
+                <div className="relative flex justify-center">
+                  <AddressCard address={address} />
+
+                  {index % 2 !== 1 && index !== addressList.length - 1 && (
+                    <div className="absolute -right-10 top-0 hidden h-full sm:block md:hidden">
+                      <Separator
+                        className="h-[80%] translate-y-[12%] bg-secondary"
+                        orientation="vertical"
+                      />
+                    </div>
+                  )}
+
+                  {index % 3 !== 2 && index !== addressList.length - 1 && (
+                    <div className="absolute -right-10 top-0 hidden h-full md:block">
+                      <Separator
+                        className="h-[80%] translate-y-[12%] bg-secondary"
+                        orientation="vertical"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {index !== addressList.length - 1 && (
+                  <div className="mt-6 block sm:hidden">
+                    <Separator className="h-[2px] w-full bg-secondary" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-10">
+          <h1 className="pl-2 text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[28px]">
+            Associated Schools
+          </h1>
+          <div className="mt-2 grid grid-cols-1 gap-x-20 gap-y-6 sm:grid-cols-2 md:grid-cols-3">
+            {associatedSchools.map((address, index) => (
               <div key={address.id} className="flex flex-col">
                 <div className="relative flex justify-center">
                   <AddressCard address={address} />

@@ -25,29 +25,38 @@ const pillarsData: PillarData[] = [
     color: '#FFF6F5',
   },
   {
-    image: img2,
-    name: 'Vidushi Bindiya Prathik',
-    designation: 'Faculty - Bharathantyam',
+    image: img7,
+    name: 'Vidushi Manjushree Raghav',
+    designation: 'Faculty - Bharatanatya',
     description:
-      'Vidushi Smt. Bindiya Prathik has been learning under Guru Vidyashree Radhakrishna and currently  managing GNA’s branch in Gurunagar, Padavinangady.',
-    color: '#F3FBFF',
-  },
-  {
-    image: img3,
-    name: 'Vidwan Krishnacharya Bantwal',
-    designation: 'Faculty - Carnatic Music',
-    description:
-      'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes.',
+      'Manjushree Raghav, a Mangalore-born Bharatanatyam dancer with a Vidwat certification, has trained for over 20 years under Guru Vidushi Vidyashree Radhakrishna.',
     color: '#F3FBFF',
   },
   {
     image: img5,
     name: 'Vidushi Ankitha Rai Pranam',
-    designation: 'Faculty - Carnatic Music',
+    designation: 'Faculty - Bharatanatya',
     description:
       'Vidushi Ankitha Rai Pranam has been learning Bharatanatyam under Guru Vidyashree Radhakrishna for 21 years, completing her Vidwat in 2017.',
+    color: '#F3FBFF',
+  },
+  {
+    image: img2,
+    name: 'Vidushi Bindiya Prathik',
+    designation: 'Faculty - Bharathantyam',
+    description:
+      'Vidushi Smt. Bindiya Prathik has been learning under Guru Vidyashree Radhakrishna and currently  managing GNA’s branch in Gurunagar, Padavinangady.',
     color: '#FFF6F5',
   },
+  {
+    image: img3,
+    name: 'Vidwan Krishnacharya Bantwal',
+    designation: 'Faculty - Carnatic Vocal',
+    description:
+      'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes.',
+    color: '#FFF6F5',
+  },
+
   // {
   //   image: img6,
   //   name: 'Vidushi Rajatha Krishacharya',
@@ -56,18 +65,11 @@ const pillarsData: PillarData[] = [
   //     'A seasoned Carnatic vocalist and composer, Shri Krishnacharya began his musical journey under his father Ramacharya and later trained with maestros.',
   //   color: '#FFF6F5',
   // },
-  {
-    image: img7,
-    name: 'Vidushi Manjushree Raghav',
-    designation: 'Faculty - Carnatic Music',
-    description:
-      'Manjushree Raghav, a Mangalore-born Bharatanatyam dancer with a Vidwat certification, has trained for over 20 years under Guru Vidushi Vidyashree Radhakrishna.',
-    color: '#F3FBFF',
-  },
+
   {
     image: img8,
     name: 'Vidushi Teena Chethan Poombady',
-    designation: 'Faculty - Carnatic Music',
+    designation: 'Faculty - Bharatanatya',
     description:
       'Teena Chethan Poombady, a Mysore-born Bharatanatyam dancer with over 15 years of experience, holds a “Vidwath” in dance and has trained under renowned gurus.',
     color: '#F3FBFF',
