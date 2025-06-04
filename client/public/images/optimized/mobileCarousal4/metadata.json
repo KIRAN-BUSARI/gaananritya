@@ -1,0 +1,37 @@
+{
+  "original": {
+    "width": 1436,
+    "height": 1596
+  },
+  "variants": [
+    {
+      "name": "mobile",
+      "width": 480,
+      "height": 533,
+      "webp": "mobileCarousal4-mobile.webp",
+      "jpg": "mobileCarousal4-mobile.jpg"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 854,
+      "webp": "mobileCarousal4-tablet.webp",
+      "jpg": "mobileCarousal4-tablet.jpg"
+    },
+    {
+      "name": "desktop",
+      "width": 1200,
+      "height": 1334,
+      "webp": "mobileCarousal4-desktop.webp",
+      "jpg": "mobileCarousal4-desktop.jpg"
+    },
+    {
+      "name": "original",
+      "width": 1436,
+      "height": 1596,
+      "webp": "mobileCarousal4-original.webp",
+      "jpg": "mobileCarousal4-original.jpg"
+    }
+  ],
+  "generatedAt": "2025-06-04T18:16:21.388Z"
+}

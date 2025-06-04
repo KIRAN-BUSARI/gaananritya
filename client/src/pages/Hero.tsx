@@ -98,7 +98,7 @@ export default function Hero() {
               </Link>
               <Button
                 variant="outline"
-                className="group w-full overflow-hidden rounded-lg border-2 border-secondary bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:border-white hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
+                className="group w-full overflow-hidden rounded-lg border-2 border-secondary border-white bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
                 onClick={handleScrollToAchievements}
                 aria-label="View our achievements"
               >
@@ -116,8 +116,8 @@ export default function Hero() {
               <div className="rounded-full bg-white/10 px-2 py-2 backdrop-blur-sm md:px-6 md:py-2">
                 <span className="flex items-center text-xs font-medium text-secondary1 md:text-sm md:text-white">
                   <span className="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-green-400 md:mr-2 md:h-2 md:w-2"></span>
-                  New Admission Open for 2025-26
-                  <span className="hidden md:inline"> Season</span>
+                  New Admission Open for 2025-26&nbsp;
+                  <span className="hidden md:inline">Season</span>
                 </span>
               </div>
             </motion.div>

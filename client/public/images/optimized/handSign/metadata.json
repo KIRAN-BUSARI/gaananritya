@@ -1,0 +1,37 @@
+{
+  "original": {
+    "width": 1428,
+    "height": 988
+  },
+  "variants": [
+    {
+      "name": "mobile",
+      "width": 480,
+      "height": 332,
+      "webp": "handSign-mobile.webp",
+      "jpg": "handSign-mobile.jpg"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 531,
+      "webp": "handSign-tablet.webp",
+      "jpg": "handSign-tablet.jpg"
+    },
+    {
+      "name": "desktop",
+      "width": 1200,
+      "height": 830,
+      "webp": "handSign-desktop.webp",
+      "jpg": "handSign-desktop.jpg"
+    },
+    {
+      "name": "original",
+      "width": 1428,
+      "height": 988,
+      "webp": "handSign-original.webp",
+      "jpg": "handSign-original.jpg"
+    }
+  ],
+  "generatedAt": "2025-06-04T18:14:56.099Z"
+}

@@ -1,0 +1,44 @@
+{
+  "original": {
+    "width": 3000,
+    "height": 3200
+  },
+  "variants": [
+    {
+      "name": "mobile",
+      "width": 480,
+      "height": 512,
+      "webp": "contact-mobile.webp",
+      "jpg": "contact-mobile.jpg"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 819,
+      "webp": "contact-tablet.webp",
+      "jpg": "contact-tablet.jpg"
+    },
+    {
+      "name": "desktop",
+      "width": 1200,
+      "height": 1280,
+      "webp": "contact-desktop.webp",
+      "jpg": "contact-desktop.jpg"
+    },
+    {
+      "name": "xl",
+      "width": 1920,
+      "height": 2048,
+      "webp": "contact-xl.webp",
+      "jpg": "contact-xl.jpg"
+    },
+    {
+      "name": "original",
+      "width": 3000,
+      "height": 3200,
+      "webp": "contact-original.webp",
+      "jpg": "contact-original.jpg"
+    }
+  ],
+  "generatedAt": "2025-06-04T18:14:43.248Z"
+}
