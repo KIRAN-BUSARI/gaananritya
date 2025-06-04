@@ -10,7 +10,12 @@
     "preview": "vite preview",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build:optimized": "npm run optimize:images && npm run build && npm run critical:css",
+    "optimize:images": "node scripts/optimize-images-advanced.js",
+    "critical:css": "node scripts/extract-critical-css.js",
+    "sw:generate": "workbox generateSW workbox-config.js",
+    "analyze": "npm run build && npx vite-bundle-analyzer dist/stats.html"
   },
   "dependencies": {
     "@barba/core": "^2.10.3",
@@ -54,14 +59,27 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
+    "critical": "^7.2.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "imagemin": "^9.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
     "postcss": "^8.4.39",
+    "postcss-cli": "^11.0.1",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
+    "purgecss": "^7.0.2",
+    "sharp": "^0.34.2",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "^5.3.4",
+    "vite-plugin-pwa": "^1.0.0",
+    "workbox-build": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0"
   }
 }

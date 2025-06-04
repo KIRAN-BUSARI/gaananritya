@@ -1,0 +1,37 @@
+{
+  "original": {
+    "width": 1208,
+    "height": 1208
+  },
+  "variants": [
+    {
+      "name": "mobile",
+      "width": 480,
+      "height": 480,
+      "webp": "achievementsImg4-mobile.webp",
+      "jpg": "achievementsImg4-mobile.jpg"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 768,
+      "webp": "achievementsImg4-tablet.webp",
+      "jpg": "achievementsImg4-tablet.jpg"
+    },
+    {
+      "name": "desktop",
+      "width": 1200,
+      "height": 1200,
+      "webp": "achievementsImg4-desktop.webp",
+      "jpg": "achievementsImg4-desktop.jpg"
+    },
+    {
+      "name": "original",
+      "width": 1208,
+      "height": 1208,
+      "webp": "achievementsImg4-original.webp",
+      "jpg": "achievementsImg4-original.jpg"
+    }
+  ],
+  "generatedAt": "2025-06-04T18:14:27.900Z"
+}

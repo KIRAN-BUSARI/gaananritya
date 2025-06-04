@@ -1,0 +1,37 @@
+{
+  "original": {
+    "width": 1440,
+    "height": 700
+  },
+  "variants": [
+    {
+      "name": "mobile",
+      "width": 480,
+      "height": 233,
+      "webp": "heroSection3-mobile.webp",
+      "jpg": "heroSection3-mobile.jpg"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 373,
+      "webp": "heroSection3-tablet.webp",
+      "jpg": "heroSection3-tablet.jpg"
+    },
+    {
+      "name": "desktop",
+      "width": 1200,
+      "height": 583,
+      "webp": "heroSection3-desktop.webp",
+      "jpg": "heroSection3-desktop.jpg"
+    },
+    {
+      "name": "original",
+      "width": 1440,
+      "height": 700,
+      "webp": "heroSection3-original.webp",
+      "jpg": "heroSection3-original.jpg"
+    }
+  ],
+  "generatedAt": "2025-06-04T18:15:13.297Z"
+}

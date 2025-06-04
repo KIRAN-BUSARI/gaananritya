@@ -108,3 +108,62 @@
 .scroll-pt-header {
   scroll-padding-top: 80px;
 }
+
+/* Performance optimization classes */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.smooth-transform {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.image-optimize {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.carousel-item {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: opacity;
+}
+
+.carousel-item.active {
+  will-change: opacity;
+}
+
+.carousel-item.inactive {
+  will-change: auto;
+}
+
+/* Reduce layout shifts */
+.aspect-ratio-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.aspect-ratio-container::before {
+  content: '';
+  display: block;
+  padding-bottom: var(--aspect-ratio, 56.25%);
+  /* 16:9 default */
+}
+
+.aspect-ratio-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Optimize repaints */
+.no-repaint {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}

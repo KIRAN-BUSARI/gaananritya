@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { RecoilRoot } from 'recoil';
 import { Toaster } from './components/ui/sonner.tsx';
+import { PerformanceMonitor } from './utils/performanceMonitor.ts';
 
 // More aggressive audio autoplay approach
 const setupAudioAutoplay = () => {
@@ -77,6 +78,46 @@ const setupAudioAutoplay = () => {
 // Run audio setup both immediately and after DOM is loaded
 setupAudioAutoplay();
 document.addEventListener('DOMContentLoaded', setupAudioAutoplay);
+
+// Initialize performance monitoring
+const performanceMonitor = new PerformanceMonitor();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+
+        // Send critical images to preload
+        const criticalImages = [
+          '/images/optimized/heroSection0_1920.webp',
+          '/images/optimized/heroSection1_1920.webp',
+          '/images/optimized/heroSection2_1920.webp',
+        ];
+
+        registration.active?.postMessage({
+          type: 'PRELOAD_IMAGES',
+          urls: criticalImages,
+        });
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
+// Start monitoring when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  performanceMonitor.startMonitoring();
+
+  // Report initial performance metrics after 5 seconds
+  setTimeout(() => {
+    const report = performanceMonitor.generateReport();
+    console.log('Performance Report:', report);
+  }, 5000);
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
