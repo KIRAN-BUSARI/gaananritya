@@ -148,8 +148,6 @@ const Achievements = () => {
             className="h-[400px] rounded-2xl"
             interval={2000}
             images={achievementsImages}
-            priority={false}
-            lazy={true}
           />
         </div>
 

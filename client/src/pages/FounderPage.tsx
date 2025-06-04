@@ -48,8 +48,6 @@ const FounderPage = () => {
             className="-z-10 h-[400px] w-full max-w-[565px] rounded-2xl md:h-[500px] lg:h-[600px]"
             images={imgs}
             interval={4000}
-            priority={false}
-            lazy={true}
           />
         </div>
 
