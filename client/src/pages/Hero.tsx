@@ -4,16 +4,19 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useCallback } from 'react';
-import { heroImages } from '@/utils/optimizedImages';
 
-// Fallback imports for older devices or if optimized images fail
+import imgUrl0 from '@/assets/heroSection0.png';
+import imgUrl2 from '@/assets/heroSection2.png';
+import imgUrl3 from '@/assets/heroSection3.png';
+import imgUrl4 from '@/assets/heroSection4.png';
+
 import mImg1 from '@/assets/mobileCarousal1.png';
 import mImg2 from '@/assets/mobileCarousal2.png';
 import mImg3 from '@/assets/mobileCarousal3.png';
 import mImg4 from '@/assets/mobileCarousal4.png';
 import mImg5 from '@/assets/mobileCarousal5.png';
 
-// Mobile images (still using original assets for mobile carousel)
+const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];
 
 const fadeUpAnimation = {
@@ -29,22 +32,13 @@ export default function Hero() {
     }
   }, []);
 
-  // Use optimized images for desktop carousel
-  const images = heroImages.map(
-    (img) => img.variants.desktop?.webp || img.variants.original.webp,
-  );
-
   return (
     <section
       aria-label="Hero Section"
       className="relative mx-auto mb-10 w-full items-center justify-center overflow-hidden px-2 md:mb-0 md:h-[calc(100vh-100px)] md:px-20"
     >
       <div className="absolute inset-0 z-0 hidden md:block">
-        <HeroSectionBgCarousel
-          images={images}
-          interval={4000}
-          priority={true}
-        />
+        <HeroSectionBgCarousel images={images} interval={4000} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
@@ -54,7 +48,6 @@ export default function Hero() {
             <HeroSectionBgCarousel
               images={mobileImages}
               interval={2000}
-              priority={true}
               className="relative h-[450px] rounded-2xl shadow-xl"
             />
           </div>
