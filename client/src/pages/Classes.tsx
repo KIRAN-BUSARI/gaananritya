@@ -89,16 +89,17 @@ const addressList = [
 const associatedSchools = [
   {
     id: 1,
-    city: 'Karkala',
+    city: 'Surat',
     name: 'Sangeetaranga',
     address: [
-      'Yajna,',
-      'Rotory Club,',
-      'Bhuvanendra Collage Road,',
-      'Karkala,',
-      'Karnataka, India',
+      'Akshata Nishanth,',
+      'Sangitaranga Dance and Music school,',
+      '193A Sai rachana Row House,',
+      'Near Palgam circle, Adajan,',
+      'Surat',
+      'Gujarat, India',
     ],
-    phoneNumber: '9591773721',
+    phoneNumber: '9099084814',
   },
   {
     id: 2,
@@ -116,17 +117,16 @@ const associatedSchools = [
   },
   {
     id: 3,
-    city: 'Surat Sub Branch',
+    city: 'Karkala',
     name: 'Yagna School Of Dance',
     address: [
-      'Akshata Nishanth,',
-      'Sangitaranga Dance and Music school,',
-      '193A Sai rachana Row House,',
-      'Near Palgam circle, Adajan,',
-      'Surat',
-      'Gujarat, India',
+      'Yajna,',
+      'Rotory Club,',
+      'Bhuvanendra Collage Road,',
+      'Karkala,',
+      'Karnataka, India',
     ],
-    phoneNumber: '9099084814',
+    phoneNumber: '9591773721',
   },
 ];
 
