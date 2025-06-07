@@ -98,7 +98,7 @@ export default function Hero() {
               </Link>
               <Button
                 variant="outline"
-                className="group w-full overflow-hidden rounded-lg border-2 border-secondary border-white bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
+                className="group w-full overflow-hidden rounded-lg border border-white bg-transparent px-8 py-6 text-lg font-medium transition-all duration-300 hover:bg-secondary/5 hover:text-secondary sm:w-auto md:text-xl"
                 onClick={handleScrollToAchievements}
                 aria-label="View our achievements"
               >
