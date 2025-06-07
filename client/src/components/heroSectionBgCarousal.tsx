@@ -41,7 +41,7 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
     <div
       className={cn(
         'relative w-full overflow-hidden bg-black',
-        'h-[80vh] sm:h-[85vh] md:h-[90vh] lg:h-[calc(100vh-100px)]',
+        '-z-10 h-[80vh] sm:h-[85vh] md:h-[90vh] lg:h-[calc(100vh-100px)]',
         className,
       )}
     >

@@ -61,7 +61,7 @@ const Achievements = () => {
   return (
     <div
       id="achievements"
-      className="relative px-6 py-10 sm:px-10 lg:px-20 lg:py-20"
+      className="relative px-4 py-10 sm:px-10 lg:px-20 lg:py-20"
     >
       <img
         className="absolute right-0 hidden h-auto w-[230px] sm:hidden sm:w-[260px] md:-top-44 md:block md:w-[350px] 2xl:-top-56 2xl:w-[450px]"
