@@ -132,7 +132,7 @@ export default function Navbar() {
             {/* Logo Section - Improved for mobile */}
             <Link to="/" className="flex max-w-[70%] items-center">
               <img
-                src="/logo.png"
+                src="/logo.svg"
                 alt="logo"
                 className="mr-1 h-10 w-auto object-contain sm:mr-2 sm:h-12 md:h-16 lg:h-20"
               />
