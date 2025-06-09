@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 interface HeroSectionBgCarouselProps {
   images: string[];
@@ -13,6 +13,7 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
   interval = 5000,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const nextImage = useCallback(() => {
     if (images.length <= 1) return;
@@ -27,11 +28,39 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
   }, [images.length, interval, nextImage]);
 
   useEffect(() => {
-    images.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    if (images.length > 0) {
+      const preloadImage = new Image();
+      preloadImage.src = images[0];
+    }
   }, [images]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const lazyImages =
+              containerRef.current?.querySelectorAll('[data-lazy]');
+            lazyImages?.forEach((img) => {
+              const lazyImage = img as HTMLDivElement;
+              const backgroundImage = lazyImage.getAttribute('data-lazy');
+              if (backgroundImage) {
+                lazyImage.style.backgroundImage = `url(${backgroundImage})`;
+                lazyImage.removeAttribute('data-lazy');
+              }
+            });
+          }
+        });
+      },
+      { root: null, threshold: 0.1 },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   if (images.length === 0) {
     return <div className="text-center text-white">No images available</div>;
@@ -39,6 +68,7 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         'relative w-full overflow-hidden bg-black',
         '-z-10 h-[80vh] sm:h-[85vh] md:h-[90vh] lg:h-[calc(100vh-100px)]',
@@ -50,10 +80,11 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
           key={`carousel-image-${index}`}
           aria-hidden={index !== currentImageIndex}
           className="absolute inset-0 h-full w-full bg-cover bg-center transition-opacity duration-1000"
+          data-lazy={index === 0 ? undefined : imageUrl}
           style={{
-            backgroundImage: `url(${imageUrl})`,
             opacity: index === currentImageIndex ? 1 : 0,
             zIndex: index === currentImageIndex ? 10 : 0,
+            backgroundImage: index === 0 ? `url(${imageUrl})` : undefined,
           }}
         />
       ))}
