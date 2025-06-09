@@ -27,14 +27,13 @@ const OptimizedCarousel: React.FC<OptimizedCarouselProps> = memo(
     priority = true,
     lazy = false,
     autoPlay = true,
-    maxPreload = 3,
+    maxPreload = 2, // Reduced from 3 to improve performance
   }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
     const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
     const [isInView, setIsInView] = useState(!lazy);
     const [isPaused, setIsPaused] = useState(false);
-
     const preloadedImages = useRef<HTMLImageElement[]>([]);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -183,14 +182,23 @@ const OptimizedCarousel: React.FC<OptimizedCarouselProps> = memo(
         await measureImageLoad(src);
         markEnd(`image-load-${index}`);
 
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           const img = new Image();
 
           if (isPriority) {
-            (img as any).fetchPriority = 'high';
-            (img as any).loading = 'eager';
+            // Set modern image loading attributes safely
+            if ('fetchPriority' in img) {
+              (
+                img as HTMLImageElement & { fetchPriority: string }
+              ).fetchPriority = 'high';
+            }
+            if ('loading' in img) {
+              (img as HTMLImageElement & { loading: string }).loading = 'eager';
+            }
           } else {
-            (img as any).loading = 'lazy';
+            if ('loading' in img) {
+              (img as HTMLImageElement & { loading: string }).loading = 'lazy';
+            }
           }
 
           img.onload = () => {

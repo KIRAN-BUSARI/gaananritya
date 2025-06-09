@@ -86,9 +86,9 @@ const performanceMonitor = new PerformanceMonitor();
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('/sw.js')
+      .register('/sw-enhanced.js')
       .then((registration) => {
-        console.log('SW registered: ', registration);
+        console.log('✅ Enhanced SW registered: ', registration);
 
         // Send critical images to preload
         const criticalImages = [
