@@ -1,6 +1,6 @@
-import carousal1 from '../assets/carousal1.png';
-import carousal2 from '../assets/carousal2.png';
-import carousal3 from '../assets/carousal3.png';
+import carousal1 from '../assets/carousal1.webp';
+import carousal2 from '../assets/carousal2.webp';
+import carousal3 from '../assets/carousal3.webp';
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 // import axiosInstance from '@/helper/axiosInstance';
 // import { useEffect, useState } from 'react';

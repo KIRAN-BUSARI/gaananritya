@@ -1,10 +1,9 @@
-import img1 from '@/assets/pillars/faculty1.png';
-import img2 from '@/assets/pillars/faculty2.png';
-import img3 from '@/assets/pillars/faculty3.png';
-import img5 from '@/assets/pillars/faculty5.png';
-// import img6 from '@/assets/pillars/faculty6.png';
-import img7 from '@/assets/pillars/faculty7.png';
-import img8 from '@/assets/pillars/faculty8.png';
+import img1 from '@/assets/pillars/faculty1.webp';
+import img2 from '@/assets/pillars/faculty2.webp';
+import img3 from '@/assets/pillars/faculty3.webp';
+import img5 from '@/assets/pillars/faculty4.webp';
+import img7 from '@/assets/pillars/faculty5.webp';
+import img8 from '@/assets/pillars/faculty6.webp';
 
 import PillarsCard from '@/components/Cards/PillarsCard';
 interface PillarData {
@@ -56,16 +55,6 @@ const pillarsData: PillarData[] = [
       'Shri Krishnacharya, a Vidwat-qualified Carnatic vocalist and composer, has performed extensively and led music for over 25 Bharatanatyam troupes.',
     color: '#FFF6F5',
   },
-
-  // {
-  //   image: img6,
-  //   name: 'Vidushi Rajatha Krishacharya',
-  //   designation: 'Faculty - Carnatic Music',
-  //   description:
-  //     'A seasoned Carnatic vocalist and composer, Shri Krishnacharya began his musical journey under his father Ramacharya and later trained with maestros.',
-  //   color: '#FFF6F5',
-  // },
-
   {
     image: img8,
     name: 'Vidushi Teena Chethan Poombady',

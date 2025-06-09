@@ -1,7 +1,7 @@
-import bharathanatyam from '@/assets/classes/bharathanatyam.png';
-import kathak from '@/assets/classes/kathak.png';
-import carnatic from '@/assets/classes/carnatic.png';
-import workshop from '@/assets/classes/workshop.png';
+import bharathanatyam from '@/assets/classes/bharathanatyam.webp';
+import kathak from '@/assets/classes/kathak.webp';
+import carnatic from '@/assets/classes/carnatic.webp';
+import workshop from '@/assets/classes/workshop.webp';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

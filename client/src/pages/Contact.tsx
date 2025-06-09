@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 
-import contactImg from '@/assets/contact.png';
+import contactImg from '@/assets/contact.webp';
 import Faq from '@/components/Faq';
 
 interface FormData {

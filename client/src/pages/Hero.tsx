@@ -5,16 +5,16 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useCallback } from 'react';
 
-import imgUrl0 from '@/assets/heroSection0.png';
-import imgUrl2 from '@/assets/heroSection2.png';
-import imgUrl3 from '@/assets/heroSection3.png';
-import imgUrl4 from '@/assets/heroSection4.png';
+import imgUrl0 from '@/assets/heroSection0.webp';
+import imgUrl2 from '@/assets/heroSection2.webp';
+import imgUrl3 from '@/assets/heroSection3.webp';
+import imgUrl4 from '@/assets/heroSection4.webp';
 
-import mImg1 from '@/assets/mobileCarousal1.png';
-import mImg2 from '@/assets/mobileCarousal2.png';
-import mImg3 from '@/assets/mobileCarousal3.png';
-import mImg4 from '@/assets/mobileCarousal4.png';
-import mImg5 from '@/assets/mobileCarousal5.png';
+import mImg1 from '@/assets/mobileImg1.webp';
+import mImg2 from '@/assets/mobileImg2.webp';
+import mImg3 from '@/assets/mobileImg3.webp';
+import mImg4 from '@/assets/mobileImg4.webp';
+import mImg5 from '@/assets/mobileImg5.webp';
 
 const images = [imgUrl0, imgUrl2, imgUrl3, imgUrl4];
 const mobileImages = [mImg1, mImg2, mImg3, mImg4, mImg5];

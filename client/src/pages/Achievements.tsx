@@ -1,13 +1,13 @@
 import AchievementCard from '@/components/Cards/AchivementCard';
 
-import Img1 from '@/assets/achievementsImg1.png';
-import Img2 from '@/assets/achievementsImg2.png';
-import Img3 from '@/assets/achievementsImg3.png';
-import Img4 from '@/assets/achievementsImg4.png';
+import Img1 from '@/assets/achievementsImg1.webp';
+import Img2 from '@/assets/achievementsImg2.webp';
+import Img3 from '@/assets/achievementsImg3.webp';
+import Img4 from '@/assets/achievementsImg4.webp';
 import AchievementGalleryCard from '@/components/Cards/AchievementGalleryCard';
 import HeroSectionBgCarousel from '@/components/heroSectionBgCarousal';
 
-import handSign from '@/assets/handSign.png';
+import handSign from '@/assets/handSign.webp';
 
 interface AchievementData {
   id: string;
