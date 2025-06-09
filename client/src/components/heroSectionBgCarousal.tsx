@@ -28,13 +28,6 @@ const HeroSectionBgCarousel: React.FC<HeroSectionBgCarouselProps> = ({
   }, [images.length, interval, nextImage]);
 
   useEffect(() => {
-    if (images.length > 0) {
-      const preloadImage = new Image();
-      preloadImage.src = images[0];
-    }
-  }, [images]);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
