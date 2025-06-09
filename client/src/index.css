@@ -97,10 +97,6 @@
   }
 }
 
-.bg-image {
-  @apply bg-[url(@/assets/heroSection0.png)];
-}
-
 .scroll-mt-header {
   scroll-margin-top: 80px;
 }
