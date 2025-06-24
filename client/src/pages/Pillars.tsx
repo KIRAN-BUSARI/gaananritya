@@ -4,6 +4,7 @@ import img3 from '@/assets/pillars/faculty3.webp';
 import img5 from '@/assets/pillars/faculty4.webp';
 import img7 from '@/assets/pillars/faculty5.webp';
 import img8 from '@/assets/pillars/faculty6.webp';
+import img9 from '@/assets/pillars/faculty7.webp';
 
 import PillarsCard from '@/components/Cards/PillarsCard';
 interface PillarData {
@@ -62,6 +63,14 @@ const pillarsData: PillarData[] = [
     description:
       'Teena Chethan Poombady, a Mysore-born Bharatanatyam dancer with over 15 years of experience, holds a “Vidwath” in dance and has trained under renowned gurus.',
     color: '#F3FBFF',
+  },
+  {
+    image: img9,
+    name: 'Payal Parekh',
+    designation: 'Faculty - Kathak',
+    description:
+      'Born in bhavnagar ( Gujarat) did visharad in kathak from akhil bhartiya gandharva mahavidyalay mandal under the guidance of guru shri Dr. Nipa thakkar.',
+    color: '#FFF6F5',
   },
 ];
 
