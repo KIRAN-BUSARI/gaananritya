@@ -275,7 +275,14 @@ const Classes = () => {
           </div>
           <div className="my-20" id="workshops">
             <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl bg-[#EEFAFF] p-4 sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-12 lg:gap-20">
-              <div className="order-2 content-center py-2 md:order-1 md:py-4">
+              <div className="order-1 content-center py-2 md:order-1 md:py-4">
+                <div className="order-1 mx-auto w-full md:order-2">
+                  <img
+                    src={workshop}
+                    alt="Carnatic Music"
+                    className="h-auto w-full rounded-lg"
+                  />
+                </div>
                 <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
                   Workshops
                 </h1>
@@ -296,13 +303,6 @@ const Classes = () => {
                 >
                   <Link to="/contact">Join Now</Link>
                 </Button>
-              </div>
-              <div className="order-1 mx-auto w-full md:order-2">
-                <img
-                  src={workshop}
-                  alt="Carnatic Music"
-                  className="h-auto w-full rounded-lg"
-                />
               </div>
             </div>
           </div>
