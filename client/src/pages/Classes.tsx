@@ -199,7 +199,7 @@ const Classes = () => {
               </p>
               <Button
                 variant={'secondary'}
-                className="mt-6 text-primary md:mt-9"
+                className="mt-6 px-4 py-2 text-primary md:mt-9"
               >
                 <Link to="/contact">Join Now</Link>
               </Button>
@@ -225,7 +225,7 @@ const Classes = () => {
                 </p>
                 <Button
                   variant={'secondary'}
-                  className="mt-6 text-primary md:mt-9"
+                  className="mt-6 px-4 py-2 text-primary md:mt-9"
                 >
                   <Link to="/contact">Join Now</Link>
                 </Button>
@@ -266,7 +266,7 @@ const Classes = () => {
                 </p>
                 <Button
                   variant={'secondary'}
-                  className="mt-6 text-primary md:mt-9"
+                  className="mt-6 px-4 py-2 text-primary md:mt-9"
                 >
                   <Link to="/contact">Join Now</Link>
                 </Button>
@@ -292,7 +292,7 @@ const Classes = () => {
                 </p>
                 <Button
                   variant={'secondary'}
-                  className="mt-6 text-primary md:mt-9"
+                  className="mt-6 px-4 py-2 text-primary md:mt-9"
                 >
                   <Link to="/contact">Join Now</Link>
                 </Button>
