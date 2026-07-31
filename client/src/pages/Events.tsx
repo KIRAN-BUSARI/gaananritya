@@ -357,7 +357,8 @@ const Events = () => {
             <Button
               onClick={openAddPostDialog}
               disabled={hasReachedPostLimit}
-              className="mt-1 bg-secondary text-primary hover:bg-secondary/90"
+              variant="outline"
+              className="mt-1 border-secondary1 text-secondary1 hover:bg-secondary1/10 hover:text-secondary1"
             >
               <Plus className="mr-2 h-4 w-4" />
               Add Instagram Post
@@ -369,24 +370,22 @@ const Events = () => {
 
     return (
       <div className="space-y-5">
-        <div className="flex items-end justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight text-gray-900 sm:text-xl">
-              On Instagram
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Recent moments from Gaana Nritya Academy
+        {canManage && (
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+            <Button
+              onClick={openAddPostDialog}
+              disabled={hasReachedPostLimit}
+              variant="outline"
+              className="w-fit border-secondary1 text-secondary1 hover:bg-secondary1/10 hover:text-secondary1"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Instagram Post
+            </Button>
+            <p className="text-xs text-gray-500">
+              {posts.length}/{MAX_POSTS} posts
             </p>
           </div>
-          <a
-            href="https://www.instagram.com/gaananrityaacademy_official/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden shrink-0 text-sm font-medium text-secondary1 hover:underline sm:inline"
-          >
-            Follow us
-          </a>
-        </div>
+        )}
 
         <motion.div
           className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 sm:justify-items-stretch xl:grid-cols-3"
@@ -481,21 +480,6 @@ const Events = () => {
               rhythm of GNA on stage.
             </p>
           </div>
-          {canManage && filter === 'Upcoming Events' && (
-            <div className="flex shrink-0 flex-col items-stretch gap-1 sm:items-end">
-              <Button
-                onClick={openAddPostDialog}
-                disabled={hasReachedPostLimit}
-                className="bg-secondary text-primary hover:bg-secondary/90"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Instagram Post
-              </Button>
-              <p className="text-xs text-gray-500">
-                {posts.length}/{MAX_POSTS} posts
-              </p>
-            </div>
-          )}
         </div>
 
         <p className="mt-4 text-sm leading-relaxed tracking-[-0.18px] sm:text-base md:text-lg">
