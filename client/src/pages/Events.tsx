@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion';
-// import img1 from '@/assets/events/img1.png';
-// import img2 from '@/assets/events/img2.png';
-// import img3 from '@/assets/events/img3.png';
-// import img4 from '@/assets/events/img4.png';
-import { useCallback, useEffect, useState, useMemo } from 'react';
-import EventCard from '@/components/Cards/EventCard';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
+import InstagramEmbedCard from '@/components/Cards/InstagramEmbedCard';
+import axiosInstance from '@/helper/axiosInstance';
+import { parseInstagramUrl } from '@/utils/instagram';
+import { toast } from 'sonner';
 
 import {
   DropdownMenu,
@@ -13,6 +12,17 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   CalendarIcon,
   FilmIcon,
@@ -20,13 +30,41 @@ import {
   HistoryIcon,
   ArrowDown,
   StarIcon,
+  Plus,
+  Pencil,
+  Trash2,
+  RefreshCw,
+  Instagram,
 } from 'lucide-react';
 
 interface Tab {
   title: string;
 }
 
-// List of significant performances
+interface InstagramPostItem {
+  _id: string;
+  url: string;
+  title?: string;
+  order: number;
+}
+
+interface HighlightItem {
+  _id: string;
+  text: string;
+  emphasizedText?: string;
+  order: number;
+}
+
+interface PostFormData {
+  url: string;
+  title: string;
+}
+
+interface HighlightFormData {
+  text: string;
+  emphasizedText: string;
+}
+
 const significantPerformances = [
   'Guruvandana under the tutelage of Guru Shri Muralidhar Rao, Mysuru',
   'Subrahmanya Temple – Kirushashtiuthsava',
@@ -58,7 +96,6 @@ const significantPerformances = [
   'Ashtabhavika presentation by the disciples of Guru Rama Vaidyanathan, Bengaluru and Mumbai.',
 ];
 
-// List of productions
 const productionsList = [
   'Solo and group performances [classical, semi classical and folk]',
   'Solo thematic performances',
@@ -77,64 +114,289 @@ const productionsList = [
 const tabs: Tab[] = [
   { title: 'Upcoming Events' },
   { title: 'Productions' },
-  // { title: 'Festivals' },
-  // { title: 'Past Events' },
   { title: 'Significant Performances' },
 ];
 
-const eventsData = [
-  {
-    id: 1,
-    // image: img1,
-    category: 'Upcoming Events',
-    title: 'Annual Dance Festival 2025 - Arohana Part 1',
-    date: '24-08-2025',
-    location: 'Mangalore',
-    timings: '5:00 PM',
-  },
-  {
-    id: 2,
-    // image: img4,
-    category: 'Upcoming Events',
-    title: 'Annual Dance Festival 2025 - Arohana Part 2',
-    date: '07-09-2025',
-    location: 'Mangalore',
-    timings: '5:00 PM',
-  },
-  {
-    id: 3,
-    // image: img2,
-    category: 'Upcoming Events',
-    title: 'Bharathanatya Rangapravesha - Anantha Krishna',
-    date: '26-10-2025',
-    location: 'Mangalore',
-    timings: '4:00 PM',
-  },
-];
+const emptyPostForm: PostFormData = {
+  url: '',
+  title: '',
+};
+
+const emptyHighlightForm: HighlightFormData = {
+  text: '',
+  emphasizedText: '',
+};
+
+const MAX_POSTS = 5;
+
+const renderHighlightedText = (text: string, emphasizedText?: string) => {
+  if (!emphasizedText || !text.includes(emphasizedText)) {
+    return text;
+  }
+
+  const parts = text.split(emphasizedText);
+  return (
+    <>
+      {parts[0]}
+      <span className="font-semibold text-secondary1">{emphasizedText}</span>
+      {parts.slice(1).join(emphasizedText)}
+    </>
+  );
+};
 
 const Events = () => {
   const [filter, setFilter] = useState<string>('Upcoming Events');
   const [isLoading, setIsLoading] = useState(true);
+  const [posts, setPosts] = useState<InstagramPostItem[]>([]);
+  const [highlights, setHighlights] = useState<HighlightItem[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [isPostDialogOpen, setIsPostDialogOpen] = useState(false);
+  const [isDeletePostOpen, setIsDeletePostOpen] = useState(false);
+  const [postForm, setPostForm] = useState<PostFormData>(emptyPostForm);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [postToDelete, setPostToDelete] = useState<InstagramPostItem | null>(
+    null,
+  );
+
+  const [isHighlightDialogOpen, setIsHighlightDialogOpen] = useState(false);
+  const [isDeleteHighlightOpen, setIsDeleteHighlightOpen] = useState(false);
+  const [highlightForm, setHighlightForm] =
+    useState<HighlightFormData>(emptyHighlightForm);
+  const [editingHighlightId, setEditingHighlightId] = useState<string | null>(
+    null,
+  );
+  const [highlightToDelete, setHighlightToDelete] =
+    useState<HighlightItem | null>(null);
 
   const handleFilterChange = useCallback((category: string) => {
     setFilter(category);
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
+  const fetchPosts = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<{ data: InstagramPostItem[] }>(
+        '/instagram-posts',
+      );
+      setPosts(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch Instagram posts:', error);
+      toast.error('Failed to load Instagram posts');
+      setPosts([]);
+    }
   }, []);
 
-  const filteredEvents = useMemo(() => {
-    return eventsData.filter((event) => {
-      return event.category === filter;
-    });
-  }, [filter]);
+  const fetchHighlights = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<{ data: HighlightItem[] }>(
+        '/highlights',
+      );
+      setHighlights(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch highlights:', error);
+      toast.error('Failed to load highlights');
+      setHighlights([]);
+    }
+  }, []);
 
-  // Render the significant performances list
+  useEffect(() => {
+    const admin = localStorage.getItem('isAdmin') === 'true';
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsAdmin(admin);
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchPosts(), fetchHighlights()]);
+      setIsLoading(false);
+    };
+    loadData();
+  }, [fetchPosts, fetchHighlights]);
+
+  const canManage = isAdmin && isLoggedIn;
+  const hasReachedPostLimit = posts.length >= MAX_POSTS;
+
+  const openAddPostDialog = () => {
+    if (hasReachedPostLimit) {
+      toast.error(
+        `You can only have up to ${MAX_POSTS} Instagram posts. Delete one to add another.`,
+      );
+      return;
+    }
+    setEditingPostId(null);
+    setPostForm(emptyPostForm);
+    setIsPostDialogOpen(true);
+  };
+
+  const openEditPostDialog = (post: InstagramPostItem) => {
+    setEditingPostId(post._id);
+    setPostForm({
+      url: post.url,
+      title: post.title || '',
+    });
+    setIsPostDialogOpen(true);
+  };
+
+  const openDeletePostDialog = (post: InstagramPostItem) => {
+    setPostToDelete(post);
+    setIsDeletePostOpen(true);
+  };
+
+  const handlePostSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!canManage) {
+      toast.error('You must be logged in as an admin to manage posts.');
+      return;
+    }
+
+    const normalizedUrl = parseInstagramUrl(postForm.url);
+    if (!normalizedUrl) {
+      toast.error(
+        'Invalid Instagram link. Paste a post/reel URL or the embed code.',
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        url: normalizedUrl,
+        title: postForm.title.trim(),
+      };
+
+      if (editingPostId) {
+        await axiosInstance.patch(
+          `/instagram-posts/update/${editingPostId}`,
+          payload,
+        );
+        toast.success('Instagram post updated successfully');
+      } else {
+        await axiosInstance.post('/instagram-posts/create', {
+          ...payload,
+          order: posts.length,
+        });
+        toast.success('Instagram post added successfully');
+      }
+      setIsPostDialogOpen(false);
+      setPostForm(emptyPostForm);
+      setEditingPostId(null);
+      await fetchPosts();
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || 'Failed to save Instagram post';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (!postToDelete) return;
+
+    setIsSubmitting(true);
+    try {
+      await axiosInstance.delete(
+        `/instagram-posts/delete/${postToDelete._id}`,
+      );
+      toast.success('Instagram post deleted successfully');
+      setIsDeletePostOpen(false);
+      setPostToDelete(null);
+      await fetchPosts();
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || 'Failed to delete Instagram post';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const openAddHighlightDialog = () => {
+    setEditingHighlightId(null);
+    setHighlightForm(emptyHighlightForm);
+    setIsHighlightDialogOpen(true);
+  };
+
+  const openEditHighlightDialog = (highlight: HighlightItem) => {
+    setEditingHighlightId(highlight._id);
+    setHighlightForm({
+      text: highlight.text,
+      emphasizedText: highlight.emphasizedText || '',
+    });
+    setIsHighlightDialogOpen(true);
+  };
+
+  const openDeleteHighlightDialog = (highlight: HighlightItem) => {
+    setHighlightToDelete(highlight);
+    setIsDeleteHighlightOpen(true);
+  };
+
+  const handleHighlightSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!canManage) {
+      toast.error('You must be logged in as an admin to manage highlights.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (editingHighlightId) {
+        await axiosInstance.patch(
+          `/highlights/update/${editingHighlightId}`,
+          highlightForm,
+        );
+        toast.success('Highlight updated successfully');
+      } else {
+        await axiosInstance.post('/highlights/create', {
+          ...highlightForm,
+          order: highlights.length,
+        });
+        toast.success('Highlight created successfully');
+      }
+      setIsHighlightDialogOpen(false);
+      setHighlightForm(emptyHighlightForm);
+      setEditingHighlightId(null);
+      await fetchHighlights();
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || 'Failed to save highlight';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteHighlight = async () => {
+    if (!highlightToDelete) return;
+
+    setIsSubmitting(true);
+    try {
+      await axiosInstance.delete(
+        `/highlights/delete/${highlightToDelete._id}`,
+      );
+      toast.success('Highlight deleted successfully');
+      setIsDeleteHighlightOpen(false);
+      setHighlightToDelete(null);
+      await fetchHighlights();
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || 'Failed to delete highlight';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const renderSignificantPerformances = () => {
     return (
       <motion.div
@@ -174,7 +436,6 @@ const Events = () => {
     );
   };
 
-  // Render the productions list
   const renderProductions = () => {
     return (
       <motion.div
@@ -214,6 +475,93 @@ const Events = () => {
     );
   };
 
+  const renderInstagramPosts = () => {
+    if (posts.length === 0) {
+      return (
+        <div className="flex h-40 w-full flex-col items-center justify-center space-y-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 py-8 text-center">
+          <Instagram className="h-10 w-10 text-gray-400" />
+          <div className="text-center">
+            <h3 className="text-base font-medium text-gray-900">
+              No Instagram posts yet
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              {canManage
+                ? 'Paste an Instagram link to showcase a post here.'
+                : 'Check back soon for updates from our Instagram.'}
+            </p>
+          </div>
+          {canManage && (
+            <Button
+              onClick={openAddPostDialog}
+              disabled={hasReachedPostLimit}
+              className="mt-1 bg-secondary text-primary hover:bg-secondary/90"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Instagram Post
+            </Button>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-5">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-gray-900 sm:text-xl">
+              On Instagram
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Recent moments from Gaana Nritya Academy
+            </p>
+          </div>
+          <a
+            href="https://www.instagram.com/gaananrityaacademy_official/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden shrink-0 text-sm font-medium text-secondary1 hover:underline sm:inline"
+          >
+            Follow us
+          </a>
+        </div>
+
+        <motion.div
+          className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 sm:justify-items-stretch xl:grid-cols-3"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+              },
+            },
+          }}
+        >
+          {posts.map((post) => (
+            <motion.div
+              key={post._id}
+              className="w-full max-w-[380px] sm:max-w-none"
+              variants={{
+                hidden: { y: 16, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+            >
+              <InstagramEmbedCard
+                url={post.url}
+                title={post.title}
+                isAdmin={canManage}
+                onEdit={() => openEditPostDialog(post)}
+                onDelete={() => openDeletePostDialog(post)}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    );
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -226,89 +574,15 @@ const Events = () => {
       );
     }
 
-    // Show significant performances list when that filter is active
     if (filter === 'Significant Performances') {
       return renderSignificantPerformances();
     }
 
-    // Show productions list when that filter is active
     if (filter === 'Productions') {
       return renderProductions();
     }
 
-    if (filteredEvents.length === 0) {
-      return (
-        <div className="flex h-40 w-full flex-col items-center justify-center space-y-3 py-8 text-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900">
-              No events found
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Try selecting a different category
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              setFilter('Upcoming Events');
-            }}
-            className="mt-2 rounded-md bg-secondary px-2 py-2 text-sm font-medium text-primary hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary/50"
-          >
-            View upcoming events
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <motion.div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.1,
-            },
-          },
-        }}
-      >
-        {filteredEvents.map((event) => (
-          <motion.div
-            key={event.id}
-            variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
-            }}
-          >
-            <EventCard
-              // image={event.image}
-              title={event.title}
-              location={event.location}
-              date={event.date}
-              timings={event.timings}
-              category={event.category}
-              showCategoryLabel={false}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
-    );
+    return renderInstagramPosts();
   };
 
   const iconMap: Record<string, JSX.Element> = {
@@ -334,13 +608,32 @@ const Events = () => {
         />
       </div>
       <div className="mb-10 flex w-full flex-col bg-white px-4 pt-10 md:mb-20 md:px-20">
-        <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl lg:text-[32px]">
-          Events that Celebrate Tradition & Talent
-        </h1>
-        <p className="mt-2 text-base font-medium sm:text-lg md:text-xl lg:text-2xl">
-          From graceful performances to grand festivals — experience the rhythm
-          of GNA on stage.
-        </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl lg:text-[32px]">
+              Events that Celebrate Tradition & Talent
+            </h1>
+            <p className="mt-2 text-base font-medium sm:text-lg md:text-xl lg:text-2xl">
+              From graceful performances to grand festivals — experience the
+              rhythm of GNA on stage.
+            </p>
+          </div>
+          {canManage && filter === 'Upcoming Events' && (
+            <div className="flex shrink-0 flex-col items-stretch gap-1 sm:items-end">
+              <Button
+                onClick={openAddPostDialog}
+                disabled={hasReachedPostLimit}
+                className="bg-secondary text-primary hover:bg-secondary/90"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Instagram Post
+              </Button>
+              <p className="text-xs text-gray-500">
+                {posts.length}/{MAX_POSTS} posts
+              </p>
+            </div>
+          )}
+        </div>
 
         <p className="mt-4 text-sm leading-relaxed tracking-[-0.18px] sm:text-base md:text-lg">
           Every event is a celebration of art, culture, and community. Our
@@ -349,7 +642,6 @@ const Events = () => {
           audiences.
         </p>
 
-        {/* Mobile Dropdown */}
         <div className="mt-6 sm:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -373,7 +665,6 @@ const Events = () => {
           </DropdownMenu>
         </div>
 
-        {/* Desktop Tabs */}
         <div className="mt-6 hidden flex-wrap items-center gap-2 sm:flex lg:gap-4">
           {tabs.map((tab) => (
             <button
@@ -392,37 +683,313 @@ const Events = () => {
 
         <div className="mt-8">{renderContent()}</div>
 
-        {/* Upcoming Events Section */}
         {filter === 'Upcoming Events' && (
-          <div className="mt-8 sm:mt-12 lg:mt-16">
-            <h2 className="mb-4 text-lg font-semibold sm:text-xl md:text-2xl">
-              Upcoming Highlights
-            </h2>
-            <ul className="mt-4 list-inside list-disc space-y-2 text-sm sm:mt-6 sm:space-y-3 sm:text-base md:space-y-4 md:text-lg">
-              <li>
-                Celebrating{' '}
-                <span className="font-semibold text-secondary1">
-                  Aaronhan-2025
-                </span>{' '}
-                at Sullia Branch, Mangalore
-              </li>
-              <li>
-                <span className="font-semibold text-secondary1">
-                  Poorvi Radhakrishna&apos;s Rangapravesh
-                </span>{' '}
-                on 12th May 2025, Mangalore.
-              </li>
-              <li>
-                Annual Day Celebration{' '}
-                <span className="font-semibold text-secondary1">
-                  Hejje-Gejje
-                </span>
-                , 25th June, Gaana Nritya Academy, Branch Bangalore.
-              </li>
-            </ul>
+          <div className="mt-10 border-t border-gray-100 pt-8 sm:mt-12">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-lg font-semibold tracking-tight text-gray-900 sm:text-xl">
+                  Upcoming Highlights
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  Key dates and celebrations coming up
+                </p>
+              </div>
+              {canManage && (
+                <Button
+                  onClick={openAddHighlightDialog}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Highlight
+                </Button>
+              )}
+            </div>
+            {highlights.length === 0 ? (
+              <p className="text-sm text-gray-500">No highlights yet.</p>
+            ) : (
+              <ul className="space-y-2.5 text-sm sm:text-base md:text-lg">
+                {highlights.map((highlight) => (
+                  <li
+                    key={highlight._id}
+                    className="flex items-start justify-between gap-3 rounded-lg px-1 py-1.5 transition-colors hover:bg-gray-50"
+                  >
+                    <span className="flex-1 before:mr-2 before:text-secondary1 before:content-['•']">
+                      {renderHighlightedText(
+                        highlight.text,
+                        highlight.emphasizedText,
+                      )}
+                    </span>
+                    {canManage && (
+                      <span className="flex shrink-0 gap-1">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => openEditHighlightDialog(highlight)}
+                          aria-label="Edit highlight"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
+                          onClick={() => openDeleteHighlightDialog(highlight)}
+                          aria-label="Delete highlight"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
       </div>
+
+      <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
+        <DialogContent className="sm:max-w-[560px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              {editingPostId ? 'Edit Instagram Post' : 'Add Instagram Post'}
+            </DialogTitle>
+            <DialogDescription>
+              Paste an Instagram post/reel URL, or the full embed code from
+              Instagram.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handlePostSubmit} className="mt-2 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="instagram-url" className="font-medium">
+                Instagram Embed Link / URL
+              </Label>
+              <Textarea
+                id="instagram-url"
+                value={postForm.url}
+                onChange={(e) =>
+                  setPostForm((prev) => ({ ...prev, url: e.target.value }))
+                }
+                placeholder="https://www.instagram.com/p/XXXX/ or paste embed code"
+                rows={4}
+                required
+              />
+              <p className="text-xs text-gray-500">
+                On Instagram: Share → Embed → copy the code, or paste the post
+                link directly.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="instagram-title" className="font-medium">
+                Title (optional)
+              </Label>
+              <Input
+                id="instagram-title"
+                value={postForm.title}
+                onChange={(e) =>
+                  setPostForm((prev) => ({ ...prev, title: e.target.value }))
+                }
+                placeholder="e.g. Arohana 2025 highlights"
+                className="h-11"
+              />
+            </div>
+            <DialogFooter className="pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsPostDialogOpen(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-secondary text-primary hover:bg-secondary/90"
+              >
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : editingPostId ? (
+                  'Update Post'
+                ) : (
+                  'Add Post'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isDeletePostOpen} onOpenChange={setIsDeletePostOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl text-red-600">
+              Delete Instagram Post
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove this Instagram post from the
+              page? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6 flex items-center justify-end space-x-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsDeletePostOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDeletePost}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isHighlightDialogOpen}
+        onOpenChange={setIsHighlightDialogOpen}
+      >
+        <DialogContent className="sm:max-w-[520px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              {editingHighlightId ? 'Edit Highlight' : 'Add Highlight'}
+            </DialogTitle>
+            <DialogDescription>
+              Enter the full highlight sentence. Optionally mark a phrase to
+              emphasize in teal.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleHighlightSubmit} className="mt-2 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="highlight-text" className="font-medium">
+                Highlight Text
+              </Label>
+              <Input
+                id="highlight-text"
+                value={highlightForm.text}
+                onChange={(e) =>
+                  setHighlightForm((prev) => ({
+                    ...prev,
+                    text: e.target.value,
+                  }))
+                }
+                placeholder="e.g. Celebrating Aaronhan-2025 at Sullia Branch"
+                className="h-11"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="highlight-emphasis" className="font-medium">
+                Emphasized Phrase (optional)
+              </Label>
+              <Input
+                id="highlight-emphasis"
+                value={highlightForm.emphasizedText}
+                onChange={(e) =>
+                  setHighlightForm((prev) => ({
+                    ...prev,
+                    emphasizedText: e.target.value,
+                  }))
+                }
+                placeholder="e.g. Aaronhan-2025"
+                className="h-11"
+              />
+              <p className="text-xs text-gray-500">
+                This phrase must appear exactly in the highlight text above.
+              </p>
+            </div>
+            <DialogFooter className="pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsHighlightDialogOpen(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-secondary text-primary hover:bg-secondary/90"
+              >
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : editingHighlightId ? (
+                  'Update Highlight'
+                ) : (
+                  'Add Highlight'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isDeleteHighlightOpen}
+        onOpenChange={setIsDeleteHighlightOpen}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl text-red-600">
+              Delete Highlight
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this highlight? This action cannot
+              be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6 flex items-center justify-end space-x-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsDeleteHighlightOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDeleteHighlight}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -92,7 +92,6 @@
   }
 
   #bharathanatyam,
-  #kathak,
   #carnatic,
   #workshops {
     scroll-margin-top: 80px;
@@ -164,4 +163,10 @@
 .no-repaint {
   backface-visibility: hidden;
   transform: translateZ(0);
+}
+
+/* Instagram compact embeds */
+.instagram-embed-frame iframe {
+  border: 0 !important;
+  background: #fafafa;
 }

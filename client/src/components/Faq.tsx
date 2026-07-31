@@ -14,7 +14,7 @@ const categorizedFaqs = {
     {
       question: 'What styles of classical dance do you teach?',
       answer:
-        'We offer Bharatanatyam and Kathak classes, rooted in traditional training and modern understanding.',
+        'We offer Bharatanatyam and Carnatic music classes, rooted in traditional training and modern understanding.',
     },
     {
       question: 'At what age can children start learning classical dance?',

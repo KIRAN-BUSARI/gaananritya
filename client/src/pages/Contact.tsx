@@ -89,7 +89,7 @@ const Contact = () => {
     setSubmitStatus(null);
 
     try {
-      await axiosInstance.post('/api/v1/contact', formData);
+      await axiosInstance.post('/contact', formData);
 
       setSubmitStatus({
         success: true,
@@ -344,12 +344,10 @@ const Contact = () => {
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`rounded-lg ${
-                      submitStatus.success ? 'bg-green-50' : 'bg-red-50'
-                    } border-2 p-4 ${
-                      submitStatus.success
-                        ? 'border-green-200'
-                        : 'border-red-200'
+                    className={`rounded-lg ${submitStatus.success ? 'bg-green-50' : 'bg-red-50'
+                    } border-2 p-4 ${submitStatus.success
+                      ? 'border-green-200'
+                      : 'border-red-200'
                     }`}
                   >
                     <div className="flex items-center">
@@ -384,10 +382,9 @@ const Contact = () => {
                       </div>
                       <div className="ml-3">
                         <p
-                          className={`text-sm font-medium ${
-                            submitStatus.success
-                              ? 'text-green-800'
-                              : 'text-red-800'
+                          className={`text-sm font-medium ${submitStatus.success
+                            ? 'text-green-800'
+                            : 'text-red-800'
                           }`}
                         >
                           {submitStatus.message}

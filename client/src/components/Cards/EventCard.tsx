@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface EventCardProps {
   image?: string;
@@ -8,26 +10,75 @@ interface EventCardProps {
   timings: string;
   category?: string;
   showCategoryLabel?: boolean;
+  isAdmin?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-const EventCard: FC<EventCardProps> = ({ title, location, date, timings }) => {
+const EventCard: FC<EventCardProps> = ({
+  image,
+  title,
+  location,
+  date,
+  timings,
+  category,
+  showCategoryLabel = false,
+  isAdmin = false,
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
-      {/* <div className="relative w-full overflow-hidden sm:h-48 md:h-[350px] 2xl:h-[450px]">
-        <img
-          src={typeof image === 'string' ? image : image?.[0] ?? '/default-image.jpg'}
-          alt={title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent opacity-30 transition-opacity duration-300 group-hover:opacity-0"></div>
-        {showCategoryLabel && category && (
-          <div className="absolute right-4 top-4 transform rounded-lg border border-white/20 bg-gradient-to-r from-secondary to-secondary/80 px-2 py-1 text-xs font-medium text-primary shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
-            {category}
-          </div>
-        )}
-      </div> */}
+    <div className="group relative h-full w-full overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
+      {isAdmin && (
+        <div className="absolute right-2 top-2 z-10 flex gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 bg-white/95"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.();
+            }}
+            aria-label="Edit event"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 bg-white/95 text-red-600 hover:bg-red-50 hover:text-red-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.();
+            }}
+            aria-label="Delete event"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      )}
+      {image && (
+        <div className="relative w-full overflow-hidden sm:h-48 md:h-[220px]">
+          <img
+            src={image}
+            alt={title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          {showCategoryLabel && category && (
+            <div className="absolute left-3 top-3 rounded-md bg-secondary px-2 py-1 text-xs font-medium text-primary shadow">
+              {category}
+            </div>
+          )}
+        </div>
+      )}
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-secondary1">{title}</h3>
+        <h3
+          className={`text-lg font-semibold text-secondary1 ${isAdmin ? 'pr-16' : ''}`}
+        >
+          {title}
+        </h3>
         <div className="mt-2 space-y-2">
           <div className="flex items-center text-sm text-gray-600">
             <svg

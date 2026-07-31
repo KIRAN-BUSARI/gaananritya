@@ -1,5 +1,4 @@
 import bharathanatyam from '@/assets/classes/bharathanatyam.webp';
-import kathak from '@/assets/classes/kathak.webp';
 import carnatic from '@/assets/classes/carnatic.webp';
 import workshop from '@/assets/classes/workshop.webp';
 
@@ -153,21 +152,20 @@ const Classes = () => {
             Classes That Move with Grace & Melody
           </h1>
           <p className="mt-2 text-base font-medium sm:text-lg md:text-xl 2xl:text-2xl">
-            Learn Bharatanatyam, Kathak & Carnatic Music — the traditional way,
-            with a modern touch.
+            Learn Bharatanatyam & Carnatic Music — the traditional way, with a
+            modern touch.
           </p>
         </div>
         <div className="mt-6 md:mt-9">
           <p className="text-base leading-[170%] tracking-[-0.18px] md:text-lg">
             At Gaana Nritya Academy, we offer structured and soulful training in
-            Bharatanatyam, Kathak, and Carnatic vocal music for students of all
-            ages. Under the expert guidance of renowned gurus, each class blends
+            Bharatanatyam and Carnatic vocal music for students of all ages.
+            Under the expert guidance of renowned gurus, each class blends
             strong foundational techniques with expressive performance skills.
             Whether you're a beginner or an experienced learner, our
             step-by-step curriculum helps you grow with confidence. Experience
             the joy of Indian classical art forms in a nurturing environment,
-            right from basic adavus and tatkars to advanced repertoire and stage
-            presence.
+            right from basic adavus to advanced repertoire and stage presence.
           </p>
         </div>
         <div className="mt-10 md:my-5 md:mt-0">
@@ -236,40 +234,6 @@ const Classes = () => {
                   alt="Carnatic Music"
                   className="h-auto w-full rounded-lg"
                 />
-              </div>
-            </div>
-          </div>
-          <div className="my-20" id="kathak">
-            <div className="my-6 grid grid-cols-1 gap-6 rounded-2xl sm:my-[100px] sm:p-8 md:grid-cols-2 md:gap-10 md:p-0 md:py-14 lg:gap-20">
-              <div className="order-1 mx-auto w-full">
-                <img
-                  src={kathak}
-                  alt="Kathak"
-                  className="h-auto w-full rounded-lg"
-                />
-              </div>
-              <div className="order-2 content-center py-2 md:py-4">
-                <h1 className="text-2xl font-semibold leading-[130%] tracking-[-0.48px] md:text-[32px]">
-                  Kathak
-                </h1>
-                <p className="my-2 text-lg font-medium sm:text-xl">
-                  Where rhythm meets expression.
-                </p>
-                <p className="mt-4 text-balance text-base leading-[170%] tracking-[-0.18px] sm:text-lg">
-                  Step into the world of Kathak dance and experience the
-                  elegance of North Indian storytelling through footwork, spins,
-                  and gestures. Our Kathak classes blend tradition and
-                  creativity, helping students master both technical precision
-                  and emotive performance. Open to all levels, the program
-                  builds a strong foundation rooted in classical knowledge and
-                  performance artistry.
-                </p>
-                <Button
-                  variant={'secondary'}
-                  className="mt-6 px-4 py-2 text-primary md:mt-9"
-                >
-                  <Link to="/contact">Join Now</Link>
-                </Button>
               </div>
             </div>
           </div>
