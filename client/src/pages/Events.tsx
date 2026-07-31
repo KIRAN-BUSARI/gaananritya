@@ -31,8 +31,6 @@ import {
   ArrowDown,
   StarIcon,
   Plus,
-  Pencil,
-  Trash2,
   RefreshCw,
   Instagram,
 } from 'lucide-react';
@@ -48,21 +46,9 @@ interface InstagramPostItem {
   order: number;
 }
 
-interface HighlightItem {
-  _id: string;
-  text: string;
-  emphasizedText?: string;
-  order: number;
-}
-
 interface PostFormData {
   url: string;
   title: string;
-}
-
-interface HighlightFormData {
-  text: string;
-  emphasizedText: string;
 }
 
 const significantPerformances = [
@@ -122,33 +108,12 @@ const emptyPostForm: PostFormData = {
   title: '',
 };
 
-const emptyHighlightForm: HighlightFormData = {
-  text: '',
-  emphasizedText: '',
-};
-
 const MAX_POSTS = 5;
-
-const renderHighlightedText = (text: string, emphasizedText?: string) => {
-  if (!emphasizedText || !text.includes(emphasizedText)) {
-    return text;
-  }
-
-  const parts = text.split(emphasizedText);
-  return (
-    <>
-      {parts[0]}
-      <span className="font-semibold text-secondary1">{emphasizedText}</span>
-      {parts.slice(1).join(emphasizedText)}
-    </>
-  );
-};
 
 const Events = () => {
   const [filter, setFilter] = useState<string>('Upcoming Events');
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState<InstagramPostItem[]>([]);
-  const [highlights, setHighlights] = useState<HighlightItem[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -160,16 +125,6 @@ const Events = () => {
   const [postToDelete, setPostToDelete] = useState<InstagramPostItem | null>(
     null,
   );
-
-  const [isHighlightDialogOpen, setIsHighlightDialogOpen] = useState(false);
-  const [isDeleteHighlightOpen, setIsDeleteHighlightOpen] = useState(false);
-  const [highlightForm, setHighlightForm] =
-    useState<HighlightFormData>(emptyHighlightForm);
-  const [editingHighlightId, setEditingHighlightId] = useState<string | null>(
-    null,
-  );
-  const [highlightToDelete, setHighlightToDelete] =
-    useState<HighlightItem | null>(null);
 
   const handleFilterChange = useCallback((category: string) => {
     setFilter(category);
@@ -188,19 +143,6 @@ const Events = () => {
     }
   }, []);
 
-  const fetchHighlights = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get<{ data: HighlightItem[] }>(
-        '/highlights',
-      );
-      setHighlights(response.data.data || []);
-    } catch (error) {
-      console.error('Failed to fetch highlights:', error);
-      toast.error('Failed to load highlights');
-      setHighlights([]);
-    }
-  }, []);
-
   useEffect(() => {
     const admin = localStorage.getItem('isAdmin') === 'true';
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -211,11 +153,11 @@ const Events = () => {
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
-      await Promise.all([fetchPosts(), fetchHighlights()]);
+      await fetchPosts();
       setIsLoading(false);
     };
     loadData();
-  }, [fetchPosts, fetchHighlights]);
+  }, [fetchPosts]);
 
   const canManage = isAdmin && isLoggedIn;
   const hasReachedPostLimit = posts.length >= MAX_POSTS;
@@ -312,85 +254,6 @@ const Events = () => {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response
           ?.data?.message || 'Failed to delete Instagram post';
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const openAddHighlightDialog = () => {
-    setEditingHighlightId(null);
-    setHighlightForm(emptyHighlightForm);
-    setIsHighlightDialogOpen(true);
-  };
-
-  const openEditHighlightDialog = (highlight: HighlightItem) => {
-    setEditingHighlightId(highlight._id);
-    setHighlightForm({
-      text: highlight.text,
-      emphasizedText: highlight.emphasizedText || '',
-    });
-    setIsHighlightDialogOpen(true);
-  };
-
-  const openDeleteHighlightDialog = (highlight: HighlightItem) => {
-    setHighlightToDelete(highlight);
-    setIsDeleteHighlightOpen(true);
-  };
-
-  const handleHighlightSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!canManage) {
-      toast.error('You must be logged in as an admin to manage highlights.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      if (editingHighlightId) {
-        await axiosInstance.patch(
-          `/highlights/update/${editingHighlightId}`,
-          highlightForm,
-        );
-        toast.success('Highlight updated successfully');
-      } else {
-        await axiosInstance.post('/highlights/create', {
-          ...highlightForm,
-          order: highlights.length,
-        });
-        toast.success('Highlight created successfully');
-      }
-      setIsHighlightDialogOpen(false);
-      setHighlightForm(emptyHighlightForm);
-      setEditingHighlightId(null);
-      await fetchHighlights();
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || 'Failed to save highlight';
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDeleteHighlight = async () => {
-    if (!highlightToDelete) return;
-
-    setIsSubmitting(true);
-    try {
-      await axiosInstance.delete(
-        `/highlights/delete/${highlightToDelete._id}`,
-      );
-      toast.success('Highlight deleted successfully');
-      setIsDeleteHighlightOpen(false);
-      setHighlightToDelete(null);
-      await fetchHighlights();
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || 'Failed to delete highlight';
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -682,74 +545,6 @@ const Events = () => {
         </div>
 
         <div className="mt-8">{renderContent()}</div>
-
-        {filter === 'Upcoming Events' && (
-          <div className="mt-10 border-t border-gray-100 pt-8 sm:mt-12">
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="text-lg font-semibold tracking-tight text-gray-900 sm:text-xl">
-                  Upcoming Highlights
-                </h2>
-                <p className="mt-1 text-sm text-gray-500">
-                  Key dates and celebrations coming up
-                </p>
-              </div>
-              {canManage && (
-                <Button
-                  onClick={openAddHighlightDialog}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Highlight
-                </Button>
-              )}
-            </div>
-            {highlights.length === 0 ? (
-              <p className="text-sm text-gray-500">No highlights yet.</p>
-            ) : (
-              <ul className="space-y-2.5 text-sm sm:text-base md:text-lg">
-                {highlights.map((highlight) => (
-                  <li
-                    key={highlight._id}
-                    className="flex items-start justify-between gap-3 rounded-lg px-1 py-1.5 transition-colors hover:bg-gray-50"
-                  >
-                    <span className="flex-1 before:mr-2 before:text-secondary1 before:content-['•']">
-                      {renderHighlightedText(
-                        highlight.text,
-                        highlight.emphasizedText,
-                      )}
-                    </span>
-                    {canManage && (
-                      <span className="flex shrink-0 gap-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8"
-                          onClick={() => openEditHighlightDialog(highlight)}
-                          aria-label="Edit highlight"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
-                          onClick={() => openDeleteHighlightDialog(highlight)}
-                          aria-label="Delete highlight"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
       </div>
 
       <Dialog open={isPostDialogOpen} onOpenChange={setIsPostDialogOpen}>
@@ -851,131 +646,6 @@ const Events = () => {
               type="button"
               variant="destructive"
               onClick={handleDeletePost}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                'Delete'
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={isHighlightDialogOpen}
-        onOpenChange={setIsHighlightDialogOpen}
-      >
-        <DialogContent className="sm:max-w-[520px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold text-gray-900">
-              {editingHighlightId ? 'Edit Highlight' : 'Add Highlight'}
-            </DialogTitle>
-            <DialogDescription>
-              Enter the full highlight sentence. Optionally mark a phrase to
-              emphasize in teal.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleHighlightSubmit} className="mt-2 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="highlight-text" className="font-medium">
-                Highlight Text
-              </Label>
-              <Input
-                id="highlight-text"
-                value={highlightForm.text}
-                onChange={(e) =>
-                  setHighlightForm((prev) => ({
-                    ...prev,
-                    text: e.target.value,
-                  }))
-                }
-                placeholder="e.g. Celebrating Aaronhan-2025 at Sullia Branch"
-                className="h-11"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="highlight-emphasis" className="font-medium">
-                Emphasized Phrase (optional)
-              </Label>
-              <Input
-                id="highlight-emphasis"
-                value={highlightForm.emphasizedText}
-                onChange={(e) =>
-                  setHighlightForm((prev) => ({
-                    ...prev,
-                    emphasizedText: e.target.value,
-                  }))
-                }
-                placeholder="e.g. Aaronhan-2025"
-                className="h-11"
-              />
-              <p className="text-xs text-gray-500">
-                This phrase must appear exactly in the highlight text above.
-              </p>
-            </div>
-            <DialogFooter className="pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsHighlightDialogOpen(false)}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-secondary text-primary hover:bg-secondary/90"
-              >
-                {isSubmitting ? (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : editingHighlightId ? (
-                  'Update Highlight'
-                ) : (
-                  'Add Highlight'
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={isDeleteHighlightOpen}
-        onOpenChange={setIsDeleteHighlightOpen}
-      >
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl text-red-600">
-              Delete Highlight
-            </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this highlight? This action cannot
-              be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-6 flex items-center justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsDeleteHighlightOpen(false)}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={handleDeleteHighlight}
               disabled={isSubmitting}
             >
               {isSubmitting ? (

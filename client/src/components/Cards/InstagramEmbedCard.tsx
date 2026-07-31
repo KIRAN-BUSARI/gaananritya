@@ -67,16 +67,15 @@ const InstagramEmbedCard: FC<InstagramEmbedCardProps> = ({
         )}
       </div>
 
-      <div className="instagram-embed-frame relative h-[340px] w-full overflow-hidden bg-gray-50">
+      <div className="instagram-embed-frame relative h-[500px] w-full overflow-hidden bg-gray-50">
         <iframe
           src={embedSrc}
           title={title || 'Instagram post'}
-          className="pointer-events-auto absolute inset-x-0 top-0 h-[540px] w-full border-0"
+          className="h-[560px] w-full border-0"
           loading="lazy"
           scrolling="no"
           allow="encrypted-media; clipboard-write"
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/90 to-transparent" />
       </div>
 
       <div className="border-t border-gray-100 px-3.5 py-2.5">
